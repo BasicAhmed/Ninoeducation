@@ -1,0 +1,114 @@
+"use server";
+
+import { db } from "@/db/client";
+import { flightSchools, accommodations, applications } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { randomUUID } from "crypto";
+import { redirect } from "next/navigation";
+import { requireAdmin } from "@/lib/admin-auth";
+
+function slugify(input: string) {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+}
+
+export async function saveSchool(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  const now = new Date().toISOString();
+  const nameEn = String(formData.get("nameEn") || "");
+
+  const values = {
+    slug: String(formData.get("slug") || slugify(nameEn)),
+    nameAr: String(formData.get("nameAr") || ""),
+    nameEn,
+    province: String(formData.get("province") || ""),
+    city: String(formData.get("city") || ""),
+    airportName: String(formData.get("airportName") || ""),
+    airportCode: String(formData.get("airportCode") || ""),
+    descriptionAr: String(formData.get("descriptionAr") || ""),
+    shortDescriptionAr: String(formData.get("shortDescriptionAr") || ""),
+    licenses: String(formData.get("licenses") || ""),
+    trainingType: String(formData.get("trainingType") || "integrated"),
+    priceMinZar: Number(formData.get("priceMinZar") || 0),
+    priceMaxZar: Number(formData.get("priceMaxZar") || 0),
+    durationMonthsMin: Number(formData.get("durationMonthsMin") || 0),
+    durationMonthsMax: Number(formData.get("durationMonthsMax") || 0),
+    acceptsInternational: formData.get("acceptsInternational") === "on",
+    hasAccommodation: formData.get("hasAccommodation") === "on",
+    aircraftFleet: String(formData.get("aircraftFleet") || ""),
+    rating: Number(formData.get("rating") || 4.5),
+    ninoRanking: Number(formData.get("ninoRanking") || 0),
+    websiteUrl: String(formData.get("websiteUrl") || "") || null,
+    status: String(formData.get("status") || "draft"),
+    lastPricingUpdate: now,
+    updatedAt: now,
+  };
+
+  if (id) {
+    await db.update(flightSchools).set(values).where(eq(flightSchools.id, id));
+  } else {
+    await db.insert(flightSchools).values({ id: randomUUID(), createdAt: now, ...values });
+  }
+
+  redirect("/admin/schools");
+}
+
+export async function deleteSchool(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  await db.delete(flightSchools).where(eq(flightSchools.id, id));
+  redirect("/admin/schools");
+}
+
+export async function saveAccommodation(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  const now = new Date().toISOString();
+  const nameAr = String(formData.get("nameAr") || "");
+
+  const values = {
+    slug: String(formData.get("slug") || slugify(nameAr)),
+    nameAr,
+    city: String(formData.get("city") || ""),
+    province: String(formData.get("province") || ""),
+    descriptionAr: String(formData.get("descriptionAr") || ""),
+    monthlyPriceZar: Number(formData.get("monthlyPriceZar") || 0),
+    roomType: String(formData.get("roomType") || "private"),
+    furnished: formData.get("furnished") === "on",
+    distanceToAirport: String(formData.get("distanceToAirport") || "") || null,
+    wifi: formData.get("wifi") === "on",
+    status: String(formData.get("status") || "draft"),
+    updatedAt: now,
+  };
+
+  if (id) {
+    await db.update(accommodations).set(values).where(eq(accommodations.id, id));
+  } else {
+    await db.insert(accommodations).values({ id: randomUUID(), createdAt: now, ...values });
+  }
+
+  redirect("/admin/accommodation");
+}
+
+export async function deleteAccommodation(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  await db.delete(accommodations).where(eq(accommodations.id, id));
+  redirect("/admin/accommodation");
+}
+
+export async function updateApplicationStatus(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  const status = String(formData.get("status") || "new");
+  await db
+    .update(applications)
+    .set({ status, updatedAt: new Date().toISOString() })
+    .where(eq(applications.id, id));
+  redirect("/admin/applications");
+}

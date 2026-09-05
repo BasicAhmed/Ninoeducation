@@ -2,3 +2,6 @@ node_modules
 .next
 .env*
 !.env.example
+nino.db
+nino.db-*
+tsconfig.tsbuildinfo
