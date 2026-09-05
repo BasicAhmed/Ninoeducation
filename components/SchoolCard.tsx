@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LICENSE_LABELS } from "@/lib/constants";
+import { formatUsdRange } from "@/lib/currency";
 
 type School = {
   slug: string;
@@ -14,10 +15,6 @@ type School = {
   hasAccommodation: boolean;
 };
 
-function formatZar(n: number) {
-  return new Intl.NumberFormat("en-ZA").format(n);
-}
-
 export function SchoolCard({
   school,
   selectable = false,
@@ -27,7 +24,7 @@ export function SchoolCard({
 }) {
   const licenses = school.licenses.split(",").slice(0, 3);
   return (
-    <div className="group relative flex flex-col rounded-2xl border border-nino-line bg-nino-cream p-6 transition hover:border-nino-orange">
+    <div className="group relative flex flex-col rounded-2xl border border-nino-line bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-nino-orange hover:shadow-lg">
       {selectable && (
         <label className="absolute left-4 top-4 flex items-center gap-2 text-xs">
           <input
@@ -63,9 +60,9 @@ export function SchoolCard({
       <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
         <div dir="ltr" className="text-end text-sm">
           <div className="font-medium">
-            R{formatZar(school.priceMinZar)} – R{formatZar(school.priceMaxZar)}
+            {formatUsdRange(school.priceMinZar, school.priceMaxZar)}
           </div>
-          <div className="text-xs text-nino-ink/50">تقديري</div>
+          <div className="text-xs text-nino-ink/50">تقديري بالدولار</div>
         </div>
         <Link
           href={`/schools/${school.slug}`}

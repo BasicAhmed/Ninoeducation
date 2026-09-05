@@ -1,11 +1,8 @@
 import Link from "next/link";
 import { getPublishedAccommodations } from "@/lib/schools";
+import { formatUsd } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-
-function formatZar(n: number) {
-  return new Intl.NumberFormat("en-ZA").format(n);
-}
 
 const roomTypeLabel: Record<string, string> = {
   private: "غرفة خاصة",
@@ -63,7 +60,7 @@ export default async function AccommodationPage() {
                 <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
                   <div dir="ltr" className="text-end text-sm">
                     <div className="font-medium">
-                      R{formatZar(a.monthlyPriceZar)} / شهريًا
+                      ${formatUsd(a.monthlyPriceZar)} / شهريًا
                     </div>
                     {a.distanceToAirport && (
                       <div className="text-xs text-nino-ink/50">

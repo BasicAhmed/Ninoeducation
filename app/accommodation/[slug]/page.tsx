@@ -1,12 +1,9 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAccommodationBySlug } from "@/lib/schools";
+import { formatUsd } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-
-function formatZar(n: number) {
-  return new Intl.NumberFormat("en-ZA").format(n);
-}
 
 const roomTypeLabel: Record<string, string> = {
   private: "غرفة خاصة",
@@ -38,13 +35,13 @@ export default async function AccommodationProfilePage({
     <>
       <SiteHeader />
       <main className="flex-1">
-        <section className="border-b border-nino-line bg-nino-ink text-white">
+        <section className="border-b border-nino-line bg-nino-cream">
           <div className="mx-auto max-w-4xl px-6 py-16">
-            <p className="text-xs text-white/50">
+            <p className="text-xs text-nino-ink/50">
               {a.city} · {a.province}
             </p>
-            <h1 className="mt-3 font-display text-4xl">{a.nameAr}</h1>
-            <p className="mt-4 max-w-xl text-white/70">{a.descriptionAr}</p>
+            <h1 className="mt-3 font-display text-4xl text-nino-ink">{a.nameAr}</h1>
+            <p className="mt-4 max-w-xl text-nino-ink/70">{a.descriptionAr}</p>
           </div>
         </section>
         <div className="mx-auto max-w-4xl px-6 py-14">
@@ -52,7 +49,7 @@ export default async function AccommodationProfilePage({
             <div>
               <div className="text-xs text-nino-ink/50">السعر الشهري</div>
               <div dir="ltr" className="mt-1 text-end font-display text-2xl text-nino-orange">
-                R{formatZar(a.monthlyPriceZar)}
+                ${formatUsd(a.monthlyPriceZar)}
               </div>
             </div>
             <div>

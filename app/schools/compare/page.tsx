@@ -1,11 +1,8 @@
 import Link from "next/link";
 import { getSchoolsBySlugs, LICENSE_LABELS } from "@/lib/schools";
+import { formatUsdRange } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-
-function formatZar(n: number) {
-  return new Intl.NumberFormat("en-ZA").format(n);
-}
 
 export const metadata = {
   title: "قارن مدارس الطيران | نينو إديوكيشن",
@@ -67,7 +64,7 @@ export default async function ComparePage({
                     <td className="p-4 text-nino-ink/50">السعر التقديري</td>
                     {schools.map((s) => (
                       <td key={s.id} dir="ltr" className="p-4 text-start">
-                        R{formatZar(s.priceMinZar)}–{formatZar(s.priceMaxZar)}
+                        {formatUsdRange(s.priceMinZar, s.priceMaxZar)}
                       </td>
                     ))}
                   </tr>

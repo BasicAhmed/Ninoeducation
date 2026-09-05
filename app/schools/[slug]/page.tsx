@@ -1,12 +1,9 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getSchoolBySlug, LICENSE_LABELS } from "@/lib/schools";
+import { formatUsdRange } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-
-function formatZar(n: number) {
-  return new Intl.NumberFormat("en-ZA").format(n);
-}
 
 export async function generateMetadata({
   params,
@@ -43,22 +40,22 @@ export default async function SchoolProfilePage({
       <SiteHeader />
       <main className="flex-1">
         {/* Hero */}
-        <section className="border-b border-nino-line bg-nino-ink text-white">
+        <section className="border-b border-nino-line bg-nino-cream">
           <div className="mx-auto max-w-5xl px-6 py-16">
-            <p className="text-xs text-white/50">
+            <p className="text-xs text-nino-ink/50">
               {school.city} · {school.province} · {school.airportName} (
               <span dir="ltr">{school.airportCode}</span>)
             </p>
-            <h1 className="mt-3 font-display text-4xl md:text-5xl">
+            <h1 className="mt-3 font-display text-4xl text-nino-ink md:text-5xl">
               {school.nameAr}
             </h1>
-            <p className="mt-4 max-w-2xl text-white/70">
+            <p className="mt-4 max-w-2xl text-nino-ink/70">
               {school.shortDescriptionAr}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={`/apply?school=${school.slug}`}
-                className="rounded-full bg-nino-orange px-6 py-3 text-sm font-medium hover:bg-white hover:text-nino-ink"
+                className="rounded-full bg-nino-orange px-6 py-3 text-sm font-medium text-white hover:bg-nino-ink"
               >
                 قدّم إلى {school.nameAr}
               </Link>
@@ -66,7 +63,7 @@ export default async function SchoolProfilePage({
                 href={`https://wa.me/000000000000?text=${encodeURIComponent(
                   `مرحبًا، أريد الاستفسار عن ${school.nameAr}`
                 )}`}
-                className="rounded-full border border-white/30 px-6 py-3 text-sm font-medium hover:border-white"
+                className="rounded-full border border-nino-ink/20 px-6 py-3 text-sm font-medium text-nino-ink hover:border-nino-ink"
               >
                 اسأل عن هذه المدرسة عبر واتساب
               </a>
@@ -133,7 +130,7 @@ export default async function SchoolProfilePage({
           <aside className="h-fit rounded-2xl border border-nino-line bg-nino-white p-6">
             <div dir="ltr" className="text-end">
               <div className="font-display text-3xl text-nino-orange">
-                R{formatZar(school.priceMinZar)}–{formatZar(school.priceMaxZar)}
+                {formatUsdRange(school.priceMinZar, school.priceMaxZar)}
               </div>
             </div>
             <p className="mt-1 text-xs text-nino-ink/50">

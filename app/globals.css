@@ -35,3 +35,71 @@ body {
   font-weight: 600;
   letter-spacing: -0.01em;
 }
+
+/* Ambient moving gradient glow used behind the hero */
+@keyframes ambient-drift {
+  0% {
+    transform: translate(-8%, -6%) scale(1);
+  }
+  50% {
+    transform: translate(6%, 8%) scale(1.15);
+  }
+  100% {
+    transform: translate(-8%, -6%) scale(1);
+  }
+}
+
+@keyframes ambient-drift-slow {
+  0% {
+    transform: translate(6%, 4%) scale(1.05);
+  }
+  50% {
+    transform: translate(-8%, -10%) scale(0.95);
+  }
+  100% {
+    transform: translate(6%, 4%) scale(1.05);
+  }
+}
+
+.ambient-glow-a {
+  animation: ambient-drift 18s ease-in-out infinite;
+}
+
+.ambient-glow-b {
+  animation: ambient-drift-slow 22s ease-in-out infinite;
+}
+
+@keyframes flight-dash {
+  to {
+    stroke-dashoffset: -200;
+  }
+}
+
+.flight-path {
+  stroke-dasharray: 6 8;
+  animation: flight-dash 6s linear infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-glow-a,
+  .ambient-glow-b,
+  .flight-path,
+  .pulse-ring {
+    animation: none !important;
+  }
+}

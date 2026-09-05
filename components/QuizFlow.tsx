@@ -25,10 +25,10 @@ const GOALS = [
 ];
 
 const BUDGETS = [
-  { key: 250000, label: "أقل من 250,000 راند" },
-  { key: 450000, label: "250,000 – 450,000 راند" },
-  { key: 700000, label: "450,000 – 700,000 راند" },
-  { key: 999999999, label: "أكثر من 700,000 راند" },
+  { key: 250000, label: "أقل من $13,500" },
+  { key: 450000, label: "$13,500 – $24,000" },
+  { key: 700000, label: "$24,000 – $38,000" },
+  { key: 999999999, label: "أكثر من $38,000" },
 ];
 
 export function QuizFlow({ schools }: { schools: School[] }) {

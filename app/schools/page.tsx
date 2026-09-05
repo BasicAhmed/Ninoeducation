@@ -88,10 +88,10 @@ export default async function SchoolsPage({
               className="rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm"
             >
               <option value="">أي ميزانية</option>
-              <option value="250000">حتى 250,000 راند</option>
-              <option value="400000">حتى 400,000 راند</option>
-              <option value="600000">حتى 600,000 راند</option>
-              <option value="900000">حتى 900,000 راند</option>
+              <option value="250000">حتى $13,500</option>
+              <option value="400000">حتى $21,600</option>
+              <option value="600000">حتى $32,400</option>
+              <option value="900000">حتى $48,600</option>
             </select>
 
             <label className="flex items-center gap-2 rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm">
