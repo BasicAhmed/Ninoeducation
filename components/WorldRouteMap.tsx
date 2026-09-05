@@ -54,7 +54,7 @@ export function WorldRouteMap() {
             x2={(i * W) / 8}
             y2={H}
             stroke="#0b0d0f"
-            strokeOpacity={0.04}
+            strokeOpacity={0.06}
           />
         ))}
         {Array.from({ length: 6 }).map((_, i) => (
@@ -65,7 +65,7 @@ export function WorldRouteMap() {
             x2={W}
             y2={(i * H) / 5}
             stroke="#0b0d0f"
-            strokeOpacity={0.04}
+            strokeOpacity={0.06}
           />
         ))}
 
@@ -73,73 +73,51 @@ export function WorldRouteMap() {
         {CITIES.map((c) => {
           const p = project(c.lon, c.lat);
           return (
-            <g key={c.code} className="group">
-              <path
-                d={arcPath(p, dest)}
-                fill="none"
-                stroke="#fe5200"
-                strokeWidth={1.5}
-                strokeOpacity={0.35}
-                className="flight-path transition-all duration-300 group-hover:stroke-[2.5] group-hover:stroke-opacity-90"
-              />
+            <path
+              key={`path-${c.code}`}
+              d={arcPath(p, dest)}
+              fill="none"
+              stroke="#fe5200"
+              strokeWidth={2}
+              strokeOpacity={0.55}
+              className="flight-path"
+            />
+          );
+        })}
 
-              {/* origin marker */}
-              <circle cx={p.x} cy={p.y} r={5} fill="#0b0d0f" />
-              <circle
-                cx={p.x}
-                cy={p.y}
-                r={5}
-                fill="none"
-                stroke="#0b0d0f"
-                strokeOpacity={0.5}
-                className="pulse-ring"
-              />
-
-              {/* label, shown on hover */}
-              <g className="opacity-70 transition-opacity duration-200 group-hover:opacity-100">
-                <text
-                  x={p.x}
-                  y={p.y - 14}
-                  textAnchor="middle"
-                  fontSize="13"
-                  fontWeight={600}
-                  fill="#0b0d0f"
-                >
-                  {c.nameAr}
-                </text>
-                <text
-                  x={p.x}
-                  y={p.y + 22}
-                  textAnchor="middle"
-                  fontSize="10"
-                  fill="#0b0d0f"
-                  opacity={0}
-                  className="transition-opacity duration-200 group-hover:opacity-60"
-                >
-                  {c.flightHours}
-                </text>
-              </g>
+        {/* origin markers + labels (always visible) */}
+        {CITIES.map((c) => {
+          const p = project(c.lon, c.lat);
+          return (
+            <g key={`marker-${c.code}`}>
+              <circle cx={p.x} cy={p.y} r={7} fill="#ffffff" stroke="#0b0d0f" strokeWidth={2} />
+              <circle cx={p.x} cy={p.y} r={3} fill="#0b0d0f" />
+              <text
+                x={p.x}
+                y={p.y - 16}
+                textAnchor="middle"
+                fontSize="15"
+                fontWeight={700}
+                fill="#0b0d0f"
+              >
+                {c.nameAr}
+              </text>
+              <text x={p.x} y={p.y + 26} textAnchor="middle" fontSize="11" fill="#0b0d0f" opacity={0.55}>
+                {c.flightHours}
+              </text>
             </g>
           );
         })}
 
         {/* destination marker */}
         <g>
-          <circle cx={dest.x} cy={dest.y} r={7} fill="#fe5200" />
-          <circle
-            cx={dest.x}
-            cy={dest.y}
-            r={7}
-            fill="none"
-            stroke="#fe5200"
-            strokeOpacity={0.6}
-            className="pulse-ring"
-          />
+          <circle cx={dest.x} cy={dest.y} r={11} fill="#fe5200" opacity={0.18} />
+          <circle cx={dest.x} cy={dest.y} r={8} fill="#fe5200" stroke="#ffffff" strokeWidth={2} />
           <text
             x={dest.x}
-            y={dest.y + 26}
+            y={dest.y + 28}
             textAnchor="middle"
-            fontSize="14"
+            fontSize="16"
             fontWeight={700}
             fill="#0b0d0f"
           >

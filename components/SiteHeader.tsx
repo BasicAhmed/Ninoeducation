@@ -1,9 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export function SiteHeader() {
+export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
   return (
-    <header className="border-b border-nino-line bg-nino-cream">
+    <header
+      className={
+        transparent
+          ? "absolute inset-x-0 top-0 z-20 bg-transparent"
+          : "relative border-b border-nino-line bg-nino-cream"
+      }
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <Link href="/">
           <Image

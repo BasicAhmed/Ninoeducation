@@ -5,7 +5,6 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SchoolCard } from "@/components/SchoolCard";
 import { WorldRouteMap } from "@/components/WorldRouteMap";
-import { CessnaIllustration } from "@/components/CessnaIllustration";
 
 const stats = [
   { value: "+30", label: "مدرسة طيران شريكة في جميع أنحاء جنوب أفريقيا" },
@@ -59,7 +58,7 @@ export default async function Home() {
 
   return (
     <>
-      <SiteHeader />
+      <SiteHeader transparent />
       <main className="flex-1">
         {/* Hero */}
         <section className="relative overflow-hidden bg-nino-cream">
@@ -101,12 +100,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="relative mx-auto mt-14 max-w-4xl px-6 pb-6 md:mt-20">
-            <CessnaIllustration
-              aria-hidden
-              className="plane-float mx-auto w-full max-w-2xl opacity-95"
-            />
-          </div>
+          <div className="h-24 md:h-32" />
         </section>
 
         {/* Route map */}
