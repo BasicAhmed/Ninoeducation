@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { getSchoolBySlug, LICENSE_LABELS } from "@/lib/schools";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { formatUsdRange } from "@/lib/currency";
@@ -44,6 +45,11 @@ export default async function SchoolProfilePage({
       <main className="flex-1">
         {/* Hero */}
         <section className="border-b border-nino-line bg-nino-cream">
+          {school.heroImageUrl && (
+            <div className="relative h-56 w-full md:h-72">
+              <Image src={school.heroImageUrl} alt={school.nameAr} fill unoptimized className="object-cover" />
+            </div>
+          )}
           <div className="mx-auto max-w-5xl px-6 py-16">
             <p className="text-xs text-nino-ink/50">
               {school.city} · {school.province} · {school.airportName} (

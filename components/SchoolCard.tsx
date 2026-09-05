@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { LICENSE_LABELS } from "@/lib/constants";
 import { formatUsdRange } from "@/lib/currency";
 
@@ -13,6 +14,7 @@ type School = {
   priceMaxZar: number;
   rating: number;
   hasAccommodation: boolean;
+  heroImageUrl?: string | null;
   nextIntakeDate?: string | null;
   seatsAvailable?: number | null;
 };
@@ -28,7 +30,13 @@ export function SchoolCard({
 }) {
   const licenses = school.licenses.split(",").slice(0, 3);
   return (
-    <div className="group relative flex flex-col rounded-2xl border border-nino-line bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-nino-orange hover:shadow-lg">
+    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-nino-line bg-white shadow-sm transition hover:-translate-y-1 hover:border-nino-orange hover:shadow-lg">
+      {school.heroImageUrl && (
+        <div className="relative h-40 w-full">
+          <Image src={school.heroImageUrl} alt={school.nameAr} fill unoptimized className="object-cover" />
+        </div>
+      )}
+      <div className="relative flex flex-1 flex-col p-6">
       {badge && (
         <span className="absolute -top-3 right-6 rounded-full bg-nino-orange px-3 py-1 text-xs font-medium text-white shadow-sm">
           {badge}
@@ -93,6 +101,7 @@ export function SchoolCard({
         >
           عرض التفاصيل
         </Link>
+      </div>
       </div>
     </div>
   );

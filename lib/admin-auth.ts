@@ -39,3 +39,11 @@ export async function requireAdmin() {
     redirect("/admin/login");
   }
 }
+
+// Like requireAdmin, but returns a boolean instead of redirecting —
+// for API routes that need to return JSON, not a redirect response.
+export async function isAdminAuthenticated() {
+  const jar = await cookies();
+  const token = jar.get(COOKIE_NAME)?.value;
+  return Boolean(token) && token === expectedToken();
+}
