@@ -10,6 +10,13 @@ import { InstagramGallery } from "@/components/InstagramGallery";
 import { Reveal } from "@/components/Reveal";
 import { CountUpNumber } from "@/components/CountUpNumber";
 
+// This page reads from the database (schools, social posts). Force
+// dynamic rendering so it's always fetched per-request, never attempted
+// at build time — a missing table, a paused database, or a transient
+// connection issue should 500 a single request, not fail the entire
+// deployment build.
+export const dynamic = "force-dynamic";
+
 const stats = [
   { value: "+30", label: "مدرسة طيران شريكة في جميع أنحاء جنوب أفريقيا" },
   { value: "0", label: "رسوم يدفعها الطالب، مهما كانت الخدمة" },

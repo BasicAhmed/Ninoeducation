@@ -86,3 +86,15 @@ CREATE TABLE "social_posts" (
 	"created_at" text NOT NULL,
 	"updated_at" text NOT NULL
 );
+
+-- Added: storage policies for the "social" bucket (Instagram photo uploads).
+-- First create the bucket in the dashboard: Storage -> New bucket -> name
+-- it "social" -> toggle "Public bucket" on. Then run this to allow the
+-- admin panel (using the anon key) to upload into it:
+create policy "Public read access on social bucket"
+on storage.objects for select
+using ( bucket_id = 'social' );
+
+create policy "Allow uploads to social bucket"
+on storage.objects for insert
+with check ( bucket_id = 'social' );

@@ -3,6 +3,8 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SchoolCard } from "@/components/SchoolCard";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "مدارس الطيران في جنوب أفريقيا | نينو إديوكيشن",
   description:

@@ -4,6 +4,8 @@ import { formatUsd } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
+export const dynamic = "force-dynamic";
+
 const roomTypeLabel: Record<string, string> = {
   private: "غرفة خاصة",
   shared: "غرفة مشتركة",

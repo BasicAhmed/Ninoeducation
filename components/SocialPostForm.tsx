@@ -1,4 +1,9 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
 import { saveSocialPost } from "@/lib/admin-actions";
+import { supabaseBrowser, SOCIAL_BUCKET } from "@/lib/supabase-browser";
 
 type SocialPost = {
   id: string;
@@ -11,22 +16,66 @@ type SocialPost = {
 };
 
 export function SocialPostForm({ post }: { post?: SocialPost }) {
+  const [imageUrl, setImageUrl] = useState(post?.imageUrl ?? "");
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setError(null);
+
+    const ext = file.name.split(".").pop() || "jpg";
+    const path = `${crypto.randomUUID()}.${ext}`;
+
+    const { error: uploadError } = await supabaseBrowser.storage
+      .from(SOCIAL_BUCKET)
+      .upload(path, file, { cacheControl: "3600", upsert: false });
+
+    if (uploadError) {
+      setError("فشل رفع الصورة: " + uploadError.message);
+      setUploading(false);
+      return;
+    }
+
+    const { data } = supabaseBrowser.storage.from(SOCIAL_BUCKET).getPublicUrl(path);
+    setImageUrl(data.publicUrl);
+    setUploading(false);
+  }
+
   return (
     <form action={saveSocialPost} className="max-w-xl space-y-6">
       {post && <input type="hidden" name="id" value={post.id} />}
+      <input type="hidden" name="imageUrl" value={imageUrl} required />
 
       <div>
-        <label className="block text-sm font-medium">رابط الصورة</label>
-        <input
-          name="imageUrl"
-          defaultValue={post?.imageUrl}
-          required
-          placeholder="https://..."
-          className="mt-1.5 w-full rounded-lg border border-nino-line bg-nino-cream px-3 py-2.5 text-sm"
-        />
-        <p className="mt-1 text-xs text-nino-ink/50">
-          ارفع الصورة إلى أي مستضيف صور (مثل Supabase Storage) والصق الرابط هنا.
-        </p>
+        <label className="block text-sm font-medium">الصورة</label>
+        <div className="mt-1.5 flex items-center gap-4">
+          {imageUrl ? (
+            <div className="relative h-24 w-24 overflow-hidden rounded-xl border border-nino-line bg-nino-cream">
+              <Image src={imageUrl} alt="معاينة" fill unoptimized className="object-cover" />
+            </div>
+          ) : (
+            <div className="flex h-24 w-24 items-center justify-center rounded-xl border border-dashed border-nino-line bg-nino-cream text-xs text-nino-ink/40">
+              لا صورة
+            </div>
+          )}
+          <div>
+            <label className="cursor-pointer rounded-full border border-nino-ink/20 px-4 py-2 text-sm font-medium hover:border-nino-ink">
+              {uploading ? "جارٍ الرفع..." : imageUrl ? "تغيير الصورة" : "اختر صورة"}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                disabled={uploading}
+                className="hidden"
+              />
+            </label>
+            {error && <p className="mt-2 text-xs text-red-500">{error}</p>}
+          </div>
+        </div>
       </div>
 
       <div>
@@ -86,7 +135,8 @@ export function SocialPostForm({ post }: { post?: SocialPost }) {
 
       <button
         type="submit"
-        className="rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white hover:bg-nino-orange"
+        disabled={uploading || !imageUrl}
+        className="rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white hover:bg-nino-orange disabled:opacity-40"
       >
         حفظ
       </button>

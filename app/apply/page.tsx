@@ -3,6 +3,8 @@ import { submitApplication } from "@/lib/actions";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "قدّم الآن | نينو إديوكيشن",
   description: "قدّم طلبك للتدريب على الطيران في جنوب أفريقيا مجانًا عبر نينو إديوكيشن.",
