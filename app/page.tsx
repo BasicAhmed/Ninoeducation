@@ -6,6 +6,8 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SchoolCard } from "@/components/SchoolCard";
 import { WorldRouteMap } from "@/components/WorldRouteMap";
 import { WhySouthAfrica } from "@/components/WhySouthAfrica";
+import { Reveal } from "@/components/Reveal";
+import { CountUpNumber } from "@/components/CountUpNumber";
 
 const stats = [
   { value: "+30", label: "مدرسة طيران شريكة في جميع أنحاء جنوب أفريقيا" },
@@ -124,18 +126,21 @@ export default async function Home() {
         <WhySouthAfrica />
 
         {/* Stats */}
-        <section className="border-b border-nino-line bg-nino-white">
-          <div className="mx-auto grid max-w-6xl gap-8 px-6 py-16 md:grid-cols-3">
-            {stats.map((s) => (
-              <div
-                key={s.label}
-                className="rounded-2xl border border-nino-line p-6 transition hover:border-nino-orange"
-              >
-                <div dir="ltr" className="text-end font-display text-4xl text-nino-orange">
-                  {s.value}
+        <section className="relative overflow-hidden border-b border-nino-line bg-nino-white">
+          <div
+            aria-hidden
+            className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(#0b0d0f_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,black_40%,transparent_100%)]"
+          />
+          <div className="relative mx-auto grid max-w-6xl gap-8 px-6 py-20 md:grid-cols-3">
+            {stats.map((s, i) => (
+              <Reveal key={s.label} delay={i * 120}>
+                <div className="rounded-2xl border border-nino-line bg-nino-cream/60 p-8 backdrop-blur-sm transition hover:border-nino-orange hover:bg-white">
+                  <div dir="ltr" className="text-end font-display text-5xl text-nino-orange">
+                    <CountUpNumber value={s.value} />
+                  </div>
+                  <p className="mt-3 text-sm text-nino-ink/70">{s.label}</p>
                 </div>
-                <p className="mt-2 text-sm text-nino-ink/70">{s.label}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </section>
@@ -153,8 +158,8 @@ export default async function Home() {
                 </Link>
               </div>
               <div className="mt-10 grid gap-6 md:grid-cols-3">
-                {featured.map((s) => (
-                  <SchoolCard key={s.id} school={s} />
+                {featured.map((s, i) => (
+                  <SchoolCard key={s.id} school={s} badge={i === 0 ? "الأعلى تقييمًا" : undefined} />
                 ))}
               </div>
             </div>
@@ -164,28 +169,40 @@ export default async function Home() {
         {/* Why us */}
         <section id="why" className="border-b border-nino-line bg-nino-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
-            <h2 className="font-display text-3xl md:text-4xl">
-              لماذا نينو إديوكيشن
-            </h2>
-            <p className="mt-3 max-w-xl text-nino-ink/70">
-              أربعة أسباب يثق بها الطلاب في قرارهم الأهم.
-            </p>
-            <div className="mt-12 grid gap-5 md:grid-cols-2">
-              {whyUs.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div
-                    key={item.title}
-                    className="group rounded-2xl border border-nino-line p-7 transition hover:-translate-y-1 hover:border-nino-orange hover:shadow-lg"
-                  >
-                    <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-nino-cream text-nino-ink transition group-hover:bg-nino-orange group-hover:text-white">
-                      <Icon size={20} />
+            <div className="grid gap-10 md:grid-cols-[minmax(0,320px)_1fr]">
+              <div>
+                <h2 className="font-display text-3xl md:text-4xl">
+                  لماذا نينو إديوكيشن
+                </h2>
+                <p className="mt-3 text-nino-ink/70">
+                  أربعة أسباب يثق بها الطلاب في قرارهم الأهم.
+                </p>
+              </div>
+              <div className="grid gap-px overflow-hidden rounded-2xl border border-nino-line bg-nino-line sm:grid-cols-2">
+                {whyUs.map((item, i) => {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={item.title}
+                      className={`group relative overflow-hidden p-7 transition hover:z-10 hover:shadow-xl ${
+                        i % 2 === 0 ? "bg-nino-cream" : "bg-white"
+                      }`}
+                    >
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute -bottom-6 -left-3 font-display text-8xl text-nino-ink/[0.04] transition group-hover:text-nino-orange/10"
+                      >
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <div className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-nino-ink text-white transition group-hover:bg-nino-orange">
+                        <Icon size={20} />
+                      </div>
+                      <h3 className="relative mt-5 font-display text-xl">{item.title}</h3>
+                      <p className="relative mt-2 text-sm text-nino-ink/70">{item.body}</p>
                     </div>
-                    <h3 className="mt-5 font-display text-xl">{item.title}</h3>
-                    <p className="mt-2 text-sm text-nino-ink/70">{item.body}</p>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
         </section>
@@ -194,22 +211,22 @@ export default async function Home() {
         <section className="border-b border-nino-line bg-nino-cream">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <h2 className="font-display text-3xl md:text-4xl">كيف تعمل الخدمة</h2>
-            <div className="relative mt-14 grid gap-10 md:grid-cols-3">
-              <div
-                aria-hidden
-                className="absolute top-6 hidden h-px w-full bg-nino-line md:block"
-              />
+            <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-nino-line bg-nino-line md:grid-cols-3">
               {steps.map((s, i) => {
                 const Icon = s.icon;
                 return (
-                  <div key={s.n} className="relative">
-                    <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full border-2 border-nino-orange bg-nino-cream text-nino-orange">
+                  <div key={s.n} className="relative overflow-hidden bg-nino-white p-8">
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute -top-6 end-4 font-display text-9xl text-nino-orange/[0.06]"
+                    >
+                      {i + 1}
+                    </span>
+                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full border-2 border-nino-orange text-nino-orange">
                       <Icon size={20} />
                     </div>
-                    <h3 className="mt-5 font-display text-xl">
-                      {i + 1}. {s.n}
-                    </h3>
-                    <p className="mt-2 text-sm text-nino-ink/70">{s.body}</p>
+                    <h3 className="relative mt-6 font-display text-xl">{s.n}</h3>
+                    <p className="relative mt-2 text-sm text-nino-ink/70">{s.body}</p>
                   </div>
                 );
               })}

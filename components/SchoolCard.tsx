@@ -18,13 +18,20 @@ type School = {
 export function SchoolCard({
   school,
   selectable = false,
+  badge,
 }: {
   school: School;
   selectable?: boolean;
+  badge?: string;
 }) {
   const licenses = school.licenses.split(",").slice(0, 3);
   return (
     <div className="group relative flex flex-col rounded-2xl border border-nino-line bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-nino-orange hover:shadow-lg">
+      {badge && (
+        <span className="absolute -top-3 right-6 rounded-full bg-nino-orange px-3 py-1 text-xs font-medium text-white shadow-sm">
+          {badge}
+        </span>
+      )}
       {selectable && (
         <label className="absolute left-4 top-4 flex items-center gap-2 text-xs">
           <input
