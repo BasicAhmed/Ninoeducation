@@ -95,11 +95,28 @@ body {
   animation: pulse-ring 2.4s ease-out infinite;
 }
 
+@keyframes plane-float {
+  0% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(1deg);
+  }
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+}
+
+.plane-float {
+  animation: plane-float 7s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ambient-glow-a,
   .ambient-glow-b,
   .flight-path,
-  .pulse-ring {
+  .pulse-ring,
+  .plane-float {
     animation: none !important;
   }
 }

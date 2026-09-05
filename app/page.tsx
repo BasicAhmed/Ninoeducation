@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ShieldCheck, ListChecks, Compass, PlaneTakeoff, Home as HomeIcon } from "lucide-react";
 import { getPublishedSchools } from "@/lib/schools";
@@ -6,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SchoolCard } from "@/components/SchoolCard";
 import { WorldRouteMap } from "@/components/WorldRouteMap";
+import { CessnaIllustration } from "@/components/CessnaIllustration";
 
 const stats = [
   { value: "+30", label: "مدرسة طيران شريكة في جميع أنحاء جنوب أفريقيا" },
@@ -62,15 +62,7 @@ export default async function Home() {
       <SiteHeader />
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative isolate overflow-hidden bg-nino-cream">
-          <Image
-            src="/brand/hero-cessna.jpg"
-            alt="طائرة سيسنا تدريبية عند غروب الشمس"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
+        <section className="relative overflow-hidden bg-nino-cream">
           <div
             aria-hidden
             className="ambient-glow-a absolute -right-1/4 -top-1/3 h-[560px] w-[560px] rounded-full bg-nino-orange/35 blur-3xl"
@@ -79,16 +71,8 @@ export default async function Home() {
             aria-hidden
             className="ambient-glow-b absolute -bottom-1/3 -left-1/4 h-[480px] w-[480px] rounded-full bg-nino-orange/25 blur-3xl"
           />
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-[radial-gradient(ellipse_65%_55%_at_50%_42%,rgba(246,244,241,0.94),transparent_70%)]"
-          />
-          <div
-            aria-hidden
-            className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-nino-cream to-transparent"
-          />
 
-          <div className="relative mx-auto max-w-3xl px-6 py-28 text-center md:py-36">
+          <div className="relative mx-auto max-w-3xl px-6 pt-24 text-center md:pt-32">
             <p dir="ltr" className="font-mono text-xs uppercase tracking-widest text-nino-orange">
               OR Tambo · FAJS · 26.13°S, 28.24°E
             </p>
@@ -115,6 +99,13 @@ export default async function Home() {
                 لماذا نينو إديوكيشن
               </a>
             </div>
+          </div>
+
+          <div className="relative mx-auto mt-14 max-w-4xl px-6 pb-6 md:mt-20">
+            <CessnaIllustration
+              aria-hidden
+              className="plane-float mx-auto w-full max-w-2xl opacity-95"
+            />
           </div>
         </section>
 
