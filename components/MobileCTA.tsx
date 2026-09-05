@@ -19,7 +19,7 @@ export function MobileCTA() {
 
   return (
     <div
-      className={`fixed inset-x-0 bottom-0 z-50 flex items-center gap-3 border-t border-white/10 bg-nino-ink px-4 py-3 transition-transform duration-300 md:hidden ${
+      className={`fixed inset-x-0 bottom-0 z-50 flex items-center gap-3 border-t border-white/10 bg-gradient-to-r from-nino-ink via-[#1a0f0a] to-[#3d1608] px-4 py-3 transition-transform duration-300 md:hidden ${
         visible ? "translate-y-0" : "translate-y-full"
       }`}
       style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
@@ -32,7 +32,7 @@ export function MobileCTA() {
       </Link>
       <Link
         href="/apply"
-        className="flex-[1.4] rounded-full bg-nino-orange px-4 py-2.5 text-center text-sm font-medium text-white"
+        className="flex-[1.4] rounded-full bg-gradient-to-r from-nino-orange to-[#ff7a3d] px-4 py-2.5 text-center text-sm font-medium text-white shadow-lg shadow-black/30"
       >
         قدّم الآن ←
       </Link>
