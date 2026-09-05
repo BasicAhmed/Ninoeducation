@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import "./globals.css";
+import { MobileCTA } from "@/components/MobileCTA";
 
 const plexArabic = IBM_Plex_Sans_Arabic({
   variable: "--font-plex-arabic",
@@ -21,8 +22,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       dir="rtl"
       className={`${plexArabic.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-nino-cream text-nino-ink">
+      <body className="min-h-full flex flex-col bg-nino-cream text-nino-ink pb-16 md:pb-0">
         {children}
+        <MobileCTA />
       </body>
     </html>
   );
