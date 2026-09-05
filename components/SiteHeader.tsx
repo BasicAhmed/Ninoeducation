@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { MobileNav } from "@/components/MobileNav";
 
 export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
   return (
@@ -34,12 +35,15 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
             حاسبة التكلفة
           </Link>
         </nav>
-        <Link
-          href="/apply"
-          className="rounded-full bg-nino-ink px-5 py-2.5 text-sm font-medium text-nino-white transition hover:bg-nino-orange"
-        >
-          قدّم الآن
-        </Link>
+        <div className="flex items-center gap-3">
+          <MobileNav />
+          <Link
+            href="/apply"
+            className="rounded-full bg-nino-ink px-5 py-2.5 text-sm font-medium text-nino-white transition hover:bg-nino-orange"
+          >
+            قدّم الآن
+          </Link>
+        </div>
       </div>
     </header>
   );

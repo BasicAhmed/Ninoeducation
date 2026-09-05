@@ -56,6 +56,14 @@ const steps = [
   },
 ];
 
+function Kicker({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
+      {children}
+    </p>
+  );
+}
+
 export default async function Home() {
   const featured = (await getPublishedSchools()).slice(0, 3);
 
@@ -63,7 +71,7 @@ export default async function Home() {
     <>
       <SiteHeader transparent />
       <main className="flex-1">
-        {/* Hero */}
+        {/* 1. Hero — the dream */}
         <section className="relative overflow-hidden bg-nino-cream">
           <div
             aria-hidden
@@ -95,10 +103,10 @@ export default async function Home() {
                 ابحث عن مدرستي
               </Link>
               <a
-                href="#why"
+                href="#why-south-africa"
                 className="rounded-full border border-nino-ink/20 px-6 py-3 text-sm font-medium text-nino-ink hover:border-nino-ink"
               >
-                لماذا نينو إديوكيشن
+                لماذا جنوب أفريقيا؟
               </a>
             </div>
           </div>
@@ -106,15 +114,22 @@ export default async function Home() {
           <div className="h-24 md:h-32" />
         </section>
 
-        {/* Route map */}
+        {/* 2. Why South Africa — the destination that makes the dream possible */}
+        <div id="why-south-africa">
+          <WhySouthAfrica />
+        </div>
+
+        {/* 3. Route map — now that you know why, see how close it actually is */}
         <section className="border-b border-nino-line bg-nino-cream">
           <div className="mx-auto max-w-6xl px-6 py-16">
             <div className="text-center">
-              <h2 className="font-display text-3xl md:text-4xl">
-                من أينما كنت، الوجهة واحدة
+              <Kicker>من بلدك إلى هناك</Kicker>
+              <h2 className="mt-3 font-display text-3xl md:text-4xl">
+                المسافة أقرب مما تتخيل
               </h2>
               <p className="mx-auto mt-2 max-w-xl text-nino-ink/70">
-                من الرياض إلى الخرطوم، كل رحلة تنتهي في جنوب أفريقيا.
+                من الرياض إلى الخرطوم، كل رحلة تنتهي في نفس المكان: جنوب
+                أفريقيا.
               </p>
             </div>
             <div className="mt-10">
@@ -123,59 +138,17 @@ export default async function Home() {
           </div>
         </section>
 
-        <WhySouthAfrica />
-
-        {/* Stats */}
-        <section className="relative overflow-hidden border-b border-nino-line bg-nino-white">
-          <div
-            aria-hidden
-            className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(#0b0d0f_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,black_40%,transparent_100%)]"
-          />
-          <div className="relative mx-auto grid max-w-6xl gap-8 px-6 py-20 md:grid-cols-3">
-            {stats.map((s, i) => (
-              <Reveal key={s.label} delay={i * 120}>
-                <div className="rounded-2xl border border-nino-line bg-nino-cream/60 p-8 backdrop-blur-sm transition hover:border-nino-orange hover:bg-white">
-                  <div dir="ltr" className="text-end font-display text-5xl text-nino-orange">
-                    <CountUpNumber value={s.value} />
-                  </div>
-                  <p className="mt-3 text-sm text-nino-ink/70">{s.label}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </section>
-
-        {/* Featured schools */}
-        {featured.length > 0 && (
-          <section className="border-b border-nino-line bg-nino-cream">
-            <div className="mx-auto max-w-6xl px-6 py-20">
-              <div className="flex items-end justify-between">
-                <h2 className="font-display text-3xl md:text-4xl">
-                  مدارس مقترحة لك
-                </h2>
-                <Link href="/schools" className="text-sm font-medium text-nino-orange hover:underline">
-                  عرض كل المدارس ←
-                </Link>
-              </div>
-              <div className="mt-10 grid gap-6 md:grid-cols-3">
-                {featured.map((s, i) => (
-                  <SchoolCard key={s.id} school={s} badge={i === 0 ? "الأعلى تقييمًا" : undefined} />
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Why us */}
+        {/* 4. Why us — with 30+ schools out there, you need a guide */}
         <section id="why" className="border-b border-nino-line bg-nino-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="grid gap-10 md:grid-cols-[minmax(0,320px)_1fr]">
               <div>
-                <h2 className="font-display text-3xl md:text-4xl">
+                <Kicker>+30 مدرسة، خيار واحد صحيح</Kicker>
+                <h2 className="mt-3 font-display text-3xl md:text-4xl">
                   لماذا نينو إديوكيشن
                 </h2>
                 <p className="mt-3 text-nino-ink/70">
-                  أربعة أسباب يثق بها الطلاب في قرارهم الأهم.
+                  لست وحدك في هذا القرار. إليك كيف نساعدك تختار بثقة.
                 </p>
               </div>
               <div className="grid gap-px overflow-hidden rounded-2xl border border-nino-line bg-nino-line sm:grid-cols-2">
@@ -207,10 +180,73 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* How it works */}
+        {/* 5. Stats — proof, not promises */}
+        <section className="relative overflow-hidden border-b border-nino-line bg-nino-cream">
+          <div
+            aria-hidden
+            className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(#0b0d0f_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,black_40%,transparent_100%)]"
+          />
+          <div className="relative mx-auto max-w-6xl px-6 pt-20 text-center">
+            <Kicker>لا تصدّق كلامنا فقط</Kicker>
+            <h2 className="mt-3 font-display text-3xl md:text-4xl">أرقام، لا وعود</h2>
+          </div>
+          <div className="relative mx-auto grid max-w-6xl gap-8 px-6 pb-20 pt-10 md:grid-cols-3">
+            {stats.map((s, i) => (
+              <Reveal key={s.label} delay={i * 120}>
+                <div className="rounded-2xl border border-nino-line bg-white/70 p-8 backdrop-blur-sm transition hover:border-nino-orange hover:bg-white">
+                  <div dir="ltr" className="text-end font-display text-5xl text-nino-orange">
+                    <CountUpNumber value={s.value} />
+                  </div>
+                  <p className="mt-3 text-sm text-nino-ink/70">{s.label}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* 6. Featured schools — the real, concrete choices */}
+        <section className="border-b border-nino-line bg-nino-white">
+          <div className="mx-auto max-w-6xl px-6 py-20">
+            <div className="text-center">
+              <Kicker>من الأرقام إلى الواقع</Kicker>
+              <h2 className="mt-3 font-display text-3xl md:text-4xl">
+                هذه ليست كل المدارس — إنها البداية فقط
+              </h2>
+            </div>
+            {featured.length > 0 && (
+              <div className="mt-10 grid gap-6 md:grid-cols-3">
+                {featured.map((s, i) => (
+                  <SchoolCard key={s.id} school={s} badge={i === 0 ? "الأعلى تقييمًا" : undefined} />
+                ))}
+              </div>
+            )}
+
+            {/* Prominent, unmissable browse-all banner */}
+            <div className="mt-12 flex flex-col items-center justify-between gap-6 rounded-2xl bg-nino-ink px-8 py-10 text-center text-white sm:flex-row sm:text-start">
+              <div>
+                <h3 className="font-display text-2xl">تصفّح كل المدارس المتاحة</h3>
+                <p className="mt-2 text-white/70">
+                  فلترة حسب الميزانية، الرخصة، الموقع، ومقارنة أكثر من مدرسة
+                  في نفس الوقت.
+                </p>
+              </div>
+              <Link
+                href="/schools"
+                className="shrink-0 rounded-full bg-nino-orange px-8 py-3.5 text-sm font-medium hover:bg-white hover:text-nino-ink"
+              >
+                عرض جميع مدارس الطيران ←
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* 7. How it works — you've seen the schools, here's what happens next */}
         <section className="border-b border-nino-line bg-nino-cream">
           <div className="mx-auto max-w-6xl px-6 py-20">
-            <h2 className="font-display text-3xl md:text-4xl">كيف تعمل الخدمة</h2>
+            <div className="text-center">
+              <Kicker>اخترت مدرستك؟</Kicker>
+              <h2 className="mt-3 font-display text-3xl md:text-4xl">إليك ما يحدث بعد ذلك</h2>
+            </div>
             <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-nino-line bg-nino-line md:grid-cols-3">
               {steps.map((s, i) => {
                 const Icon = s.icon;
@@ -234,10 +270,13 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Footer CTA */}
+        {/* 8. Final CTA — close the story */}
         <section className="bg-gradient-to-br from-nino-orange to-[#ff7a3d] text-white">
           <div className="mx-auto max-w-6xl px-6 py-16 text-center">
-            <h2 className="font-display text-3xl md:text-4xl">
+            <Kicker>
+              <span className="text-white/70">من الحلم إلى قمرة القيادة</span>
+            </Kicker>
+            <h2 className="mt-3 font-display text-3xl md:text-4xl">
               هل أنت مستعد لبدء ملفك؟
             </h2>
             <p className="mx-auto mt-3 max-w-md text-white/90">

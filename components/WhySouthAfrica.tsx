@@ -23,7 +23,7 @@ export function WhySouthAfrica() {
       {/* video background */}
       <div className="absolute inset-0 overflow-hidden">
         <iframe
-          src="https://www.youtube.com/embed/VzqWO5EaSps?autoplay=1&mute=1&loop=1&playlist=VzqWO5EaSps&controls=0&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1"
+          src="https://www.youtube.com/embed/VzqWO5EaSps?start=15&autoplay=1&mute=1&loop=1&playlist=VzqWO5EaSps&controls=0&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1"
           title="لماذا جنوب أفريقيا"
           allow="autoplay; encrypted-media"
           className="pointer-events-none absolute left-1/2 top-1/2 h-[100vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2"
