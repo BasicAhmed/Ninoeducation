@@ -8,6 +8,13 @@
       "when": 1788614680670,
       "tag": "0000_nervous_black_panther",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788622943479,
+      "tag": "0001_free_kabuki",
+      "breakpoints": true
     }
   ]
 }

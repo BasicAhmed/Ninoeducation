@@ -64,3 +64,15 @@ export const applications = pgTable("applications", {
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
 });
+
+export const socialPosts = pgTable("social_posts", {
+  id: text("id").primaryKey(),
+  imageUrl: text("image_url").notNull(),
+  caption: text("caption").notNull(),
+  permalink: text("permalink").notNull(), // link to the actual Instagram post
+  likes: integer("likes"),
+  displayOrder: integer("display_order").notNull().default(0),
+  status: text("status").notNull().default("draft"), // draft | published
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});

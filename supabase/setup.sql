@@ -73,3 +73,16 @@ INSERT INTO flight_schools (id, slug, name_ar, name_en, province, city, airport_
 INSERT INTO accommodations (id, slug, name_ar, city, province, description_ar, monthly_price_zar, room_type, furnished, distance_to_airport, wifi, status, created_at, updated_at) VALUES ('bb4dd249-fd8e-4b36-9c58-259970b160fc', 'kroon-student-residence', 'سكن كرون للطلاب', 'كروغرسدورب', 'غاوتنغ', 'غرف مفروشة قريبة من مطار كيتي هوك، مع مطبخ ومناطق مشتركة.', 6500, 'private', true, '10 دقائق بالسيارة', true, 'published', '2026-09-05T13:25:15.796Z', '2026-09-05T13:25:15.796Z') ON CONFLICT (slug) DO NOTHING;
 INSERT INTO accommodations (id, slug, name_ar, city, province, description_ar, monthly_price_zar, room_type, furnished, distance_to_airport, wifi, status, created_at, updated_at) VALUES ('c3851701-dd67-4233-8da5-553a5672968b', 'wonderboom-shared-house', 'منزل مشترك - وندربوم', 'بريتوريا', 'غاوتنغ', 'غرف مشتركة اقتصادية لطلاب الطيران، على بعد دقائق من المدرسة.', 3800, 'shared', true, '8 دقائق بالسيارة', true, 'published', '2026-09-05T13:25:15.796Z', '2026-09-05T13:25:15.796Z') ON CONFLICT (slug) DO NOTHING;
 INSERT INTO accommodations (id, slug, name_ar, city, province, description_ar, monthly_price_zar, room_type, furnished, distance_to_airport, wifi, status, created_at, updated_at) VALUES ('b84949b6-20f5-4ae4-9625-c140b8c9b220', 'fish-hoek-seaview-studio', 'استوديو فيشوك بإطلالة بحرية', 'كيب تاون', 'الكيب الغربية', 'استوديو مستقل قريب من الساحل، مناسب لطالب واحد.', 8200, 'studio', true, '12 دقيقة بالسيارة', true, 'published', '2026-09-05T13:25:15.796Z', '2026-09-05T13:25:15.796Z') ON CONFLICT (slug) DO NOTHING;
+
+-- Added: social_posts table (Instagram feed section, manually curated)
+CREATE TABLE "social_posts" (
+	"id" text PRIMARY KEY NOT NULL,
+	"image_url" text NOT NULL,
+	"caption" text NOT NULL,
+	"permalink" text NOT NULL,
+	"likes" integer,
+	"display_order" integer DEFAULT 0 NOT NULL,
+	"status" text DEFAULT 'draft' NOT NULL,
+	"created_at" text NOT NULL,
+	"updated_at" text NOT NULL
+);

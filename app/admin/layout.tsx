@@ -27,6 +27,9 @@ export default async function AdminLayout({
               <Link href="/admin/applications" className="hover:text-white">
                 الطلبات
               </Link>
+              <Link href="/admin/social" className="hover:text-white">
+                إنستقرام
+              </Link>
             </nav>
           </div>
           <form action={logoutAdmin}>

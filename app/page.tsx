@@ -6,6 +6,7 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { SchoolCard } from "@/components/SchoolCard";
 import { WorldRouteMap } from "@/components/WorldRouteMap";
 import { WhySouthAfrica } from "@/components/WhySouthAfrica";
+import { InstagramGallery } from "@/components/InstagramGallery";
 import { Reveal } from "@/components/Reveal";
 import { CountUpNumber } from "@/components/CountUpNumber";
 
@@ -269,6 +270,8 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        <InstagramGallery />
 
         {/* 8. Final CTA — close the story */}
         <section className="bg-gradient-to-br from-nino-orange to-[#ff7a3d] text-white">

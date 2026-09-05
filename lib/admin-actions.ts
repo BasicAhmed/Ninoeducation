@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/client";
-import { flightSchools, accommodations, applications } from "@/db/schema";
+import { flightSchools, accommodations, applications, socialPosts } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { redirect } from "next/navigation";
@@ -111,4 +111,35 @@ export async function updateApplicationStatus(formData: FormData) {
     .set({ status, updatedAt: new Date().toISOString() })
     .where(eq(applications.id, id));
   redirect("/admin/applications");
+}
+
+export async function saveSocialPost(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  const now = new Date().toISOString();
+
+  const values = {
+    imageUrl: String(formData.get("imageUrl") || ""),
+    caption: String(formData.get("caption") || ""),
+    permalink: String(formData.get("permalink") || ""),
+    likes: formData.get("likes") ? Number(formData.get("likes")) : null,
+    displayOrder: Number(formData.get("displayOrder") || 0),
+    status: String(formData.get("status") || "draft"),
+    updatedAt: now,
+  };
+
+  if (id) {
+    await db.update(socialPosts).set(values).where(eq(socialPosts.id, id));
+  } else {
+    await db.insert(socialPosts).values({ id: randomUUID(), createdAt: now, ...values });
+  }
+
+  redirect("/admin/social");
+}
+
+export async function deleteSocialPost(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  await db.delete(socialPosts).where(eq(socialPosts.id, id));
+  redirect("/admin/social");
 }
