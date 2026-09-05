@@ -98,3 +98,9 @@ using ( bucket_id = 'social' );
 create policy "Allow uploads to social bucket"
 on storage.objects for insert
 with check ( bucket_id = 'social' );
+
+-- Added: optional intake-date / seats-available fields on flight_schools
+-- (real urgency signals — leave NULL until a school confirms actual data;
+-- the UI only shows these when they're set, never invented numbers)
+ALTER TABLE "flight_schools" ADD COLUMN "next_intake_date" text;
+ALTER TABLE "flight_schools" ADD COLUMN "seats_available" integer;

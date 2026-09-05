@@ -8,6 +8,9 @@ import { SchoolCard } from "@/components/SchoolCard";
 import { WorldRouteMap } from "@/components/WorldRouteMap";
 import { WhySouthAfrica } from "@/components/WhySouthAfrica";
 import { InstagramGallery } from "@/components/InstagramGallery";
+import { TrustBar } from "@/components/TrustBar";
+import { FAQ } from "@/components/FAQ";
+import { Testimonials } from "@/components/Testimonials";
 import { Reveal } from "@/components/Reveal";
 import { CountUpNumber } from "@/components/CountUpNumber";
 
@@ -123,6 +126,9 @@ export default async function Home() {
 
           <div className="h-24 md:h-32" />
         </section>
+
+        {/* 1.5 Trust bar — immediate credibility right under the fold */}
+        <TrustBar />
 
         {/* 2. Why South Africa — the destination that makes the dream possible */}
         <div id="why-south-africa">
@@ -329,6 +335,10 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        <Testimonials />
+
+        <FAQ />
 
         <InstagramGallery />
 

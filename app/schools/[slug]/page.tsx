@@ -54,6 +54,20 @@ export default async function SchoolProfilePage({
             <p className="mt-4 max-w-2xl text-nino-ink/70">
               {school.shortDescriptionAr}
             </p>
+            {(school.nextIntakeDate || school.seatsAvailable != null) && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                {school.nextIntakeDate && (
+                  <span className="rounded-full bg-nino-orange/10 px-3 py-1.5 text-sm font-medium text-nino-orange">
+                    الدفعة القادمة: {school.nextIntakeDate}
+                  </span>
+                )}
+                {school.seatsAvailable != null && (
+                  <span className="rounded-full bg-nino-orange/10 px-3 py-1.5 text-sm font-medium text-nino-orange">
+                    {school.seatsAvailable} مقاعد متبقية فقط
+                  </span>
+                )}
+              </div>
+            )}
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={`/apply?school=${school.slug}`}

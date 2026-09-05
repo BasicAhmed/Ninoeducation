@@ -15,6 +15,13 @@
       "when": 1788622943479,
       "tag": "0001_free_kabuki",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788629093292,
+      "tag": "0002_amazing_mentallo",
+      "breakpoints": true
     }
   ]
 }

@@ -13,6 +13,8 @@ type School = {
   priceMaxZar: number;
   rating: number;
   hasAccommodation: boolean;
+  nextIntakeDate?: string | null;
+  seatsAvailable?: number | null;
 };
 
 export function SchoolCard({
@@ -54,6 +56,20 @@ export function SchoolCard({
       <p className="mt-2 text-sm text-nino-ink/70">
         {school.shortDescriptionAr}
       </p>
+      {(school.nextIntakeDate || school.seatsAvailable != null) && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {school.nextIntakeDate && (
+            <span className="rounded-full bg-nino-orange/10 px-2.5 py-1 text-xs font-medium text-nino-orange">
+              الدفعة القادمة: {school.nextIntakeDate}
+            </span>
+          )}
+          {school.seatsAvailable != null && (
+            <span className="rounded-full bg-nino-orange/10 px-2.5 py-1 text-xs font-medium text-nino-orange">
+              {school.seatsAvailable} مقاعد متبقية
+            </span>
+          )}
+        </div>
+      )}
       <div className="mt-4 flex flex-wrap gap-2">
         {licenses.map((l) => (
           <span

@@ -44,6 +44,10 @@ export async function saveSchool(formData: FormData) {
     rating: Number(formData.get("rating") || 4.5),
     ninoRanking: Number(formData.get("ninoRanking") || 0),
     websiteUrl: String(formData.get("websiteUrl") || "") || null,
+    nextIntakeDate: String(formData.get("nextIntakeDate") || "") || null,
+    seatsAvailable: formData.get("seatsAvailable")
+      ? Number(formData.get("seatsAvailable"))
+      : null,
     status: String(formData.get("status") || "draft"),
     lastPricingUpdate: now,
     updatedAt: now,

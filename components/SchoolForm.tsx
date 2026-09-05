@@ -23,6 +23,8 @@ type School = {
   rating: number;
   ninoRanking: number;
   websiteUrl: string | null;
+  nextIntakeDate?: string | null;
+  seatsAvailable?: number | null;
   status: string;
 };
 
@@ -89,6 +91,21 @@ export function SchoolForm({ school }: { school?: School }) {
         <TextField label="رابط الموقع الرسمي" name="websiteUrl" defaultValue={school?.websiteUrl ?? ""} />
       </div>
 
+      <div className="grid gap-5 md:grid-cols-2">
+        <TextField
+          label="تاريخ الدفعة القادمة (اختياري — اتركه فارغًا إن لم يكن مؤكدًا)"
+          name="nextIntakeDate"
+          defaultValue={school?.nextIntakeDate ?? ""}
+          placeholder="مثال: يناير 2027"
+        />
+        <TextField
+          label="عدد المقاعد المتبقية (اختياري — رقم حقيقي فقط)"
+          name="seatsAvailable"
+          type="number"
+          defaultValue={school?.seatsAvailable ?? ""}
+        />
+      </div>
+
       <div className="flex flex-wrap gap-6">
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" name="acceptsInternational" defaultChecked={school?.acceptsInternational ?? true} className="h-4 w-4 accent-orange-600" />
@@ -128,12 +145,14 @@ function TextField({
   type = "text",
   defaultValue,
   required,
+  placeholder,
 }: {
   label: string;
   name: string;
   type?: string;
   defaultValue?: string | number | null;
   required?: boolean;
+  placeholder?: string;
 }) {
   return (
     <div>
@@ -143,6 +162,7 @@ function TextField({
         name={name}
         defaultValue={defaultValue ?? ""}
         required={required}
+        placeholder={placeholder}
         className="mt-1.5 w-full rounded-lg border border-nino-line bg-nino-cream px-3 py-2.5 text-sm"
       />
     </div>

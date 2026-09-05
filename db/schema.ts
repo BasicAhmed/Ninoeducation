@@ -26,6 +26,8 @@ export const flightSchools = pgTable("flight_schools", {
   heroImageUrl: text("hero_image_url"),
   status: text("status").notNull().default("draft"), // draft | published
   lastPricingUpdate: text("last_pricing_update").notNull(),
+  nextIntakeDate: text("next_intake_date"), // optional — only shown if the school confirms a real date
+  seatsAvailable: integer("seats_available"), // optional — only shown if the school confirms a real count
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
 });
