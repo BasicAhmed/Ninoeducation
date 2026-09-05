@@ -1,32 +1,25 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
+const plexArabic = IBM_Plex_Sans_Arabic({
+  variable: "--font-plex-arabic",
+  subsets: ["arabic"],
   weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Nino Education — Study Aviation in South Africa",
+  title: "نينو إديوكيشن — ادرس الطيران في جنوب أفريقيا",
   description:
-    "Nino Education helps Arab and Indian students find, compare, and apply to flight schools in South Africa — free of charge, from first search to first flight.",
+    "نينو إديوكيشن تساعد الطلاب العرب على إيجاد ومقارنة والتقديم لأفضل مدارس الطيران في جنوب أفريقيا، دون أي تكلفة على الطالب.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
-      dir="ltr"
-      className={`${fraunces.variable} ${inter.variable} h-full antialiased`}
+      lang="ar"
+      dir="rtl"
+      className={`${plexArabic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-nino-cream text-nino-ink">
         {children}
