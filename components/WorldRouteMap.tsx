@@ -1,3 +1,8 @@
+import { geoMercator, geoPath, geoBounds } from "d3-geo";
+import { feature } from "topojson-client";
+import type { Topology, GeometryCollection } from "topojson-specification";
+import worldTopology from "world-atlas/countries-110m.json";
+
 type City = {
   code: string;
   nameAr: string;
@@ -15,59 +20,77 @@ const CITIES: City[] = [
 
 const DEST = { code: "JNB", nameAr: "جوهانسبرغ", lon: 28.0, lat: -26.2 };
 
-const LON_MIN = 15;
-const LON_MAX = 60;
-const LAT_MIN = -32;
-const LAT_MAX = 35;
 const W = 800;
-const H = 520;
+const H = 560;
 
-function project(lon: number, lat: number) {
-  const x = ((lon - LON_MIN) / (LON_MAX - LON_MIN)) * W;
-  const y = ((LAT_MAX - lat) / (LAT_MAX - LAT_MIN)) * H;
-  return { x, y };
-}
+const HIGHLIGHT = new Set([
+  "Saudi Arabia",
+  "Egypt",
+  "United Arab Emirates",
+  "Sudan",
+  "South Africa",
+]);
 
 function arcPath(from: { x: number; y: number }, to: { x: number; y: number }) {
   const mx = (from.x + to.x) / 2;
-  const my = (from.y + to.y) / 2 - 60;
+  const my = (from.y + to.y) / 2 - 70;
   return `M ${from.x} ${from.y} Q ${mx} ${my} ${to.x} ${to.y}`;
 }
 
 export function WorldRouteMap() {
+  const allCountries = (
+    feature(
+      worldTopology as unknown as Topology,
+      (worldTopology as unknown as Topology).objects.countries as GeometryCollection
+    ) as GeoJSON.FeatureCollection
+  ).features;
+
+  const countries = allCountries.filter((f) => {
+    try {
+      const [[minLon, minLat], [maxLon, maxLat]] = geoBounds(f);
+      return maxLon >= -25 && minLon <= 70 && maxLat >= -40 && minLat <= 42;
+    } catch {
+      return false;
+    }
+  });
+
+  const projection = geoMercator().fitSize([W, H], {
+    type: "FeatureCollection",
+    features: countries,
+  } as GeoJSON.FeatureCollection);
+  const pathGenerator = geoPath(projection);
+
+  const project = (lon: number, lat: number) => {
+    const p = projection([lon, lat]);
+    return p ? { x: p[0], y: p[1] } : { x: 0, y: 0 };
+  };
+
   const dest = project(DEST.lon, DEST.lat);
 
   return (
-    <div dir="ltr" className="relative overflow-hidden rounded-3xl border border-nino-line bg-[#fbf8f4]">
+    <div dir="ltr" className="relative overflow-hidden rounded-3xl border border-nino-line bg-[#eef2f6]">
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="w-full"
         role="img"
         aria-label="خريطة توضح انطلاق الطلاب من عدة دول عربية نحو جنوب أفريقيا"
       >
-        {/* graticule */}
-        {Array.from({ length: 9 }).map((_, i) => (
-          <line
-            key={`v${i}`}
-            x1={(i * W) / 8}
-            y1={0}
-            x2={(i * W) / 8}
-            y2={H}
-            stroke="#0b0d0f"
-            strokeOpacity={0.06}
-          />
-        ))}
-        {Array.from({ length: 6 }).map((_, i) => (
-          <line
-            key={`h${i}`}
-            x1={0}
-            y1={(i * H) / 5}
-            x2={W}
-            y2={(i * H) / 5}
-            stroke="#0b0d0f"
-            strokeOpacity={0.06}
-          />
-        ))}
+        {/* land */}
+        {countries.map((c, i) => {
+          const name = (c.properties as { name?: string } | null)?.name ?? "";
+          const d = pathGenerator(c);
+          if (!d) return null;
+          const isHighlighted = HIGHLIGHT.has(name);
+          return (
+            <path
+              key={`${name}-${i}`}
+              d={d}
+              fill={isHighlighted ? "#ffe4d1" : "#ffffff"}
+              stroke={isHighlighted ? "#fe5200" : "#c7cdd6"}
+              strokeWidth={isHighlighted ? 1.5 : 0.75}
+            />
+          );
+        })}
 
         {/* flight paths */}
         {CITIES.map((c) => {
@@ -79,13 +102,13 @@ export function WorldRouteMap() {
               fill="none"
               stroke="#fe5200"
               strokeWidth={2}
-              strokeOpacity={0.55}
+              strokeOpacity={0.7}
               className="flight-path"
             />
           );
         })}
 
-        {/* origin markers + labels (always visible) */}
+        {/* origin markers + labels */}
         {CITIES.map((c) => {
           const p = project(c.lon, c.lat);
           return (
@@ -99,10 +122,19 @@ export function WorldRouteMap() {
                 fontSize="15"
                 fontWeight={700}
                 fill="#0b0d0f"
+                style={{ paintOrder: "stroke", stroke: "#eef2f6", strokeWidth: 4 }}
               >
                 {c.nameAr}
               </text>
-              <text x={p.x} y={p.y + 26} textAnchor="middle" fontSize="11" fill="#0b0d0f" opacity={0.55}>
+              <text
+                x={p.x}
+                y={p.y + 26}
+                textAnchor="middle"
+                fontSize="11"
+                fill="#0b0d0f"
+                opacity={0.6}
+                style={{ paintOrder: "stroke", stroke: "#eef2f6", strokeWidth: 4 }}
+              >
                 {c.flightHours}
               </text>
             </g>
@@ -111,7 +143,7 @@ export function WorldRouteMap() {
 
         {/* destination marker */}
         <g>
-          <circle cx={dest.x} cy={dest.y} r={11} fill="#fe5200" opacity={0.18} />
+          <circle cx={dest.x} cy={dest.y} r={12} fill="#fe5200" opacity={0.18} />
           <circle cx={dest.x} cy={dest.y} r={8} fill="#fe5200" stroke="#ffffff" strokeWidth={2} />
           <text
             x={dest.x}
@@ -120,13 +152,14 @@ export function WorldRouteMap() {
             fontSize="16"
             fontWeight={700}
             fill="#0b0d0f"
+            style={{ paintOrder: "stroke", stroke: "#eef2f6", strokeWidth: 4 }}
           >
             جنوب أفريقيا
           </text>
         </g>
       </svg>
 
-      <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-nino-line bg-white/60 px-6 py-4 text-xs text-nino-ink/60" dir="rtl">
+      <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-nino-line bg-white/70 px-6 py-4 text-xs text-nino-ink/60" dir="rtl">
         {CITIES.map((c) => (
           <span key={c.code}>
             {c.nameAr} → جوهانسبرغ · {c.flightHours}

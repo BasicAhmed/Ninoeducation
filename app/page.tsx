@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SchoolCard } from "@/components/SchoolCard";
 import { WorldRouteMap } from "@/components/WorldRouteMap";
+import { WhySouthAfrica } from "@/components/WhySouthAfrica";
 
 const stats = [
   { value: "+30", label: "مدرسة طيران شريكة في جميع أنحاء جنوب أفريقيا" },
@@ -111,7 +112,7 @@ export default async function Home() {
                 من أينما كنت، الوجهة واحدة
               </h2>
               <p className="mx-auto mt-2 max-w-xl text-nino-ink/70">
-                مرّر فوق أي مدينة لترى تفاصيل الرحلة نحو جنوب أفريقيا.
+                من الرياض إلى الخرطوم، كل رحلة تنتهي في جنوب أفريقيا.
               </p>
             </div>
             <div className="mt-10">
@@ -119,6 +120,8 @@ export default async function Home() {
             </div>
           </div>
         </section>
+
+        <WhySouthAfrica />
 
         {/* Stats */}
         <section className="border-b border-nino-line bg-nino-white">
