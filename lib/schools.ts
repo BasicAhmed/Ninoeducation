@@ -13,54 +13,84 @@ export type SchoolFilters = {
 };
 
 export async function getPublishedSchools(filters: SchoolFilters = {}) {
-  const rows = await db
-    .select()
-    .from(flightSchools)
-    .where(eq(flightSchools.status, "published"))
-    .orderBy(flightSchools.ninoRanking);
+  try {
+    const rows = await db
+      .select()
+      .from(flightSchools)
+      .where(eq(flightSchools.status, "published"))
+      .orderBy(flightSchools.ninoRanking);
 
-  return rows.filter((s) => {
-    if (filters.province && s.province !== filters.province) return false;
-    if (filters.license && !s.licenses.split(",").includes(filters.license))
-      return false;
-    if (filters.maxBudget && s.priceMinZar > filters.maxBudget) return false;
-    if (filters.trainingType && s.trainingType !== filters.trainingType)
-      return false;
-    if (filters.accommodation && !s.hasAccommodation) return false;
-    return true;
-  });
+    return rows.filter((s) => {
+      if (filters.province && s.province !== filters.province) return false;
+      if (filters.license && !s.licenses.split(",").includes(filters.license))
+        return false;
+      if (filters.maxBudget && s.priceMinZar > filters.maxBudget) return false;
+      if (filters.trainingType && s.trainingType !== filters.trainingType)
+        return false;
+      if (filters.accommodation && !s.hasAccommodation) return false;
+      return true;
+    });
+  } catch (err) {
+    // A DB hiccup or a pending migration should show "no schools yet",
+    // not crash every page that lists schools (homepage included).
+    console.error("getPublishedSchools failed:", err);
+    return [];
+  }
 }
 
 export async function getSchoolBySlug(slug: string) {
-  const rows = await db
-    .select()
-    .from(flightSchools)
-    .where(eq(flightSchools.slug, slug))
-    .limit(1);
-  return rows[0] ?? null;
+  try {
+    const rows = await db
+      .select()
+      .from(flightSchools)
+      .where(eq(flightSchools.slug, slug))
+      .limit(1);
+    return rows[0] ?? null;
+  } catch (err) {
+    console.error("getSchoolBySlug failed:", err);
+    return null;
+  }
 }
 
 export async function getSchoolsBySlugs(slugs: string[]) {
-  const rows = await db.select().from(flightSchools);
-  return rows.filter((s) => slugs.includes(s.slug));
+  try {
+    const rows = await db.select().from(flightSchools);
+    return rows.filter((s) => slugs.includes(s.slug));
+  } catch (err) {
+    console.error("getSchoolsBySlugs failed:", err);
+    return [];
+  }
 }
 
 export async function getPublishedAccommodations() {
-  return db
-    .select()
-    .from(accommodations)
-    .where(eq(accommodations.status, "published"));
+  try {
+    return await db
+      .select()
+      .from(accommodations)
+      .where(eq(accommodations.status, "published"));
+  } catch (err) {
+    console.error("getPublishedAccommodations failed:", err);
+    return [];
+  }
 }
 
 export async function getAccommodationBySlug(slug: string) {
-  const rows = await db
-    .select()
-    .from(accommodations)
-    .where(eq(accommodations.slug, slug))
-    .limit(1);
-  return rows[0] ?? null;
+  try {
+    const rows = await db
+      .select()
+      .from(accommodations)
+      .where(eq(accommodations.slug, slug))
+      .limit(1);
+    return rows[0] ?? null;
+  } catch (err) {
+    console.error("getAccommodationBySlug failed:", err);
+    return null;
+  }
 }
 
 export async function getAllApplications() {
+  // Not wrapped in try/catch on purpose: this is admin-only, and a
+  // silent empty list here could make Ahmed think there are zero
+  // leads when the query is actually broken. Fail loud for admin.
   return db.select().from(applications).orderBy(desc(applications.createdAt));
 }

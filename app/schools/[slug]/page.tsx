@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getSchoolBySlug, LICENSE_LABELS } from "@/lib/schools";
+import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { formatUsdRange } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -76,7 +77,7 @@ export default async function SchoolProfilePage({
                 قدّم إلى {school.nameAr}
               </Link>
               <a
-                href={`https://wa.me/000000000000?text=${encodeURIComponent(
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
                   `مرحبًا، أريد الاستفسار عن ${school.nameAr}`
                 )}`}
                 className="rounded-full border border-nino-ink/20 px-6 py-3 text-sm font-medium text-nino-ink hover:border-nino-ink"

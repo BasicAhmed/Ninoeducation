@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 export function SiteFooter() {
   return (
@@ -35,7 +36,7 @@ export function SiteFooter() {
           <div>
             <p className="font-medium text-nino-ink">تواصل معنا</p>
             <a
-              href="https://wa.me/000000000000"
+              href={`https://wa.me/${WHATSAPP_NUMBER}`}
               className="mt-2 inline-block hover:text-nino-orange"
             >
               واتساب نينو إديوكيشن

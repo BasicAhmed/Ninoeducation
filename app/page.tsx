@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ShieldCheck, ListChecks, Compass, PlaneTakeoff, Home as HomeIcon } from "lucide-react";
 import { getPublishedSchools, getPublishedAccommodations } from "@/lib/schools";
+import { WHATSAPP_NUMBER, SITE_URL } from "@/lib/constants";
 import { formatUsd } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -80,8 +81,28 @@ export default async function Home() {
   const featured = (await getPublishedSchools()).slice(0, 3);
   const accommodation = (await getPublishedAccommodations()).slice(0, 3);
 
+  // Accurate to what Nino Education actually is — an enrollment
+  // consultancy connecting students to accredited flight schools, not
+  // an accredited training provider itself. Misrepresenting the type
+  // here would be the kind of structured-data spam Google penalizes.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "نينو إديوكيشن",
+    alternateName: "Nino Education",
+    url: SITE_URL,
+    description:
+      "استشارات مجانية للطلاب العرب لإيجاد ومقارنة والتقديم لأفضل مدارس الطيران المعتمدة في جنوب أفريقيا.",
+    areaServed: "Arab world, India",
+    knowsAbout: "Flight training enrollment, SACAA-licensed flight schools in South Africa",
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <SiteHeader transparent />
       <main className="flex-1">
         {/* 1. Hero — the dream */}
@@ -377,7 +398,7 @@ export default async function Home() {
                 لست متأكدًا؟ ابحث عن مدرستي
               </Link>
               <a
-                href="https://wa.me/000000000000"
+                href={`https://wa.me/${WHATSAPP_NUMBER}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="rounded-full border border-white/40 px-6 py-4 text-sm font-medium hover:bg-white/10"
