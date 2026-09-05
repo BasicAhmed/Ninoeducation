@@ -16,6 +16,7 @@ const CITIES: City[] = [
   { code: "CAI", nameAr: "القاهرة", lon: 31.2, lat: 30.0, flightHours: "≈ 9 ساعات" },
   { code: "DXB", nameAr: "دبي", lon: 55.3, lat: 25.2, flightHours: "≈ 8.5 ساعة" },
   { code: "KRT", nameAr: "الخرطوم", lon: 32.5, lat: 15.6, flightHours: "≈ 6 ساعات" },
+  { code: "BOM", nameAr: "مومباي", lon: 72.8, lat: 19.1, flightHours: "≈ 9 ساعات" },
 ];
 
 const DEST = { code: "JNB", nameAr: "جوهانسبرغ", lon: 28.0, lat: -26.2 };
@@ -29,6 +30,21 @@ const HIGHLIGHT = new Set([
   "United Arab Emirates",
   "Sudan",
   "South Africa",
+  "Jordan",
+  "Kuwait",
+  "Qatar",
+  "Bahrain",
+  "Oman",
+  "Yemen",
+  "Iraq",
+  "Syria",
+  "Lebanon",
+  "Palestine",
+  "Morocco",
+  "Algeria",
+  "Tunisia",
+  "Libya",
+  "India",
 ]);
 
 function arcPath(from: { x: number; y: number }, to: { x: number; y: number }) {
@@ -48,7 +64,7 @@ export function WorldRouteMap() {
   const countries = allCountries.filter((f) => {
     try {
       const [[minLon, minLat], [maxLon, maxLat]] = geoBounds(f);
-      return maxLon >= -25 && minLon <= 70 && maxLat >= -40 && minLat <= 42;
+      return maxLon >= -25 && minLon <= 100 && maxLat >= -40 && minLat <= 42;
     } catch {
       return false;
     }

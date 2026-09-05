@@ -9,7 +9,7 @@ export async function InstagramGallery() {
   if (posts.length === 0) return null;
 
   return (
-    <section className="border-b border-nino-line bg-nino-white py-20">
+    <section className="bg-nino-white py-20">
       <div className="mx-auto max-w-6xl px-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ShieldCheck, ListChecks, Compass, PlaneTakeoff, Home as HomeIcon } from "lucide-react";
-import { getPublishedSchools } from "@/lib/schools";
+import { getPublishedSchools, getPublishedAccommodations } from "@/lib/schools";
+import { formatUsd } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SchoolCard } from "@/components/SchoolCard";
@@ -74,6 +75,7 @@ function Kicker({ children }: { children: React.ReactNode }) {
 
 export default async function Home() {
   const featured = (await getPublishedSchools()).slice(0, 3);
+  const accommodation = (await getPublishedAccommodations()).slice(0, 3);
 
   return (
     <>
@@ -83,11 +85,11 @@ export default async function Home() {
         <section className="relative overflow-hidden bg-nino-cream">
           <div
             aria-hidden
-            className="ambient-glow-a absolute -right-1/4 -top-1/3 h-[560px] w-[560px] rounded-full bg-nino-orange/35 blur-3xl"
+            className="ambient-glow-a absolute -right-1/4 -top-1/4 h-64 w-64 rounded-full bg-nino-orange/40 blur-2xl sm:-top-1/3 sm:h-96 sm:w-96 sm:blur-3xl lg:h-[560px] lg:w-[560px] lg:bg-nino-orange/35"
           />
           <div
             aria-hidden
-            className="ambient-glow-b absolute -bottom-1/3 -left-1/4 h-[480px] w-[480px] rounded-full bg-nino-orange/25 blur-3xl"
+            className="ambient-glow-b absolute -bottom-1/4 -left-1/4 h-56 w-56 rounded-full bg-nino-orange/30 blur-2xl sm:-bottom-1/3 sm:h-80 sm:w-80 sm:blur-3xl lg:h-[480px] lg:w-[480px] lg:bg-nino-orange/25"
           />
 
           <div className="relative mx-auto max-w-3xl px-6 pt-24 text-center md:pt-32">
@@ -128,7 +130,7 @@ export default async function Home() {
         </div>
 
         {/* 3. Route map — now that you know why, see how close it actually is */}
-        <section className="border-b border-nino-line bg-nino-cream">
+        <section className="bg-nino-cream">
           <div className="mx-auto max-w-6xl px-6 py-16">
             <div className="text-center">
               <Kicker>من بلدك إلى هناك</Kicker>
@@ -147,7 +149,7 @@ export default async function Home() {
         </section>
 
         {/* 4. Why us — with 30+ schools out there, you need a guide */}
-        <section id="why" className="border-b border-nino-line bg-nino-white">
+        <section id="why" className="bg-nino-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="grid gap-10 md:grid-cols-[minmax(0,320px)_1fr]">
               <div>
@@ -189,7 +191,7 @@ export default async function Home() {
         </section>
 
         {/* 5. Stats — proof, not promises */}
-        <section className="relative overflow-hidden border-b border-nino-line bg-nino-cream">
+        <section className="relative overflow-hidden bg-nino-cream">
           <div
             aria-hidden
             className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(#0b0d0f_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,black_40%,transparent_100%)]"
@@ -213,7 +215,7 @@ export default async function Home() {
         </section>
 
         {/* 6. Featured schools — the real, concrete choices */}
-        <section className="border-b border-nino-line bg-nino-white">
+        <section className="bg-nino-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="text-center">
               <Kicker>من الأرقام إلى الواقع</Kicker>
@@ -248,8 +250,58 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* 6.5 Accommodation — the next real worry after picking a school */}
+        {accommodation.length > 0 && (
+          <section className="bg-nino-cream">
+            <div className="mx-auto max-w-6xl px-6 py-20">
+              <div className="text-center">
+                <Kicker>وين هسكن؟</Kicker>
+                <h2 className="mt-3 font-display text-3xl md:text-4xl">
+                  السكن جاهز قبل ما توصل
+                </h2>
+                <p className="mx-auto mt-2 max-w-xl text-nino-ink/70">
+                  خيارات سكن قريبة من المدرسة، ننسقها معك من الرياض أو
+                  القاهرة أو أي بلد — قبل أن تحجز تذكرتك حتى.
+                </p>
+              </div>
+              <div className="mt-10 grid gap-6 md:grid-cols-3">
+                {accommodation.map((a) => (
+                  <Link
+                    key={a.id}
+                    href={`/accommodation/${a.slug}`}
+                    className="flex flex-col rounded-2xl border border-nino-line bg-nino-white p-6 transition hover:border-nino-orange"
+                  >
+                    <span className="text-xs text-nino-ink/50">
+                      {a.city} · {a.province}
+                    </span>
+                    <h3 className="mt-3 font-display text-xl">{a.nameAr}</h3>
+                    <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
+                      <div dir="ltr" className="text-end text-sm font-medium">
+                        ${formatUsd(a.monthlyPriceZar)} / شهريًا
+                      </div>
+                      {a.distanceToAirport && (
+                        <span className="text-xs text-nino-ink/50">
+                          {a.distanceToAirport} من المطار
+                        </span>
+                      )}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+              <div className="mt-10 text-center">
+                <Link
+                  href="/accommodation"
+                  className="inline-block rounded-full border border-nino-ink/20 px-8 py-3.5 text-sm font-medium text-nino-ink hover:border-nino-ink"
+                >
+                  عرض كل خيارات السكن ←
+                </Link>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* 7. How it works — you've seen the schools, here's what happens next */}
-        <section className="border-b border-nino-line bg-nino-cream">
+        <section className="bg-nino-cream">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="text-center">
               <Kicker>اخترت مدرستك؟</Kicker>
@@ -280,9 +332,17 @@ export default async function Home() {
 
         <InstagramGallery />
 
-        {/* 8. Final CTA — close the story */}
-        <section className="bg-gradient-to-br from-nino-orange to-[#ff7a3d] text-white">
-          <div className="mx-auto max-w-6xl px-6 py-16 text-center">
+        {/* 8. Final CTA — close the story, but meet people where they are */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-nino-orange to-[#ff7a3d] text-white">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-nino-cream to-transparent"
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-nino-white to-transparent"
+          />
+          <div className="relative mx-auto max-w-4xl px-6 py-20 text-center">
             <Kicker>
               <span className="text-white/70">من الحلم إلى قمرة القيادة</span>
             </Kicker>
@@ -292,12 +352,29 @@ export default async function Home() {
             <p className="mx-auto mt-3 max-w-md text-white/90">
               أخبرنا بميزانيتك وأهدافك — وسنطابقك مع المدارس المناسبة اليوم.
             </p>
-            <Link
-              href="/apply"
-              className="mt-8 inline-block rounded-full bg-nino-ink px-8 py-3 text-sm font-medium hover:bg-white hover:text-nino-ink"
-            >
-              ابدأ طلبي
-            </Link>
+
+            <div className="mx-auto mt-10 grid max-w-2xl gap-3 sm:grid-cols-[1.4fr_1fr_1fr]">
+              <Link
+                href="/apply"
+                className="rounded-full bg-nino-ink px-6 py-4 text-sm font-medium hover:bg-white hover:text-nino-ink"
+              >
+                ابدأ طلبي الآن
+              </Link>
+              <Link
+                href="/quiz"
+                className="rounded-full border border-white/40 px-6 py-4 text-sm font-medium hover:bg-white/10"
+              >
+                لست متأكدًا؟ ابحث عن مدرستي
+              </Link>
+              <a
+                href="https://wa.me/000000000000"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-full border border-white/40 px-6 py-4 text-sm font-medium hover:bg-white/10"
+              >
+                تحدث معنا واتساب
+              </a>
+            </div>
           </div>
         </section>
       </main>

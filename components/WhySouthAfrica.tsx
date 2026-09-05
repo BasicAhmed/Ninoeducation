@@ -55,6 +55,10 @@ export function WhySouthAfrica() {
           شاهد الفيديو الكامل
         </a>
       </div>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent to-nino-cream"
+      />
     </section>
   );
 }
