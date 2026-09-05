@@ -71,7 +71,27 @@ export async function POST(req: NextRequest) {
     if (!res.ok) {
       const text = await res.text();
       console.error("lookup-school: Anthropic API error", res.status, text);
-      return NextResponse.json({ error: "فشل البحث، حاول مرة أخرى" }, { status: 502 });
+
+      // Surface the specific reason when it's something the admin can
+      // actually act on (billing, auth) instead of a generic failure —
+      // a silent "try again" for a zero balance just wastes their time.
+      let detail = "";
+      try {
+        const parsedErr = JSON.parse(text);
+        const msg = parsedErr?.error?.message || "";
+        if (msg.toLowerCase().includes("credit balance")) {
+          detail = " — رصيد حساب Anthropic API منخفض جدًا، أضف رصيدًا من console.anthropic.com > Plans & Billing";
+        } else if (res.status === 401) {
+          detail = " — مفتاح API غير صحيح";
+        }
+      } catch {
+        // ignore parse failure, fall back to generic message below
+      }
+
+      return NextResponse.json(
+        { error: `فشل البحث${detail}` },
+        { status: 502 }
+      );
     }
 
     const data = await res.json();

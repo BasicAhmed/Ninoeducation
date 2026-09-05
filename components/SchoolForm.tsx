@@ -191,7 +191,7 @@ export function SchoolForm({ school }: { school?: School }) {
 
       <div className="grid gap-5 md:grid-cols-2">
         <TextField label="اسم المدرسة (عربي)" name="nameAr" value={data.nameAr} onChange={(v) => set("nameAr", v)} required />
-        <TextField label="اسم المدرسة (إنجليزي / للرابط)" name="nameEn" value={data.nameEn} onChange={(v) => set("nameEn", v)} required />
+        <TextField label="اسم المدرسة (إنجليزي / للرابط)" name="nameEn" value={data.nameEn} onChange={(v) => set("nameEn", v)} required dir="ltr" />
       </div>
 
       <div className="rounded-xl border border-nino-orange/30 bg-nino-orange/5 p-4">
@@ -210,7 +210,7 @@ export function SchoolForm({ school }: { school?: School }) {
         {lookupNote && <p className="mt-2 text-xs font-medium text-nino-orange">{lookupNote}</p>}
       </div>
 
-      <TextField label="الرابط (slug) — اتركه فارغًا للإنشاء التلقائي" name="slug" value={data.slug} onChange={(v) => set("slug", v)} />
+      <TextField label="الرابط (slug) — اتركه فارغًا للإنشاء التلقائي" name="slug" value={data.slug} onChange={(v) => set("slug", v)} dir="ltr" />
 
       <div className="grid gap-5 md:grid-cols-2">
         <TextField label="المقاطعة" name="province" value={data.province} onChange={(v) => set("province", v)} required />
@@ -219,7 +219,7 @@ export function SchoolForm({ school }: { school?: School }) {
 
       <div className="grid gap-5 md:grid-cols-2">
         <TextField label="اسم المطار" name="airportName" value={data.airportName} onChange={(v) => set("airportName", v)} required />
-        <TextField label="رمز المطار (ICAO)" name="airportCode" value={data.airportCode} onChange={(v) => set("airportCode", v)} required />
+        <TextField label="رمز المطار (ICAO)" name="airportCode" value={data.airportCode} onChange={(v) => set("airportCode", v)} required dir="ltr" />
       </div>
 
       <TextAreaField label="وصف قصير" name="shortDescriptionAr" value={data.shortDescriptionAr} onChange={(v) => set("shortDescriptionAr", v)} rows={2} required />
@@ -231,6 +231,7 @@ export function SchoolForm({ school }: { school?: School }) {
         value={data.licenses}
         onChange={(v) => set("licenses", v)}
         required
+        dir="ltr"
       />
 
       <div>
@@ -257,12 +258,12 @@ export function SchoolForm({ school }: { school?: School }) {
         <TextField label="أطول مدة (أشهر)" name="durationMonthsMax" type="number" value={data.durationMonthsMax} onChange={(v) => set("durationMonthsMax", v)} required />
       </div>
 
-      <TextField label="الأسطول (افصل بفاصلة)" name="aircraftFleet" value={data.aircraftFleet} onChange={(v) => set("aircraftFleet", v)} required />
+      <TextField label="الأسطول (افصل بفاصلة)" name="aircraftFleet" value={data.aircraftFleet} onChange={(v) => set("aircraftFleet", v)} required dir="ltr" />
 
       <div className="grid gap-5 md:grid-cols-3">
         <TextField label="التقييم (0-5)" name="rating" type="number" value={data.rating} onChange={(v) => set("rating", v)} />
         <TextField label="ترتيب نينو (رقم أقل = أعلى)" name="ninoRanking" type="number" value={data.ninoRanking} onChange={(v) => set("ninoRanking", v)} />
-        <TextField label="رابط الموقع الرسمي" name="websiteUrl" value={data.websiteUrl} onChange={(v) => set("websiteUrl", v)} />
+        <TextField label="رابط الموقع الرسمي" name="websiteUrl" value={data.websiteUrl} onChange={(v) => set("websiteUrl", v)} dir="ltr" />
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
@@ -337,6 +338,7 @@ function TextField({
   onChange,
   required,
   placeholder,
+  dir,
 }: {
   label: string;
   name: string;
@@ -345,11 +347,13 @@ function TextField({
   onChange: (v: string) => void;
   required?: boolean;
   placeholder?: string;
+  dir?: "ltr" | "rtl";
 }) {
   return (
     <div>
       <label className="block text-sm font-medium">{label}</label>
       <input
+        dir={dir}
         type={type}
         name={name}
         value={value}
