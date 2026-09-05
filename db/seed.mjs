@@ -1,8 +1,14 @@
-import Database from "better-sqlite3";
-import path from "path";
+import postgres from "postgres";
+import "dotenv/config";
 import { randomUUID } from "crypto";
 
-const db = new Database(path.join(process.cwd(), "nino.db"));
+const connectionString = process.env.DATABASE_URL;
+if (!connectionString) {
+  console.error("DATABASE_URL is not set. Add it to .env before seeding.");
+  process.exit(1);
+}
+
+const sql = postgres(connectionString, { prepare: false });
 const now = new Date().toISOString();
 
 const schools = [
@@ -23,8 +29,8 @@ const schools = [
     priceMaxZar: 720000,
     durationMonthsMin: 12,
     durationMonthsMax: 18,
-    acceptsInternational: 1,
-    hasAccommodation: 1,
+    acceptsInternational: true,
+    hasAccommodation: true,
     aircraftFleet: "Cessna 172,Piper Seneca,Cirrus SR20",
     rating: 4.6,
     ninoRanking: 1,
@@ -47,8 +53,8 @@ const schools = [
     priceMaxZar: 520000,
     durationMonthsMin: 10,
     durationMonthsMax: 20,
-    acceptsInternational: 1,
-    hasAccommodation: 0,
+    acceptsInternational: true,
+    hasAccommodation: false,
     aircraftFleet: "Cessna 152,Cessna 172",
     rating: 4.3,
     ninoRanking: 2,
@@ -71,8 +77,8 @@ const schools = [
     priceMaxZar: 810000,
     durationMonthsMin: 13,
     durationMonthsMax: 17,
-    acceptsInternational: 1,
-    hasAccommodation: 1,
+    acceptsInternational: true,
+    hasAccommodation: true,
     aircraftFleet: "Cessna 172,Beechcraft Duchess",
     rating: 4.7,
     ninoRanking: 3,
@@ -95,8 +101,8 @@ const schools = [
     priceMaxZar: 470000,
     durationMonthsMin: 9,
     durationMonthsMax: 14,
-    acceptsInternational: 1,
-    hasAccommodation: 0,
+    acceptsInternational: true,
+    hasAccommodation: false,
     aircraftFleet: "Cessna 152,Cessna 172",
     rating: 4.1,
     ninoRanking: 4,
@@ -119,8 +125,8 @@ const schools = [
     priceMaxZar: 890000,
     durationMonthsMin: 14,
     durationMonthsMax: 19,
-    acceptsInternational: 1,
-    hasAccommodation: 1,
+    acceptsInternational: true,
+    hasAccommodation: true,
     aircraftFleet: "Cessna 172,Piper Seneca,Beechcraft Baron",
     rating: 4.8,
     ninoRanking: 5,
@@ -143,8 +149,8 @@ const schools = [
     priceMaxZar: 260000,
     durationMonthsMin: 4,
     durationMonthsMax: 8,
-    acceptsInternational: 1,
-    hasAccommodation: 0,
+    acceptsInternational: true,
+    hasAccommodation: false,
     aircraftFleet: "Cessna 152",
     rating: 3.9,
     ninoRanking: 6,
@@ -152,87 +158,94 @@ const schools = [
   },
 ];
 
-const insertSchool = db.prepare(`
-  INSERT OR REPLACE INTO flight_schools
-  (id, slug, name_ar, name_en, province, city, airport_name, airport_code,
-   description_ar, short_description_ar, licenses, training_type,
-   price_min_zar, price_max_zar, duration_months_min, duration_months_max,
-   accepts_international, has_accommodation, aircraft_fleet, rating,
-   nino_ranking, website_url, hero_image_url, status, last_pricing_update,
-   created_at, updated_at)
-  VALUES (@id, @slug, @nameAr, @nameEn, @province, @city, @airportName, @airportCode,
-   @descriptionAr, @shortDescriptionAr, @licenses, @trainingType,
-   @priceMinZar, @priceMaxZar, @durationMonthsMin, @durationMonthsMax,
-   @acceptsInternational, @hasAccommodation, @aircraftFleet, @rating,
-   @ninoRanking, @websiteUrl, @heroImageUrl, @status, @lastPricingUpdate,
-   @createdAt, @updatedAt)
-`);
+async function run() {
+  for (const s of schools) {
+    const row = {
+      id: randomUUID(),
+      websiteUrl: null,
+      heroImageUrl: null,
+      lastPricingUpdate: now,
+      createdAt: now,
+      updatedAt: now,
+      ...s,
+    };
+    await sql`
+      INSERT INTO flight_schools
+      (id, slug, name_ar, name_en, province, city, airport_name, airport_code,
+       description_ar, short_description_ar, licenses, training_type,
+       price_min_zar, price_max_zar, duration_months_min, duration_months_max,
+       accepts_international, has_accommodation, aircraft_fleet, rating,
+       nino_ranking, website_url, hero_image_url, status, last_pricing_update,
+       created_at, updated_at)
+      VALUES (${row.id}, ${row.slug}, ${row.nameAr}, ${row.nameEn}, ${row.province}, ${row.city}, ${row.airportName}, ${row.airportCode},
+       ${row.descriptionAr}, ${row.shortDescriptionAr}, ${row.licenses}, ${row.trainingType},
+       ${row.priceMinZar}, ${row.priceMaxZar}, ${row.durationMonthsMin}, ${row.durationMonthsMax},
+       ${row.acceptsInternational}, ${row.hasAccommodation}, ${row.aircraftFleet}, ${row.rating},
+       ${row.ninoRanking}, ${row.websiteUrl}, ${row.heroImageUrl}, ${row.status}, ${row.lastPricingUpdate},
+       ${row.createdAt}, ${row.updatedAt})
+      ON CONFLICT (slug) DO NOTHING
+    `;
+  }
 
-for (const s of schools) {
-  insertSchool.run({
-    id: randomUUID(),
-    websiteUrl: null,
-    heroImageUrl: null,
-    lastPricingUpdate: now,
-    createdAt: now,
-    updatedAt: now,
-    ...s,
-  });
+  const accommodations = [
+    {
+      slug: "kroon-student-residence",
+      nameAr: "سكن كرون للطلاب",
+      city: "كروغرسدورب",
+      province: "غاوتنغ",
+      descriptionAr: "غرف مفروشة قريبة من مطار كيتي هوك، مع مطبخ ومناطق مشتركة.",
+      monthlyPriceZar: 6500,
+      roomType: "private",
+      furnished: true,
+      distanceToAirport: "10 دقائق بالسيارة",
+      wifi: true,
+      status: "published",
+    },
+    {
+      slug: "wonderboom-shared-house",
+      nameAr: "منزل مشترك - وندربوم",
+      city: "بريتوريا",
+      province: "غاوتنغ",
+      descriptionAr: "غرف مشتركة اقتصادية لطلاب الطيران، على بعد دقائق من المدرسة.",
+      monthlyPriceZar: 3800,
+      roomType: "shared",
+      furnished: true,
+      distanceToAirport: "8 دقائق بالسيارة",
+      wifi: true,
+      status: "published",
+    },
+    {
+      slug: "fish-hoek-seaview-studio",
+      nameAr: "استوديو فيشوك بإطلالة بحرية",
+      city: "كيب تاون",
+      province: "الكيب الغربية",
+      descriptionAr: "استوديو مستقل قريب من الساحل، مناسب لطالب واحد.",
+      monthlyPriceZar: 8200,
+      roomType: "studio",
+      furnished: true,
+      distanceToAirport: "12 دقيقة بالسيارة",
+      wifi: true,
+      status: "published",
+    },
+  ];
+
+  for (const a of accommodations) {
+    const row = { id: randomUUID(), createdAt: now, updatedAt: now, ...a };
+    await sql`
+      INSERT INTO accommodations
+      (id, slug, name_ar, city, province, description_ar, monthly_price_zar,
+       room_type, furnished, distance_to_airport, wifi, status, created_at, updated_at)
+      VALUES (${row.id}, ${row.slug}, ${row.nameAr}, ${row.city}, ${row.province}, ${row.descriptionAr}, ${row.monthlyPriceZar},
+       ${row.roomType}, ${row.furnished}, ${row.distanceToAirport}, ${row.wifi}, ${row.status}, ${row.createdAt}, ${row.updatedAt})
+      ON CONFLICT (slug) DO NOTHING
+    `;
+  }
+
+  console.log(`Seeded ${schools.length} flight schools and ${accommodations.length} accommodations.`);
+  await sql.end();
 }
 
-const accommodations = [
-  {
-    slug: "kroon-student-residence",
-    nameAr: "سكن كرون للطلاب",
-    city: "كروغرسدورب",
-    province: "غاوتنغ",
-    descriptionAr: "غرف مفروشة قريبة من مطار كيتي هوك، مع مطبخ ومناطق مشتركة.",
-    monthlyPriceZar: 6500,
-    roomType: "private",
-    furnished: 1,
-    distanceToAirport: "10 دقائق بالسيارة",
-    wifi: 1,
-    status: "published",
-  },
-  {
-    slug: "wonderboom-shared-house",
-    nameAr: "منزل مشترك - وندربوم",
-    city: "بريتوريا",
-    province: "غاوتنغ",
-    descriptionAr: "غرف مشتركة اقتصادية لطلاب الطيران، على بعد دقائق من المدرسة.",
-    monthlyPriceZar: 3800,
-    roomType: "shared",
-    furnished: 1,
-    distanceToAirport: "8 دقائق بالسيارة",
-    wifi: 1,
-    status: "published",
-  },
-  {
-    slug: "fish-hoek-seaview-studio",
-    nameAr: "استوديو فيشوك بإطلالة بحرية",
-    city: "كيب تاون",
-    province: "الكيب الغربية",
-    descriptionAr: "استوديو مستقل قريب من الساحل، مناسب لطالب واحد.",
-    monthlyPriceZar: 8200,
-    roomType: "studio",
-    furnished: 1,
-    distanceToAirport: "12 دقيقة بالسيارة",
-    wifi: 1,
-    status: "published",
-  },
-];
-
-const insertAcc = db.prepare(`
-  INSERT OR REPLACE INTO accommodations
-  (id, slug, name_ar, city, province, description_ar, monthly_price_zar,
-   room_type, furnished, distance_to_airport, wifi, status, created_at, updated_at)
-  VALUES (@id, @slug, @nameAr, @city, @province, @descriptionAr, @monthlyPriceZar,
-   @roomType, @furnished, @distanceToAirport, @wifi, @status, @createdAt, @updatedAt)
-`);
-
-for (const a of accommodations) {
-  insertAcc.run({ id: randomUUID(), createdAt: now, updatedAt: now, ...a });
-}
-
-console.log(`Seeded ${schools.length} flight schools and ${accommodations.length} accommodations.`);
-db.close();
+run().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

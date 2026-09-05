@@ -1,6 +1,6 @@
-import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
+import { pgTable, text, integer, real, boolean } from "drizzle-orm/pg-core";
 
-export const flightSchools = sqliteTable("flight_schools", {
+export const flightSchools = pgTable("flight_schools", {
   id: text("id").primaryKey(),
   slug: text("slug").notNull().unique(),
   nameAr: text("name_ar").notNull(),
@@ -17,12 +17,8 @@ export const flightSchools = sqliteTable("flight_schools", {
   priceMaxZar: integer("price_max_zar").notNull(),
   durationMonthsMin: integer("duration_months_min").notNull(),
   durationMonthsMax: integer("duration_months_max").notNull(),
-  acceptsInternational: integer("accepts_international", { mode: "boolean" })
-    .notNull()
-    .default(true),
-  hasAccommodation: integer("has_accommodation", { mode: "boolean" })
-    .notNull()
-    .default(false),
+  acceptsInternational: boolean("accepts_international").notNull().default(true),
+  hasAccommodation: boolean("has_accommodation").notNull().default(false),
   aircraftFleet: text("aircraft_fleet").notNull(), // comma-separated
   rating: real("rating").notNull().default(4.5),
   ninoRanking: integer("nino_ranking").notNull().default(0),
@@ -34,7 +30,7 @@ export const flightSchools = sqliteTable("flight_schools", {
   updatedAt: text("updated_at").notNull(),
 });
 
-export const accommodations = sqliteTable("accommodations", {
+export const accommodations = pgTable("accommodations", {
   id: text("id").primaryKey(),
   slug: text("slug").notNull().unique(),
   nameAr: text("name_ar").notNull(),
@@ -43,15 +39,15 @@ export const accommodations = sqliteTable("accommodations", {
   descriptionAr: text("description_ar").notNull(),
   monthlyPriceZar: integer("monthly_price_zar").notNull(),
   roomType: text("room_type").notNull(), // private | shared | studio
-  furnished: integer("furnished", { mode: "boolean" }).notNull().default(true),
+  furnished: boolean("furnished").notNull().default(true),
   distanceToAirport: text("distance_to_airport"),
-  wifi: integer("wifi", { mode: "boolean" }).notNull().default(true),
+  wifi: boolean("wifi").notNull().default(true),
   status: text("status").notNull().default("draft"),
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
 });
 
-export const applications = sqliteTable("applications", {
+export const applications = pgTable("applications", {
   id: text("id").primaryKey(),
   fullName: text("full_name").notNull(),
   nationality: text("nationality").notNull(),
