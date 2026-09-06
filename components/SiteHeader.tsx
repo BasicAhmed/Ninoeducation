@@ -41,12 +41,12 @@ export async function SiteHeader({ transparent = false }: { transparent?: boolea
             {t.calculator}
           </Link>
         </nav>
-        <div className="flex items-center gap-3">
-          <LanguageToggle lang={lang} className="hidden sm:flex" />
+        <div className="flex items-center gap-2 sm:gap-3">
+          <LanguageToggle lang={lang} />
           <MobileNav lang={lang} />
           <Link
             href="/apply"
-            className="rounded-full bg-nino-ink px-5 py-2.5 text-sm font-medium text-nino-white transition hover:bg-nino-orange"
+            className="rounded-full bg-nino-ink px-4 py-2.5 text-xs font-medium text-nino-white transition hover:bg-nino-orange sm:px-5 sm:text-sm"
           >
             {t.apply}
           </Link>

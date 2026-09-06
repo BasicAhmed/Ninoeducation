@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import { LanguageToggle } from "@/components/LanguageToggle";
 import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 
 export function MobileNav({ lang }: { lang: Lang }) {
@@ -48,9 +47,6 @@ export function MobileNav({ lang }: { lang: Lang }) {
             >
               {t.apply}
             </Link>
-            <div className="mt-2 flex justify-center">
-              <LanguageToggle lang={lang} />
-            </div>
           </nav>
         </div>
       )}
