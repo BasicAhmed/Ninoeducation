@@ -3,7 +3,7 @@
 import { db } from "@/db/client";
 import { applications, flightSchools } from "@/db/schema";
 import { randomUUID } from "crypto";
-import { eq, ilike } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
 function generateReferenceCode() {
@@ -28,16 +28,33 @@ export async function submitApplication(formData: FormData) {
 
   // Same email can't apply twice — send them straight to their
   // existing application's status instead of creating a duplicate.
-  const existing = await db
-    .select()
-    .from(applications)
-    .where(ilike(applications.email, email))
-    .limit(1);
+  // Match on email alone, regardless of what name they typed this
+  // time — the person is who they say they are by email, not name.
+  // Exact case-insensitive match via lower() rather than ilike, since
+  // ilike treats "_" as a wildcard and emails can legitimately
+  // contain underscores — ilike could false-positive-match a
+  // different address that happens to share the same length/shape.
+  const existing = email
+    ? await db
+        .select()
+        .from(applications)
+        .where(sql`lower(${applications.email}) = ${email.toLowerCase()}`)
+        .limit(1)
+    : [];
 
-  if (existing[0]?.referenceCode) {
-    redirect(
-      `/track?ref=${existing[0].referenceCode}&email=${encodeURIComponent(email)}&already=1`
-    );
+  if (existing[0]) {
+    console.log(`submitApplication: duplicate email detected (${email}), redirecting to existing application ${existing[0].id}`);
+    let refCode = existing[0].referenceCode;
+    if (!refCode) {
+      // Older row from before reference codes existed — backfill one
+      // now instead of silently letting a duplicate through.
+      refCode = generateReferenceCode();
+      await db
+        .update(applications)
+        .set({ referenceCode: refCode, updatedAt: new Date().toISOString() })
+        .where(eq(applications.id, existing[0].id));
+    }
+    redirect(`/track?ref=${refCode}&email=${encodeURIComponent(email)}&already=1`);
   }
 
   const now = new Date().toISOString();
