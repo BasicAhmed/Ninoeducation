@@ -35,4 +35,29 @@ export const GUIDES: GuideMeta[] = [
     title: "كم تستغرق دراسة الطيران حتى الاحتراف؟",
     description: "جدول زمني واقعي، وما الذي يؤثر فعليًا على مدة تدريبك.",
   },
+  {
+    href: "/guides/student-accommodation-south-africa",
+    title: "السكن في جنوب أفريقيا: دليل الطالب الدولي",
+    description: "أنواع السكن، الأسعار، وكيف تحجز قبل وصولك بثقة.",
+  },
+  {
+    href: "/guides/how-to-choose-a-flight-school",
+    title: "كيف تختار أفضل مدرسة طيران في جنوب أفريقيا؟",
+    description: "معايير عملية غير الاسم الأشهر — الاعتماد، الأسطول، والسعر الحقيقي.",
+  },
+  {
+    href: "/guides/common-challenges-flight-training",
+    title: "مشاكل قد تواجهك أثناء برنامج التدريب",
+    description: "بصراحة تامة: تأخير الطقس، الحنين للوطن، وتكاليف غير متوقعة.",
+  },
+  {
+    href: "/guides/tips-to-succeed-in-south-africa",
+    title: "كيف تنجح في دراسة الطيران بجنوب أفريقيا؟",
+    description: "نصائح عملية من قبل الوصول وحتى منتصف برنامجك.",
+  },
+  {
+    href: "/guides/pilot-salary-and-jobs",
+    title: "فرص العمل ورواتب الطيارين: نظرة واقعية",
+    description: "بدون أرقام مضخّمة — المسار المهني الحقيقي وما يؤثر على راتبك.",
+  },
 ];

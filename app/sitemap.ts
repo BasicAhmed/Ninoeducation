@@ -20,6 +20,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/guides/flight-training-cost-south-africa`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/guides/sacaa-medical-requirements`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/guides/how-long-to-become-a-pilot`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/guides/student-accommodation-south-africa`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/guides/how-to-choose-a-flight-school`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/guides/common-challenges-flight-training`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${SITE_URL}/guides/tips-to-succeed-in-south-africa`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${SITE_URL}/guides/pilot-salary-and-jobs`, changeFrequency: "monthly", priority: 0.7 },
   ];
 
   // A failed DB connection here should never take down the sitemap

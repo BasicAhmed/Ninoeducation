@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { SITE_URL } from "@/lib/constants";
+import { GUIDES } from "@/lib/guides";
 
 export const metadata = {
   title: "دراسة الطيران في جنوب أفريقيا: الدليل الشامل 2026 | نينو إديوكيشن",
@@ -238,7 +239,12 @@ export default function StudyAviationGuidePage() {
                 <Link href="/accommodation" className="text-nino-orange hover:underline">
                   تصفح خيارات السكن المتاحة
                 </Link>{" "}
-                بالقرب من كل مدرسة، مع الأسعار التقديرية الشهرية.
+                بالقرب من كل مدرسة، مع الأسعار التقديرية الشهرية. للتفاصيل
+                الكاملة، راجع{" "}
+                <Link href="/guides/student-accommodation-south-africa" className="text-nino-orange hover:underline">
+                  دليل السكن الشامل
+                </Link>
+                .
               </p>
             </section>
 
@@ -255,7 +261,11 @@ export default function StudyAviationGuidePage() {
                 <Link href="/quiz" className="text-nino-orange hover:underline">
                   أداة البحث عن مدرستك المناسبة
                 </Link>{" "}
-                — ثلاثة أسئلة فقط وتحصل على ترشيحات مباشرة.
+                — ثلاثة أسئلة فقط وتحصل على ترشيحات مباشرة، أو راجع{" "}
+                <Link href="/guides/how-to-choose-a-flight-school" className="text-nino-orange hover:underline">
+                  دليل اختيار المدرسة المناسبة
+                </Link>
+                .
               </p>
             </section>
 
@@ -266,7 +276,11 @@ export default function StudyAviationGuidePage() {
                 لمعظم دول العالم بعد استيفاء متطلبات التحويل المحلية. يفتح هذا
                 المجال للتقديم على شركات طيران في الخليج ومصر وغيرها، أو العمل
                 كمدرب طيران لتجميع ساعات إضافية قبل الانتقال لشركات الطيران
-                الكبرى.
+                الكبرى. راجع{" "}
+                <Link href="/guides/pilot-salary-and-jobs" className="text-nino-orange hover:underline">
+                  دليل فرص العمل والرواتب
+                </Link>{" "}
+                لنظرة واقعية على هذا المسار.
               </p>
             </section>
           </div>
@@ -293,31 +307,13 @@ export default function StudyAviationGuidePage() {
           <section className="mt-12 border-t border-nino-line pt-10">
             <h2 className="font-display text-xl">أدلة ذات صلة</h2>
             <ul className="mt-4 space-y-2">
-              <li>
-                <Link href="/guides/south-africa-study-visa" className="text-nino-orange hover:underline">
-                  التأشيرة الدراسية لجنوب أفريقيا ←
-                </Link>
-              </li>
-              <li>
-                <Link href="/guides/ppl-vs-cpl" className="text-nino-orange hover:underline">
-                  الفرق بين PPL و CPL ←
-                </Link>
-              </li>
-              <li>
-                <Link href="/guides/flight-training-cost-south-africa" className="text-nino-orange hover:underline">
-                  كم تكلفة تعلم الطيران في جنوب أفريقيا؟ ←
-                </Link>
-              </li>
-              <li>
-                <Link href="/guides/sacaa-medical-requirements" className="text-nino-orange hover:underline">
-                  متطلبات SACAA والفحص الطبي ←
-                </Link>
-              </li>
-              <li>
-                <Link href="/guides/how-long-to-become-a-pilot" className="text-nino-orange hover:underline">
-                  كم تستغرق مدة دراسة الطيران؟ ←
-                </Link>
-              </li>
+              {GUIDES.filter((g) => g.href !== "/guides/study-aviation-in-south-africa").map((g) => (
+                <li key={g.href}>
+                  <Link href={g.href} className="text-nino-orange hover:underline">
+                    {g.title} ←
+                  </Link>
+                </li>
+              ))}
             </ul>
           </section>
 
