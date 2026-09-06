@@ -86,6 +86,8 @@ export function ApplyWizard({
 }) {
   const [step, setStep] = useState(0);
   const [showErrors, setShowErrors] = useState(false);
+  const [checkingEmail, setCheckingEmail] = useState(false);
+  const [duplicate, setDuplicate] = useState<{ referenceCode: string | null } | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const hasMounted = useRef(false);
@@ -145,12 +147,38 @@ export function ApplyWizard({
   const currentErrors = stepErrors(step);
   const isStepValid = Object.keys(currentErrors).length === 0;
 
-  function next() {
+  async function next() {
     if (!isStepValid) {
       setShowErrors(true);
       return;
     }
     setShowErrors(false);
+
+    // Check for a duplicate email right when leaving the contact
+    // step — the earliest point we have their email — instead of
+    // waiting until final submission and wasting their time on the
+    // rest of the form.
+    if (step === 1) {
+      setCheckingEmail(true);
+      try {
+        const res = await fetch("/api/check-email", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ email: data.email }),
+        });
+        const json = await res.json();
+        if (json.exists) {
+          setDuplicate({ referenceCode: json.referenceCode });
+          setCheckingEmail(false);
+          return;
+        }
+      } catch {
+        // Fail open — a network hiccup on this convenience check
+        // should never trap someone on this step.
+      }
+      setCheckingEmail(false);
+    }
+
     setStep((s) => Math.min(s + 1, STEPS.length - 1));
   }
   function back() {
@@ -174,6 +202,36 @@ export function ApplyWizard({
   const formattedPhone = phoneDial ? `+${phoneDial}${data.phoneNumber.replace(/\s/g, "")}` : "";
   const formattedWhatsapp =
     whatsappDial && data.whatsappNumber.trim() ? `+${whatsappDial}${data.whatsappNumber.replace(/\s/g, "")}` : "";
+
+  if (duplicate) {
+    const trackHref = duplicate.referenceCode
+      ? `/track?ref=${duplicate.referenceCode}&email=${encodeURIComponent(data.email)}&already=1`
+      : `/track?email=${encodeURIComponent(data.email)}`;
+    return (
+      <div className="rounded-2xl border border-nino-orange/30 bg-nino-orange/5 p-8 text-center">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-nino-orange text-white">
+          <Check size={20} strokeWidth={3} />
+        </div>
+        <h2 className="mt-4 font-display text-2xl">لقيناك! قدّمت طلبك من قبل</h2>
+        <p className="mt-2 text-sm text-nino-ink/60">
+          هذا الإيميل عنده طلب مسجّل عندنا — ما نبي نسوي لك طلب مكرر ونضيع وقتك. تقدر تشوف وين وصل حالًا.
+        </p>
+        <a
+          href={trackHref}
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white hover:bg-nino-orange"
+        >
+          شوف وضع طلبي
+        </a>
+        <button
+          type="button"
+          onClick={() => setDuplicate(null)}
+          className="mt-4 block w-full text-xs text-nino-ink/40 hover:text-nino-ink/60"
+        >
+          هذا مو إيميلي، رجّعني
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div ref={rootRef} className="pb-24">
@@ -484,9 +542,10 @@ export function ApplyWizard({
               <button
                 type="button"
                 onClick={next}
-                className="flex items-center gap-1.5 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white transition-transform hover:bg-nino-orange active:scale-95"
+                disabled={checkingEmail}
+                className="flex items-center gap-1.5 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white transition-transform hover:bg-nino-orange active:scale-95 disabled:opacity-60"
               >
-                التالي
+                {checkingEmail ? "لحظة..." : "التالي"}
                 <ChevronLeft size={15} />
               </button>
             ) : (
