@@ -17,6 +17,9 @@ import {
   PlaneTakeoff,
 } from "lucide-react";
 import { submitApplication } from "@/lib/actions";
+import { CountrySelect } from "@/components/CountrySelect";
+import { PhoneField, validatePhone } from "@/components/PhoneField";
+import { COUNTRIES } from "@/lib/countries";
 
 const LICENSE_OPTIONS = [
   { value: "PPL", label: "رخصة طيار خاص", hint: "أول خطوة نحو السماء", icon: Plane },
@@ -27,10 +30,11 @@ const LICENSE_OPTIONS = [
 ];
 
 const BUDGET_OPTIONS = [
-  "أقل من 300,000 راند",
-  "300,000 – 500,000 راند",
-  "500,000 – 800,000 راند",
-  "أكثر من 800,000 راند",
+  "أقل من $40,000",
+  "من $40,000 إلى $70,000",
+  "من $70,000 إلى $100,000",
+  "من $100,000 إلى $150,000",
+  "أكثر من $150,000",
   "غير متأكد بعد",
 ];
 
@@ -70,6 +74,7 @@ const STEPS = [
 ];
 
 const EASE = "cubic-bezier(0.65,0,0.35,1)";
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function ApplyWizard({
   schoolSlug,
@@ -79,14 +84,17 @@ export function ApplyWizard({
   schoolName?: string;
 }) {
   const [step, setStep] = useState(0);
+  const [showErrors, setShowErrors] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const hasMounted = useRef(false);
   const [data, setData] = useState({
     fullName: "",
     nationality: "",
     currentResidence: "",
-    phone: "",
-    whatsapp: "",
+    phoneCountry: "",
+    phoneNumber: "",
+    whatsappCountry: "",
+    whatsappNumber: "",
     email: "",
     estimatedBudget: "",
     fundingSource: "",
@@ -103,20 +111,48 @@ export function ApplyWizard({
     setData((d) => ({ ...d, [key]: value }));
   }
 
-  function stepValid(i: number) {
-    if (i === 0) return data.fullName.trim() && data.nationality.trim() && data.currentResidence.trim();
-    if (i === 1) return data.phone.trim() && data.email.trim();
-    if (i === 2) return data.estimatedBudget && data.fundingSource && data.accommodationBudgetOk;
-    if (i === 3) return data.englishLevel && data.medicalConcern;
-    if (i === 4) return data.desiredLicense;
-    return true;
+  function stepErrors(i: number): Record<string, string> {
+    const e: Record<string, string> = {};
+    if (i === 0) {
+      if (!data.fullName.trim()) e.fullName = "مطلوب";
+      if (!data.nationality) e.nationality = "اختر دولة الجنسية";
+      if (!data.currentResidence) e.currentResidence = "اختر دولة الإقامة";
+    }
+    if (i === 1) {
+      if (!validatePhone(data.phoneCountry, data.phoneNumber)) e.phone = "رقم الهاتف غير صحيح";
+      if (data.whatsappNumber.trim() && !validatePhone(data.whatsappCountry, data.whatsappNumber)) {
+        e.whatsapp = "رقم الواتساب غير صحيح";
+      }
+      if (!EMAIL_RE.test(data.email.trim())) e.email = "بريد إلكتروني غير صحيح";
+    }
+    if (i === 2) {
+      if (!data.estimatedBudget) e.estimatedBudget = "اختر خيارًا";
+      if (!data.fundingSource) e.fundingSource = "اختر خيارًا";
+      if (!data.accommodationBudgetOk) e.accommodationBudgetOk = "اختر خيارًا";
+    }
+    if (i === 3) {
+      if (!data.englishLevel) e.englishLevel = "اختر خيارًا";
+      if (!data.medicalConcern) e.medicalConcern = "اختر خيارًا";
+    }
+    if (i === 4) {
+      if (!data.desiredLicense) e.desiredLicense = "اختر الرخصة";
+    }
+    return e;
   }
 
+  const currentErrors = stepErrors(step);
+  const isStepValid = Object.keys(currentErrors).length === 0;
+
   function next() {
-    if (!stepValid(step)) return;
+    if (!isStepValid) {
+      setShowErrors(true);
+      return;
+    }
+    setShowErrors(false);
     setStep((s) => Math.min(s + 1, STEPS.length - 1));
   }
   function back() {
+    setShowErrors(false);
     setStep((s) => Math.max(s - 1, 0));
   }
 
@@ -130,6 +166,12 @@ export function ApplyWizard({
 
   const progressPct = (step / (STEPS.length - 1)) * 100;
   const StepIcon = STEPS[step].icon;
+
+  const phoneDial = COUNTRIES.find((c) => c.code === data.phoneCountry)?.dialCode;
+  const whatsappDial = COUNTRIES.find((c) => c.code === data.whatsappCountry)?.dialCode;
+  const formattedPhone = phoneDial ? `+${phoneDial}${data.phoneNumber.replace(/\s/g, "")}` : "";
+  const formattedWhatsapp =
+    whatsappDial && data.whatsappNumber.trim() ? `+${whatsappDial}${data.whatsappNumber.replace(/\s/g, "")}` : "";
 
   return (
     <div ref={rootRef} className="pb-24">
@@ -179,10 +221,10 @@ export function ApplyWizard({
       <form action={submitApplication}>
         <input type="hidden" name="schoolSlug" value={schoolSlug} />
         <input type="hidden" name="fullName" value={data.fullName} />
-        <input type="hidden" name="nationality" value={data.nationality} />
-        <input type="hidden" name="currentResidence" value={data.currentResidence} />
-        <input type="hidden" name="phone" value={data.phone} />
-        <input type="hidden" name="whatsapp" value={data.whatsapp} />
+        <input type="hidden" name="nationality" value={COUNTRIES.find((c) => c.code === data.nationality)?.name || ""} />
+        <input type="hidden" name="currentResidence" value={COUNTRIES.find((c) => c.code === data.currentResidence)?.name || ""} />
+        <input type="hidden" name="phone" value={formattedPhone} />
+        <input type="hidden" name="whatsapp" value={formattedWhatsapp} />
         <input type="hidden" name="email" value={data.email} />
         <input type="hidden" name="estimatedBudget" value={data.estimatedBudget} />
         <input type="hidden" name="fundingSource" value={data.fundingSource} />
@@ -204,14 +246,26 @@ export function ApplyWizard({
             <Panel active={step === 0}>
               <StepHeading icon={STEPS[0].icon} kicker={STEPS[0].kicker} title={STEPS[0].title} />
               <div className="space-y-5">
-                <TextInput id="fullName" label="اسم القبطان الكامل" value={data.fullName} onChange={(v) => set("fullName", v)} />
-                <TextInput id="nationality" label="الجنسية" value={data.nationality} onChange={(v) => set("nationality", v)} />
                 <TextInput
-                  id="currentResidence"
-                  label="أين تقيم حاليًا؟ (المدينة والدولة)"
+                  id="fullNameInput"
+                  label="اسم القبطان الكامل"
+                  value={data.fullName}
+                  onChange={(v) => set("fullName", v)}
+                  error={showErrors ? currentErrors.fullName : undefined}
+                />
+                <CountrySelect
+                  id="nationalityInput"
+                  label="الجنسية"
+                  value={data.nationality}
+                  onChange={(v) => set("nationality", v)}
+                  error={showErrors ? currentErrors.nationality : undefined}
+                />
+                <CountrySelect
+                  id="currentResidenceInput"
+                  label="أين تقيم حاليًا؟"
                   value={data.currentResidence}
                   onChange={(v) => set("currentResidence", v)}
-                  placeholder="مثال: جدة، السعودية"
+                  error={showErrors ? currentErrors.currentResidence : undefined}
                 />
               </div>
             </Panel>
@@ -223,9 +277,32 @@ export function ApplyWizard({
                 نحتاج طريقة نوصلك فيها بالأخبار الجيدة.
               </p>
               <div className="space-y-5">
-                <TextInput id="phone" label="رقم الهاتف" type="tel" value={data.phone} onChange={(v) => set("phone", v)} dir="ltr" />
-                <TextInput id="whatsapp" label="رقم الواتساب (اختياري)" type="tel" value={data.whatsapp} onChange={(v) => set("whatsapp", v)} dir="ltr" />
-                <TextInput id="email" label="البريد الإلكتروني" type="email" value={data.email} onChange={(v) => set("email", v)} dir="ltr" />
+                <PhoneField
+                  label="رقم الهاتف"
+                  required
+                  countryCode={data.phoneCountry}
+                  onCountryChange={(v) => set("phoneCountry", v)}
+                  national={data.phoneNumber}
+                  onNationalChange={(v) => set("phoneNumber", v)}
+                  error={showErrors ? currentErrors.phone : undefined}
+                />
+                <PhoneField
+                  label="رقم الواتساب"
+                  countryCode={data.whatsappCountry || data.phoneCountry}
+                  onCountryChange={(v) => set("whatsappCountry", v)}
+                  national={data.whatsappNumber}
+                  onNationalChange={(v) => set("whatsappNumber", v)}
+                  error={showErrors ? currentErrors.whatsapp : undefined}
+                />
+                <TextInput
+                  id="emailInput"
+                  label="البريد الإلكتروني"
+                  type="email"
+                  value={data.email}
+                  onChange={(v) => set("email", v)}
+                  dir="ltr"
+                  error={showErrors ? currentErrors.email : undefined}
+                />
               </div>
             </Panel>
 
@@ -237,22 +314,25 @@ export function ApplyWizard({
               </p>
               <div className="space-y-6">
                 <ChoiceGroup
-                  label="ميزانيتك الإجمالية التقديرية"
+                  label="ميزانيتك الإجمالية التقديرية (بالدولار)"
                   options={BUDGET_OPTIONS.map((b) => ({ value: b, label: b }))}
                   value={data.estimatedBudget}
                   onChange={(v) => set("estimatedBudget", v)}
+                  error={showErrors ? currentErrors.estimatedBudget : undefined}
                 />
                 <ChoiceGroup
                   label="مصدر التمويل"
                   options={FUNDING_OPTIONS}
                   value={data.fundingSource}
                   onChange={(v) => set("fundingSource", v)}
+                  error={showErrors ? currentErrors.fundingSource : undefined}
                 />
                 <ChoiceGroup
                   label="هل ميزانيتك تشمل تكاليف السكن أيضًا؟"
                   options={ACCOMMODATION_BUDGET_OPTIONS}
                   value={data.accommodationBudgetOk}
                   onChange={(v) => set("accommodationBudgetOk", v)}
+                  error={showErrors ? currentErrors.accommodationBudgetOk : undefined}
                 />
               </div>
             </Panel>
@@ -267,6 +347,7 @@ export function ApplyWizard({
                   value={data.englishLevel}
                   onChange={(v) => set("englishLevel", v)}
                   columns={2}
+                  error={showErrors ? currentErrors.englishLevel : undefined}
                 />
                 <div>
                   <ChoiceGroup
@@ -274,6 +355,7 @@ export function ApplyWizard({
                     options={MEDICAL_OPTIONS}
                     value={data.medicalConcern}
                     onChange={(v) => set("medicalConcern", v)}
+                    error={showErrors ? currentErrors.medicalConcern : undefined}
                   />
                   <p className="mt-2 text-xs text-nino-ink/45">
                     لسنا بحاجة لتفاصيل الآن — فقط لنعرف إن كان يجب مناقشة هذا مبكرًا.
@@ -353,7 +435,13 @@ export function ApplyWizard({
                 />
               </div>
 
-              <BoardingPass data={data} schoolName={schoolName} />
+              <BoardingPass
+                fullName={data.fullName}
+                nationality={COUNTRIES.find((c) => c.code === data.nationality)?.name || ""}
+                desiredLicense={data.desiredLicense}
+                preferredStart={data.preferredStart}
+                schoolName={schoolName}
+              />
             </Panel>
           </div>
         </div>
@@ -381,8 +469,7 @@ export function ApplyWizard({
               <button
                 type="button"
                 onClick={next}
-                disabled={!stepValid(step)}
-                className="flex items-center gap-1.5 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white hover:bg-nino-orange disabled:opacity-30"
+                className="flex items-center gap-1.5 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white hover:bg-nino-orange"
               >
                 التالي
                 <ChevronLeft size={15} />
@@ -446,6 +533,7 @@ function TextInput({
   type = "text",
   placeholder,
   dir,
+  error,
 }: {
   id: string;
   label: string;
@@ -454,6 +542,7 @@ function TextInput({
   type?: string;
   placeholder?: string;
   dir?: "ltr" | "rtl";
+  error?: string;
 }) {
   return (
     <div>
@@ -465,8 +554,11 @@ function TextInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         dir={dir}
-        className="mt-1.5 w-full rounded-lg border border-nino-line bg-nino-white px-3 py-3 text-sm"
+        className={`mt-1.5 w-full rounded-lg border bg-nino-white px-3 py-3 text-sm ${
+          error ? "border-red-400" : "border-nino-line"
+        }`}
       />
+      {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
     </div>
   );
 }
@@ -477,12 +569,16 @@ function ChoiceGroup({
   value,
   onChange,
   columns = 1,
+  error,
+  labelDir,
 }: {
   label: string;
   options: { value: string; label: string }[];
   value: string;
   onChange: (v: string) => void;
   columns?: 1 | 2;
+  error?: string;
+  labelDir?: "ltr" | "rtl";
 }) {
   return (
     <div>
@@ -495,10 +591,13 @@ function ChoiceGroup({
               type="button"
               key={o.value}
               onClick={() => onChange(o.value)}
+              dir={labelDir}
               className={`rounded-lg border px-3.5 py-2.5 text-start text-sm transition-colors ${
                 active
                   ? "border-nino-orange bg-nino-orange/5 font-medium text-nino-ink"
-                  : "border-nino-line bg-nino-white text-nino-ink/70 hover:border-nino-ink/30"
+                  : error
+                    ? "border-red-300 bg-nino-white text-nino-ink/70"
+                    : "border-nino-line bg-nino-white text-nino-ink/70 hover:border-nino-ink/30"
               }`}
             >
               {o.label}
@@ -506,18 +605,25 @@ function ChoiceGroup({
           );
         })}
       </div>
+      {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
     </div>
   );
 }
 
 function BoardingPass({
-  data,
+  fullName,
+  nationality,
+  desiredLicense,
+  preferredStart,
   schoolName,
 }: {
-  data: { fullName: string; nationality: string; desiredLicense: string; preferredStart: string };
+  fullName: string;
+  nationality: string;
+  desiredLicense: string;
+  preferredStart: string;
   schoolName?: string;
 }) {
-  const license = LICENSE_OPTIONS.find((o) => o.value === data.desiredLicense);
+  const license = LICENSE_OPTIONS.find((o) => o.value === desiredLicense);
   return (
     <div className="mt-8 overflow-hidden rounded-2xl border border-nino-ink bg-nino-ink text-white">
       <div className="flex items-center justify-between px-6 py-4">
@@ -527,11 +633,11 @@ function BoardingPass({
       <div className="grid grid-cols-2 gap-5 border-t border-dashed border-white/20 px-6 py-5 text-sm">
         <div>
           <div className="text-xs text-white/40">القبطان</div>
-          <div className="mt-1 font-medium">{data.fullName || "—"}</div>
+          <div className="mt-1 font-medium">{fullName || "—"}</div>
         </div>
         <div>
           <div className="text-xs text-white/40">من</div>
-          <div className="mt-1 font-medium">{data.nationality || "—"}</div>
+          <div className="mt-1 font-medium">{nationality || "—"}</div>
         </div>
         <div>
           <div className="text-xs text-white/40">الوجهة</div>
@@ -541,10 +647,10 @@ function BoardingPass({
           <div className="text-xs text-white/40">الرخصة</div>
           <div className="mt-1 font-medium">{license?.label}</div>
         </div>
-        {data.preferredStart && (
+        {preferredStart && (
           <div className="col-span-2">
             <div className="text-xs text-white/40">موعد الإقلاع المفضل</div>
-            <div className="mt-1 font-medium">{data.preferredStart}</div>
+            <div className="mt-1 font-medium">{preferredStart}</div>
           </div>
         )}
       </div>
