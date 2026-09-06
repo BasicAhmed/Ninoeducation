@@ -2,6 +2,7 @@
 
 import { COUNTRIES } from "@/lib/countries";
 import { inputClass } from "@/lib/form-styles";
+import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 
 export function CountrySelect({
   id,
@@ -9,12 +10,14 @@ export function CountrySelect({
   value,
   onChange,
   error,
+  lang = "ar",
 }: {
   id: string;
   label: string;
   value: string;
   onChange: (v: string) => void;
   error?: string;
+  lang?: Lang;
 }) {
   return (
     <div>
@@ -25,10 +28,10 @@ export function CountrySelect({
         onChange={(e) => onChange(e.target.value)}
         className={`mt-1.5 w-full ${inputClass(!!error)}`}
       >
-        <option value="">اختر الدولة</option>
+        <option value="">{dictionaries[lang].apply.chooseCountry}</option>
         {COUNTRIES.map((c) => (
           <option key={c.code} value={c.code}>
-            {c.name}
+            {lang === "ar" ? c.name : c.nameEn}
           </option>
         ))}
       </select>

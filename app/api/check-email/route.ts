@@ -2,21 +2,34 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/client";
 import { applications, flightSchools } from "@/db/schema";
 import { sql, eq } from "drizzle-orm";
+import { type Lang } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
 
-const STATUS_LABELS: Record<string, string> = {
-  new: "تم استلام طلبك",
-  contacted: "تم التواصل معك",
-  documents_required: "بانتظار مستندات منك",
-  submitted_to_school: "أُرسل طلبك للمدرسة",
-  accepted: "تم قبولك",
-  rejected: "لم يُقبل هذه المرة",
-  enrolled: "تم تسجيلك",
+const STATUS_LABELS: Record<Lang, Record<string, string>> = {
+  ar: {
+    new: "تم استلام طلبك",
+    contacted: "تم التواصل معك",
+    documents_required: "بانتظار مستندات منك",
+    submitted_to_school: "أُرسل طلبك للمدرسة",
+    accepted: "تم قبولك",
+    rejected: "لم يُقبل هذه المرة",
+    enrolled: "تم تسجيلك",
+  },
+  en: {
+    new: "Application received",
+    contacted: "We've contacted you",
+    documents_required: "Awaiting documents from you",
+    submitted_to_school: "Sent to the school",
+    accepted: "You've been accepted",
+    rejected: "Not accepted this time",
+    enrolled: "You're enrolled",
+  },
 };
 
 export async function POST(req: NextRequest) {
-  const { email } = await req.json().catch(() => ({ email: "" }));
+  const { email, lang: rawLang } = await req.json().catch(() => ({ email: "" }));
+  const lang: Lang = rawLang === "en" ? "en" : "ar";
   const clean = String(email || "").trim().toLowerCase();
 
   if (!clean) {
@@ -55,7 +68,7 @@ export async function POST(req: NextRequest) {
       referenceCode: app.referenceCode,
       fullName: app.fullName,
       status: app.status,
-      statusLabel: STATUS_LABELS[app.status] ?? app.status,
+      statusLabel: STATUS_LABELS[lang][app.status] ?? app.status,
       schoolName,
     });
   } catch (err) {

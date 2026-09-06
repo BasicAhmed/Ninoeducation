@@ -3,26 +3,10 @@ import { CheckCircle2, PlaneTakeoff, MessageCircle, ListChecks, Home, Send } fro
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
+import { getLang } from "@/lib/i18n/get-lang";
+import { dictionaries } from "@/lib/i18n/dictionaries";
 
 export const metadata = { title: "تم استلام طلبك | نينو إديوكيشن" };
-
-const NEXT_STEPS = [
-  {
-    icon: MessageCircle,
-    title: "خلال 24–48 ساعة",
-    text: "بيتصل فيك أحد مستشارينا يتعرف على وضعك أكثر — لا فورمات ولا تعقيد.",
-  },
-  {
-    icon: ListChecks,
-    title: "نرشح لك",
-    text: "نجهز لك أفضل المدارس المناسبة، مع خطاب قبول أولي من المدرسة المختارة.",
-  },
-  {
-    icon: Home,
-    title: "نمشي معك خطوة بخطوة",
-    text: "من الفيزا للسكن للسفر — ما راح تحتاج تسوي شي لحالك.",
-  },
-];
 
 export default async function ThankYouPage({
   searchParams,
@@ -30,10 +14,18 @@ export default async function ThankYouPage({
   searchParams: Promise<{ ref?: string; name?: string }>;
 }) {
   const { ref, name } = await searchParams;
+  const lang = await getLang();
+  const t = dictionaries[lang].thankYou;
 
   const whatsappText = ref
-    ? `مرحبًا، رقم رحلتي هو ${ref} — أريد تأكيد استلام طلبي.`
-    : "مرحبًا، قدّمت طلبًا للتو وأريد التأكيد.";
+    ? t.whatsappWithRef.replace("{ref}", ref)
+    : t.whatsappGeneric;
+
+  const NEXT_STEPS = [
+    { icon: MessageCircle, title: t.step1Title, text: t.step1Text },
+    { icon: ListChecks, title: t.step2Title, text: t.step2Text },
+    { icon: Home, title: t.step3Title, text: t.step3Text },
+  ];
 
   return (
     <>
@@ -44,20 +36,20 @@ export default async function ThankYouPage({
             <CheckCircle2 size={28} />
           </div>
           <p className="mt-6 font-mono text-xs uppercase tracking-widest text-nino-orange">
-            وصلنا طلبك
+            {t.kicker}
           </p>
           <h1 className="mt-2 font-display text-4xl">
-            {name ? `يلا يا ${name}، بدأنا! 🎉` : "يلا، بدأنا! 🎉"}
+            {name ? t.titleWithName.replace("{name}", name) : t.titleGeneric}
           </h1>
           <p className="mt-3 text-nino-ink/70">
-            من هنا وطالع، الباقي علينا.
+            {t.subtitle}
           </p>
         </div>
 
         {ref && (
           <div className="mx-auto mt-10 max-w-lg overflow-hidden rounded-2xl border border-nino-ink bg-nino-ink text-white">
             <div className="flex items-center justify-between px-6 py-4">
-              <span className="font-display text-sm">رقم رحلتك</span>
+              <span className="font-display text-sm">{t.flightNumber}</span>
               <PlaneTakeoff size={16} className="text-nino-orange" />
             </div>
             <div className="border-t border-dashed border-white/20 px-6 py-6 text-center">
@@ -65,7 +57,7 @@ export default async function ThankYouPage({
                 {ref}
               </div>
               <p className="mt-2 text-xs text-white/50">
-                خلّه عندك — فيك تتابع طلبك به في أي وقت
+                {t.keepIt}
               </p>
             </div>
             <div className="grid grid-cols-2 divide-x divide-x-reverse divide-dashed divide-white/20 border-t border-dashed border-white/20">
@@ -73,7 +65,7 @@ export default async function ThankYouPage({
                 href={`/track?ref=${ref}`}
                 className="px-4 py-3.5 text-center text-sm font-medium hover:bg-white/5"
               >
-                تابع طلبي
+                {t.trackMine}
               </Link>
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappText)}`}
@@ -82,7 +74,7 @@ export default async function ThankYouPage({
                 className="flex items-center justify-center gap-1.5 px-4 py-3.5 text-center text-sm font-medium hover:bg-white/5"
               >
                 <Send size={13} />
-                أرسله على واتساب
+                {t.sendViaWhatsapp}
               </a>
             </div>
           </div>
@@ -111,10 +103,10 @@ export default async function ThankYouPage({
             href="/schools"
             className="w-full rounded-full bg-nino-ink py-3.5 text-center text-sm font-medium text-white hover:bg-nino-orange sm:w-auto sm:px-8"
           >
-            وانت تنتظر، شوف المدارس
+            {t.browseWhileWait}
           </Link>
           <Link href="/" className="text-sm text-nino-ink/60 hover:text-nino-orange">
-            رجوع للصفحة الرئيسية
+            {t.backHome}
           </Link>
         </div>
       </main>

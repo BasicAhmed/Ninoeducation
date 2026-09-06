@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { PlaneTakeoff, Search, CheckCircle2, Clock } from "lucide-react";
+import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 
 const STATUS_ORDER = [
   "new",
@@ -23,15 +24,16 @@ type Result = {
   createdAt: string;
 };
 
-export function TrackForm() {
+export function TrackForm({ lang }: { lang: Lang }) {
   return (
     <Suspense fallback={null}>
-      <TrackFormInner />
+      <TrackFormInner lang={lang} />
     </Suspense>
   );
 }
 
-function TrackFormInner() {
+function TrackFormInner({ lang }: { lang: Lang }) {
+  const t = dictionaries[lang].track;
   const searchParams = useSearchParams();
   const alreadyApplied = searchParams.get("already") === "1";
   const [referenceCode, setReferenceCode] = useState(() => searchParams.get("ref") || "");
@@ -48,20 +50,20 @@ function TrackFormInner() {
       const res = await fetch("/api/track", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ referenceCode: ref, email: mail }),
+        body: JSON.stringify({ referenceCode: ref, email: mail, lang }),
       });
       const json = await res.json();
       if (!res.ok) {
-        setError(json.error || "حدث خطأ");
+        setError(json.error || "");
         return;
       }
       setResult(json);
     } catch {
-      setError("تعذر الاتصال، حاول مرة أخرى");
+      setError(lang === "ar" ? "تعذر الاتصال، حاول مرة أخرى" : "Couldn't connect, please try again");
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [lang]);
 
   // Coming from "you already applied" — both ref and email are
   // already known, so show the status immediately without making
@@ -70,8 +72,8 @@ function TrackFormInner() {
     const ref = searchParams.get("ref");
     const mail = searchParams.get("email");
     if (ref && mail) {
-      const t = setTimeout(() => runLookup(ref, mail), 0);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => runLookup(ref, mail), 0);
+      return () => clearTimeout(timer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -87,25 +89,23 @@ function TrackFormInner() {
   return (
     <div className="mx-auto max-w-md">
       <p className="text-center font-mono text-xs uppercase tracking-widest text-nino-orange">
-        {alreadyApplied ? "قدّمت طلبك من قبل" : "تتبّع رحلتك"}
+        {alreadyApplied ? t.alreadyKicker : t.trackKicker}
       </p>
       <h1 className="mt-2 text-center font-display text-3xl">
-        {alreadyApplied ? "لقيناك! خذ آخر تحديث" : "وين وصل طلبك؟"}
+        {alreadyApplied ? t.alreadyTitle : t.trackTitle}
       </h1>
       <p className="mt-2 text-center text-sm text-nino-ink/60">
-        {alreadyApplied
-          ? "هذا البريد قدّم طلب قبل كذا — ما نبي نسوي لك طلب مكرر، فهذا آخر وضعك."
-          : "أدخل رقم الرحلة اللي وصلك بعد التقديم، مع نفس الإيميل."}
+        {alreadyApplied ? t.alreadySubtitle : t.trackSubtitle}
       </p>
 
       {alreadyApplied && loading && (
-        <p className="mt-8 text-center text-sm text-nino-ink/50">جارٍ إحضار آخر تحديث...</p>
+        <p className="mt-8 text-center text-sm text-nino-ink/50">{t.fetchingUpdate}</p>
       )}
 
       {!(alreadyApplied && loading) && (
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <div>
-            <label htmlFor="referenceCode" className="block text-sm font-medium">رقم الرحلة</label>
+            <label htmlFor="referenceCode" className="block text-sm font-medium">{t.referenceLabel}</label>
             <input
               id="referenceCode"
               value={referenceCode}
@@ -117,7 +117,7 @@ function TrackFormInner() {
             />
           </div>
           <div>
-            <label htmlFor="trackEmail" className="block text-sm font-medium">الإيميل اللي قدّمت فيه</label>
+            <label htmlFor="trackEmail" className="block text-sm font-medium">{t.emailLabel}</label>
             <input
               id="trackEmail"
               type="email"
@@ -134,7 +134,7 @@ function TrackFormInner() {
             className="flex w-full items-center justify-center gap-2 rounded-full bg-nino-ink py-3.5 text-sm font-medium text-white hover:bg-nino-orange disabled:opacity-50"
           >
             <Search size={15} />
-            {loading ? "جارٍ البحث..." : "شوف وضعي"}
+            {loading ? t.searching : t.searchButton}
           </button>
         </form>
       )}
@@ -152,11 +152,11 @@ function TrackFormInner() {
             <PlaneTakeoff size={16} className="text-nino-orange" />
           </div>
           <div className="border-t border-dashed border-white/20 px-6 py-5">
-            <div className="text-xs text-white/40">القبطان</div>
+            <div className="text-xs text-white/40">{t.captain}</div>
             <div className="mt-1 font-medium">{result.fullName}</div>
             {result.schoolName && (
               <>
-                <div className="mt-4 text-xs text-white/40">الوجهة</div>
+                <div className="mt-4 text-xs text-white/40">{t.destination}</div>
                 <div className="mt-1 font-medium">{result.schoolName}</div>
               </>
             )}

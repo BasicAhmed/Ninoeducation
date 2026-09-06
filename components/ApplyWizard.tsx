@@ -23,58 +23,7 @@ import { CountrySelect } from "@/components/CountrySelect";
 import { PhoneField, validatePhone } from "@/components/PhoneField";
 import { COUNTRIES } from "@/lib/countries";
 import { inputClass } from "@/lib/form-styles";
-
-const LICENSE_OPTIONS = [
-  { value: "PPL", label: "رخصة طيار خاص", hint: "أول خطوة نحو السماء", icon: Plane },
-  { value: "CPL", label: "رخصة طيار تجاري", hint: "للعمل كطيار محترف", icon: Briefcase },
-  { value: "IR", label: "تصنيف آلي", hint: "الطيران في كل الأجواء", icon: CloudFog },
-  { value: "ME", label: "متعدد المحركات", hint: "طائرات بمحركين", icon: Layers3 },
-  { value: "ATPL_THEORY", label: "نظري رخصة النقل الجوي", hint: "أعلى مستوى نظري", icon: GraduationCap },
-];
-
-const BUDGET_OPTIONS = [
-  "أقل من $40,000",
-  "من $40,000 إلى $70,000",
-  "من $70,000 إلى $100,000",
-  "من $100,000 إلى $150,000",
-  "أكثر من $150,000",
-  "غير متأكد بعد",
-];
-
-const FUNDING_OPTIONS = [
-  { value: "personal_savings", label: "مدخرات شخصية" },
-  { value: "family_support", label: "دعم عائلي" },
-  { value: "loan", label: "قرض بنكي" },
-  { value: "undecided", label: "لم أحدد بعد" },
-];
-
-const ACCOMMODATION_BUDGET_OPTIONS = [
-  { value: "yes", label: "نعم، ميزانيتي تشمل السكن" },
-  { value: "no", label: "لا، أحتاج تقدير سكن منفصل" },
-  { value: "unsure", label: "غير متأكد" },
-];
-
-const ENGLISH_OPTIONS = [
-  { value: "beginner", label: "مبتدئ" },
-  { value: "intermediate", label: "متوسط" },
-  { value: "good", label: "جيد" },
-  { value: "fluent", label: "بطلاقة" },
-];
-
-const MEDICAL_OPTIONS = [
-  { value: "no", label: "لا يوجد" },
-  { value: "unsure", label: "غير متأكد" },
-  { value: "yes", label: "نعم، لدي استفسار" },
-];
-
-const STEPS = [
-  { key: "who", title: "مين الطيار الجديد؟", kicker: "خلنا نتعرف عليك", icon: IdCard },
-  { key: "contact", title: "وين نلقاك؟", kicker: "ما ننساك أبدًا", icon: TowerControl },
-  { key: "money", title: "خلنا صرحاء بالفلوس", kicker: "بدون لف ودوران", icon: Wallet },
-  { key: "readiness", title: "جاهز فعلاً؟", kicker: "شوي أسئلة مهمة", icon: Languages },
-  { key: "dream", title: "شو حلمك بالضبط؟", kicker: "الجزء الحلو", icon: Plane },
-  { key: "review", title: "جاهز نطير؟", kicker: "آخر شي", icon: Ticket },
-];
+import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 
 const EASE = "cubic-bezier(0.65,0,0.35,1)";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -82,10 +31,59 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export function ApplyWizard({
   schoolSlug,
   schoolName,
+  lang,
 }: {
   schoolSlug: string;
   schoolName?: string;
+  lang: Lang;
 }) {
+  const t = dictionaries[lang].apply;
+
+  const LICENSE_OPTIONS = [
+    { value: "PPL", label: t.licensePplLabel, hint: t.licensePplHint, icon: Plane },
+    { value: "CPL", label: t.licenseCplLabel, hint: t.licenseCplHint, icon: Briefcase },
+    { value: "IR", label: t.licenseIrLabel, hint: t.licenseIrHint, icon: CloudFog },
+    { value: "ME", label: t.licenseMeLabel, hint: t.licenseMeHint, icon: Layers3 },
+    { value: "ATPL_THEORY", label: t.licenseAtplLabel, hint: t.licenseAtplHint, icon: GraduationCap },
+  ];
+
+  const BUDGET_OPTIONS = [t.budget1, t.budget2, t.budget3, t.budget4, t.budget5, t.budget6];
+
+  const FUNDING_OPTIONS = [
+    { value: "personal_savings", label: t.fundingPersonal },
+    { value: "family_support", label: t.fundingFamily },
+    { value: "loan", label: t.fundingLoan },
+    { value: "undecided", label: t.fundingUndecided },
+  ];
+
+  const ACCOMMODATION_BUDGET_OPTIONS = [
+    { value: "yes", label: t.accBudgetYes },
+    { value: "no", label: t.accBudgetNo },
+    { value: "unsure", label: t.accBudgetUnsure },
+  ];
+
+  const ENGLISH_OPTIONS = [
+    { value: "beginner", label: t.englishBeginner },
+    { value: "intermediate", label: t.englishIntermediate },
+    { value: "good", label: t.englishGood },
+    { value: "fluent", label: t.englishFluent },
+  ];
+
+  const MEDICAL_OPTIONS = [
+    { value: "no", label: t.medicalNo },
+    { value: "unsure", label: t.medicalUnsure },
+    { value: "yes", label: t.medicalYes },
+  ];
+
+  const STEPS = [
+    { key: "who", title: t.stepWhoTitle, kicker: t.stepWhoKicker, icon: IdCard },
+    { key: "contact", title: t.stepContactTitle, kicker: t.stepContactKicker, icon: TowerControl },
+    { key: "money", title: t.stepMoneyTitle, kicker: t.stepMoneyKicker, icon: Wallet },
+    { key: "readiness", title: t.stepReadinessTitle, kicker: t.stepReadinessKicker, icon: Languages },
+    { key: "dream", title: t.stepDreamTitle, kicker: t.stepDreamKicker, icon: Plane },
+    { key: "review", title: t.stepReviewTitle, kicker: t.stepReviewKicker, icon: Ticket },
+  ];
+
   const [step, setStep] = useState(0);
   const [showErrors, setShowErrors] = useState(false);
   const [checkingEmail, setCheckingEmail] = useState(false);
@@ -125,28 +123,28 @@ export function ApplyWizard({
   function stepErrors(i: number): Record<string, string> {
     const e: Record<string, string> = {};
     if (i === 0) {
-      if (!data.fullName.trim()) e.fullName = "مطلوب";
-      if (!data.nationality) e.nationality = "اختر جنسيتك";
-      if (!data.currentResidence) e.currentResidence = "اختر وين تسكن";
+      if (!data.fullName.trim()) e.fullName = t.errRequired;
+      if (!data.nationality) e.nationality = t.errNationality;
+      if (!data.currentResidence) e.currentResidence = t.errResidence;
     }
     if (i === 1) {
-      if (!validatePhone(data.phoneCountry, data.phoneNumber)) e.phone = "رقم الهاتف غير صحيح";
+      if (!validatePhone(data.phoneCountry, data.phoneNumber)) e.phone = t.errPhone;
       if (data.whatsappNumber.trim() && !validatePhone(data.whatsappCountry, data.whatsappNumber)) {
-        e.whatsapp = "رقم الواتساب غير صحيح";
+        e.whatsapp = t.errWhatsapp;
       }
-      if (!EMAIL_RE.test(data.email.trim())) e.email = "بريد إلكتروني غير صحيح";
+      if (!EMAIL_RE.test(data.email.trim())) e.email = t.errEmail;
     }
     if (i === 2) {
-      if (!data.estimatedBudget) e.estimatedBudget = "اختر خيارًا";
-      if (!data.fundingSource) e.fundingSource = "اختر خيارًا";
-      if (!data.accommodationBudgetOk) e.accommodationBudgetOk = "اختر خيارًا";
+      if (!data.estimatedBudget) e.estimatedBudget = t.errChoose;
+      if (!data.fundingSource) e.fundingSource = t.errChoose;
+      if (!data.accommodationBudgetOk) e.accommodationBudgetOk = t.errChoose;
     }
     if (i === 3) {
-      if (!data.englishLevel) e.englishLevel = "اختر خيارًا";
-      if (!data.medicalConcern) e.medicalConcern = "اختر خيارًا";
+      if (!data.englishLevel) e.englishLevel = t.errChoose;
+      if (!data.medicalConcern) e.medicalConcern = t.errChoose;
     }
     if (i === 4) {
-      if (!data.desiredLicense) e.desiredLicense = "اختر الرخصة";
+      if (!data.desiredLicense) e.desiredLicense = t.errLicense;
     }
     return e;
   }
@@ -171,7 +169,7 @@ export function ApplyWizard({
         const res = await fetch("/api/check-email", {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ email: data.email }),
+          body: JSON.stringify({ email: data.email, lang }),
         });
         const json = await res.json();
         if (json.exists) {
@@ -225,27 +223,27 @@ export function ApplyWizard({
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-nino-orange text-white">
             <Check size={20} strokeWidth={3} />
           </div>
-          <h2 className="mt-4 font-display text-2xl">لقيناك! قدّمت طلبك من قبل</h2>
+          <h2 className="mt-4 font-display text-2xl">{t.duplicateTitle}</h2>
           <p className="mt-2 text-sm text-nino-ink/60">
-            هذا الإيميل عنده طلب مسجّل عندنا — ما نبي نسوي لك طلب مكرر ونضيع وقتك.
+            {t.duplicateBody}
           </p>
         </div>
 
         <div className="mx-6 mb-6 overflow-hidden rounded-xl border border-nino-ink bg-nino-ink text-white">
           <div className="flex items-center justify-between px-5 py-3">
-            <span className="font-display text-sm">{duplicate.referenceCode || "طلبك"}</span>
+            <span className="font-display text-sm">{duplicate.referenceCode || t.yourApplication}</span>
             <PlaneTakeoff size={15} className="text-nino-orange" />
           </div>
           <div className="border-t border-dashed border-white/20 px-5 py-4 text-sm">
-            <div className="text-xs text-white/40">القبطان</div>
+            <div className="text-xs text-white/40">{t.captain}</div>
             <div className="mt-0.5 font-medium">{duplicate.fullName}</div>
             {duplicate.schoolName && (
               <>
-                <div className="mt-3 text-xs text-white/40">الوجهة</div>
+                <div className="mt-3 text-xs text-white/40">{t.destination}</div>
                 <div className="mt-0.5 font-medium">{duplicate.schoolName}</div>
               </>
             )}
-            <div className="mt-3 text-xs text-white/40">الوضع الحالي</div>
+            <div className="mt-3 text-xs text-white/40">{t.currentStatus}</div>
             <div className="mt-0.5 flex items-center gap-1.5 font-medium text-nino-orange">
               <CheckCircle2 size={14} />
               {duplicate.statusLabel}
@@ -258,14 +256,14 @@ export function ApplyWizard({
             href={trackHref}
             className="inline-flex items-center gap-2 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white hover:bg-nino-orange"
           >
-            تفاصيل أكثر عن طلبي
+            {t.moreDetails}
           </a>
           <button
             type="button"
             onClick={() => setDuplicate(null)}
             className="mt-4 block w-full text-xs text-nino-ink/40 hover:text-nino-ink/60"
           >
-            هذا مو إيميلي، رجّعني
+            {t.notMyEmail}
           </button>
         </div>
       </div>
@@ -344,33 +342,35 @@ export function ApplyWizard({
         <input type="hidden" name="preferredStart" value={data.preferredStart} />
         <input type="hidden" name="notes" value={data.notes} />
 
-        {/* Carousel viewport — isolated to LTR so translateX math is predictable, each panel re-declares RTL for its content */}
+        {/* Carousel viewport — isolated to LTR so translateX math is predictable, each panel re-declares RTL/LTR for its content */}
         <div dir="ltr" className="overflow-hidden">
           <div
             className="flex motion-reduce:transition-none"
             style={{ transform: `translateX(-${step * 100}%)`, transition: `transform 500ms ${EASE}` }}
           >
             {/* Step 1: Captain's details */}
-            <Panel active={step === 0}>
+            <Panel active={step === 0} lang={lang}>
               <StepHeading icon={STEPS[0].icon} kicker={STEPS[0].kicker} title={STEPS[0].title} />
               <div className="space-y-5">
                 <TextInput
                   id="fullNameInput"
-                  label="وش اسمك بالكامل؟"
+                  label={t.fullNameLabel}
                   value={data.fullName}
                   onChange={(v) => set("fullName", v)}
                   error={showErrors ? currentErrors.fullName : undefined}
                 />
                 <CountrySelect
+                  lang={lang}
                   id="nationalityInput"
-                  label="جنسيتك؟"
+                  label={t.nationalityLabel}
                   value={data.nationality}
                   onChange={(v) => set("nationality", v)}
                   error={showErrors ? currentErrors.nationality : undefined}
                 />
                 <CountrySelect
+                  lang={lang}
                   id="currentResidenceInput"
-                  label="وين تسكن حاليًا؟"
+                  label={t.residenceLabel}
                   value={data.currentResidence}
                   onChange={(v) => set("currentResidence", v)}
                   error={showErrors ? currentErrors.currentResidence : undefined}
@@ -379,14 +379,15 @@ export function ApplyWizard({
             </Panel>
 
             {/* Step 2: Control tower / contact */}
-            <Panel active={step === 1}>
+            <Panel active={step === 1} lang={lang}>
               <StepHeading icon={STEPS[1].icon} kicker={STEPS[1].kicker} title={STEPS[1].title} />
               <p className="-mt-3 mb-6 text-sm text-nino-ink/60">
-                عشان ما نضيعك، ونوصلك بالأخبار الحلوة أول بأول.
+                {t.contactSubtitle}
               </p>
               <div className="space-y-5">
                 <PhoneField
-                  label="رقم الهاتف"
+                  lang={lang}
+                  label={t.phoneLabel}
                   required
                   countryCode={data.phoneCountry}
                   onCountryChange={(v) => set("phoneCountry", v)}
@@ -395,7 +396,8 @@ export function ApplyWizard({
                   error={showErrors ? currentErrors.phone : undefined}
                 />
                 <PhoneField
-                  label="رقم الواتساب"
+                  lang={lang}
+                  label={t.whatsappLabel}
                   countryCode={data.whatsappCountry || data.phoneCountry}
                   onCountryChange={(v) => set("whatsappCountry", v)}
                   national={data.whatsappNumber}
@@ -404,7 +406,7 @@ export function ApplyWizard({
                 />
                 <TextInput
                   id="emailInput"
-                  label="البريد الإلكتروني"
+                  label={t.emailLabel}
                   type="email"
                   value={data.email}
                   onChange={(v) => set("email", v)}
@@ -415,28 +417,28 @@ export function ApplyWizard({
             </Panel>
 
             {/* Step 3: Financial readiness */}
-            <Panel active={step === 2}>
+            <Panel active={step === 2} lang={lang}>
               <StepHeading icon={STEPS[2].icon} kicker={STEPS[2].kicker} title={STEPS[2].title} />
               <p className="-mt-3 mb-6 text-sm text-nino-ink/60">
-                نبي نرشح لك مدارس تناسب جيبك الحقيقي — بدون مفاجآت بعدين.
+                {t.moneySubtitle}
               </p>
               <div className="space-y-6">
                 <ChoiceGroup
-                  label="كم ميزانيتك تقريبًا؟ (بالدولار)"
+                  label={t.budgetLabel}
                   options={BUDGET_OPTIONS.map((b) => ({ value: b, label: b }))}
                   value={data.estimatedBudget}
                   onChange={(v) => set("estimatedBudget", v)}
                   error={showErrors ? currentErrors.estimatedBudget : undefined}
                 />
                 <ChoiceGroup
-                  label="من وين بتمول رحلتك؟"
+                  label={t.fundingLabel}
                   options={FUNDING_OPTIONS}
                   value={data.fundingSource}
                   onChange={(v) => set("fundingSource", v)}
                   error={showErrors ? currentErrors.fundingSource : undefined}
                 />
                 <ChoiceGroup
-                  label="ميزانيتك تغطي السكن كمان؟"
+                  label={t.accBudgetLabel}
                   options={ACCOMMODATION_BUDGET_OPTIONS}
                   value={data.accommodationBudgetOk}
                   onChange={(v) => set("accommodationBudgetOk", v)}
@@ -446,11 +448,11 @@ export function ApplyWizard({
             </Panel>
 
             {/* Step 4: English & readiness */}
-            <Panel active={step === 3}>
+            <Panel active={step === 3} lang={lang}>
               <StepHeading icon={STEPS[3].icon} kicker={STEPS[3].kicker} title={STEPS[3].title} />
               <div className="space-y-6">
                 <ChoiceGroup
-                  label="كيف إنجليزيتك؟"
+                  label={t.englishLabel}
                   options={ENGLISH_OPTIONS}
                   value={data.englishLevel}
                   onChange={(v) => set("englishLevel", v)}
@@ -459,32 +461,32 @@ export function ApplyWizard({
                 />
                 <div>
                   <ChoiceGroup
-                    label="فيه شي صحي ممكن يأثر على رخصتك الطبية؟"
+                    label={t.medicalLabel}
                     options={MEDICAL_OPTIONS}
                     value={data.medicalConcern}
                     onChange={(v) => set("medicalConcern", v)}
                     error={showErrors ? currentErrors.medicalConcern : undefined}
                   />
                   <p className="mt-2 text-xs text-nino-ink/45">
-                    ما نبي تفاصيل الحين، بس نبي نعرف إذا في شي نتكلم عنه من البداية.
+                    {t.medicalNote}
                   </p>
                 </div>
               </div>
             </Panel>
 
             {/* Step 5: The dream */}
-            <Panel active={step === 4}>
+            <Panel active={step === 4} lang={lang}>
               <StepHeading icon={STEPS[4].icon} kicker={STEPS[4].kicker} title={STEPS[4].title} />
               <div className="space-y-6">
                 <div>
-                  <label htmlFor="currentLicenseSelect" className="block text-sm font-medium">عندك رخصة حالية؟ (إذا فيه)</label>
+                  <label htmlFor="currentLicenseSelect" className="block text-sm font-medium">{t.currentLicenseLabel}</label>
                   <select
                     id="currentLicenseSelect"
                     value={data.currentLicense}
                     onChange={(e) => set("currentLicense", e.target.value)}
                     className={`mt-1.5 w-full ${inputClass()}`}
                   >
-                    <option value="">لا يوجد بعد</option>
+                    <option value="">{t.currentLicenseNone}</option>
                     {LICENSE_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>
                         {o.label}
@@ -493,7 +495,7 @@ export function ApplyWizard({
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium">وش الرخصة اللي تحلم فيها؟</label>
+                  <label className="block text-sm font-medium">{t.desiredLicenseLabel}</label>
                   <div className="mt-2.5 grid gap-2.5 sm:grid-cols-2">
                     {LICENSE_OPTIONS.map((o) => {
                       const Icon = o.icon;
@@ -530,15 +532,15 @@ export function ApplyWizard({
                     })}
                   </div>
                 </div>
-                <TextInput id="preferredStart" label="متى تحب تبدأ؟" placeholder="مثال: يناير 2027" value={data.preferredStart} onChange={(v) => set("preferredStart", v)} />
+                <TextInput id="preferredStart" label={t.preferredStartLabel} placeholder={t.preferredStartPlaceholder} value={data.preferredStart} onChange={(v) => set("preferredStart", v)} />
               </div>
             </Panel>
 
             {/* Step 6: Review (boarding pass) */}
-            <Panel active={step === 5}>
+            <Panel active={step === 5} lang={lang}>
               <StepHeading icon={STEPS[5].icon} kicker={STEPS[5].kicker} title={STEPS[5].title} />
               <div>
-                <label htmlFor="notes" className="block text-sm font-medium">أي شي ثاني تحب تقوله؟ (اختياري)</label>
+                <label htmlFor="notes" className="block text-sm font-medium">{t.notesLabel}</label>
                 <textarea
                   id="notes"
                   value={data.notes}
@@ -550,10 +552,17 @@ export function ApplyWizard({
 
               <BoardingPass
                 fullName={data.fullName}
-                nationality={COUNTRIES.find((c) => c.code === data.nationality)?.name || ""}
+                nationality={
+                  (() => {
+                    const c = COUNTRIES.find((c) => c.code === data.nationality);
+                    return c ? (lang === "ar" ? c.name : c.nameEn) : "";
+                  })()
+                }
                 desiredLicense={data.desiredLicense}
                 preferredStart={data.preferredStart}
                 schoolName={schoolName}
+                licenseOptions={LICENSE_OPTIONS}
+                t={t}
               />
             </Panel>
           </div>
@@ -570,7 +579,7 @@ export function ApplyWizard({
                 className="flex items-center gap-1.5 rounded-full border border-nino-ink/20 px-5 py-3 text-sm font-medium text-nino-ink transition-transform hover:border-nino-ink active:scale-95"
               >
                 <ChevronRight size={15} />
-                رجوع
+                {t.back}
               </button>
             ) : (
               <span className="flex items-center gap-1.5 text-xs text-nino-ink/40">
@@ -586,7 +595,7 @@ export function ApplyWizard({
                 disabled={checkingEmail}
                 className="flex items-center gap-1.5 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white transition-transform hover:bg-nino-orange active:scale-95 disabled:opacity-60"
               >
-                {checkingEmail ? "لحظة..." : "التالي"}
+                {checkingEmail ? t.nextLoading : t.next}
                 <ChevronLeft size={15} />
               </button>
             ) : (
@@ -595,7 +604,7 @@ export function ApplyWizard({
                 onClick={() => formRef.current?.requestSubmit()}
                 className="flex items-center gap-2 rounded-full bg-nino-orange px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-nino-orange/30 transition-transform hover:bg-nino-ink active:scale-95"
               >
-                يلا نطلقها 🚀
+                {t.launch}
                 <PlaneTakeoff size={16} />
               </button>
             )}
@@ -606,10 +615,10 @@ export function ApplyWizard({
   );
 }
 
-function Panel({ active, children }: { active: boolean; children: React.ReactNode }) {
+function Panel({ active, lang, children }: { active: boolean; lang: Lang; children: React.ReactNode }) {
   return (
     <div
-      dir="rtl"
+      dir={lang === "ar" ? "rtl" : "ltr"}
       className="w-full shrink-0 px-1"
       style={{ opacity: active ? 1 : 0.35, transition: `opacity 500ms ${EASE}` }}
       aria-hidden={!active}
@@ -735,46 +744,50 @@ function BoardingPass({
   desiredLicense,
   preferredStart,
   schoolName,
+  licenseOptions,
+  t,
 }: {
   fullName: string;
   nationality: string;
   desiredLicense: string;
   preferredStart: string;
   schoolName?: string;
+  licenseOptions: { value: string; label: string }[];
+  t: { [K in keyof (typeof dictionaries)["ar"]["apply"]]: string };
 }) {
-  const license = LICENSE_OPTIONS.find((o) => o.value === desiredLicense);
+  const license = licenseOptions.find((o) => o.value === desiredLicense);
   return (
     <div className="mt-8 overflow-hidden rounded-2xl border border-nino-ink bg-nino-ink text-white">
       <div className="flex items-center justify-between px-6 py-4">
-        <span className="font-display text-sm">بطاقة صعود نينو إديوكيشن</span>
+        <span className="font-display text-sm">{t.boardingPassTitle}</span>
         <PlaneTakeoff size={16} className="text-nino-orange" />
       </div>
       <div className="grid grid-cols-2 gap-5 border-t border-dashed border-white/20 px-6 py-5 text-sm">
         <div>
-          <div className="text-xs text-white/40">القبطان</div>
+          <div className="text-xs text-white/40">{t.captain}</div>
           <div className="mt-1 font-medium">{fullName || "—"}</div>
         </div>
         <div>
-          <div className="text-xs text-white/40">من</div>
+          <div className="text-xs text-white/40">{t.from}</div>
           <div className="mt-1 font-medium">{nationality || "—"}</div>
         </div>
         <div>
-          <div className="text-xs text-white/40">الوجهة</div>
-          <div className="mt-1 font-medium">{schoolName || "قمرة القيادة، جنوب أفريقيا"}</div>
+          <div className="text-xs text-white/40">{t.destination}</div>
+          <div className="mt-1 font-medium">{schoolName || t.defaultDestination}</div>
         </div>
         <div>
-          <div className="text-xs text-white/40">الرخصة</div>
+          <div className="text-xs text-white/40">{t.license}</div>
           <div className="mt-1 font-medium">{license?.label}</div>
         </div>
         {preferredStart && (
           <div className="col-span-2">
-            <div className="text-xs text-white/40">موعد الإقلاع المفضل</div>
+            <div className="text-xs text-white/40">{t.preferredDate}</div>
             <div className="mt-1 font-medium">{preferredStart}</div>
           </div>
         )}
       </div>
       <div className="border-t border-dashed border-white/20 px-6 py-3 text-center text-xs text-white/40">
-        رقم رحلتك سيصدر فور الإقلاع — اضغط &quot;أطلق طلبي&quot; للتأكيد
+        {t.refNote}
       </div>
     </div>
   );

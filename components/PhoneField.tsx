@@ -3,6 +3,7 @@
 import { COUNTRIES } from "@/lib/countries";
 import { isValidPhoneNumber, type CountryCode } from "libphonenumber-js/min";
 import { inputClass } from "@/lib/form-styles";
+import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 
 export function validatePhone(countryCode: string, national: string): boolean {
   if (!countryCode || !national.trim()) return false;
@@ -21,6 +22,7 @@ export function PhoneField({
   onNationalChange,
   error,
   required,
+  lang = "ar",
 }: {
   label: string;
   countryCode: string;
@@ -29,14 +31,16 @@ export function PhoneField({
   onNationalChange: (v: string) => void;
   error?: string;
   required?: boolean;
+  lang?: Lang;
 }) {
   const dial = COUNTRIES.find((c) => c.code === countryCode)?.dialCode;
+  const t = dictionaries[lang].apply;
 
   return (
     <div>
       <label className="block text-sm font-medium">
         {label}
-        {!required && <span className="text-nino-ink/40"> (اختياري)</span>}
+        {!required && <span className="text-nino-ink/40"> ({t.optional})</span>}
       </label>
       <div className="mt-1.5 flex gap-2" dir="ltr">
         <select
@@ -56,7 +60,7 @@ export function PhoneField({
           inputMode="numeric"
           value={national}
           onChange={(e) => onNationalChange(e.target.value.replace(/[^\d\s]/g, ""))}
-          placeholder={dial ? "5xxxxxxxx" : "اختر الدولة أولًا"}
+          placeholder={dial ? "5xxxxxxxx" : t.chooseCountryFirst}
           className={`min-w-0 flex-1 ${inputClass(!!error)}`}
         />
       </div>
