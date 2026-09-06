@@ -26,11 +26,11 @@ export default async function ApplyPage({
           <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
             من الحلم إلى قمرة القيادة
           </p>
-          <h1 className="mt-2 font-display text-4xl">قدّم طلبك</h1>
+          <h1 className="mt-2 font-display text-4xl">خلك قريب من حلمك</h1>
           <p className="mt-2 text-nino-ink/70">
             {school
-              ? `طلبك سيكون موجّهًا إلى ${school.nameAr}. سيتواصل معك مستشار نينو إديوكيشن خلال وقت قصير.`
-              : "بضع خطوات قصيرة، وأنت أقرب لأول تحليق لك."}
+              ? `طلبك بيروح لـ ${school.nameAr}. مستشار من نينو إديوكيشن بيتواصل معك قريب.`
+              : "شوي خطوات بس، وتكون قريب جدًا من أول تحليق لك."}
           </p>
 
           <div className="mt-10">

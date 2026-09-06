@@ -66,5 +66,6 @@ export async function submitApplication(formData: FormData) {
     }
   }
 
-  redirect(`/apply/thank-you?ref=${referenceCode}`);
+  const firstName = values.fullName.trim().split(/\s+/)[0] || "";
+  redirect(`/apply/thank-you?ref=${referenceCode}&name=${encodeURIComponent(firstName)}`);
 }

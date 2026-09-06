@@ -15,6 +15,7 @@ import {
   Wallet,
   Languages,
   PlaneTakeoff,
+  Check,
 } from "lucide-react";
 import { submitApplication } from "@/lib/actions";
 import { CountrySelect } from "@/components/CountrySelect";
@@ -65,12 +66,12 @@ const MEDICAL_OPTIONS = [
 ];
 
 const STEPS = [
-  { key: "who", title: "بيانات القبطان", kicker: "بداية القصة", icon: IdCard },
-  { key: "contact", title: "برج المراقبة", kicker: "خطوة أقرب", icon: TowerControl },
-  { key: "money", title: "الجاهزية المالية", kicker: "لنكن واقعيين", icon: Wallet },
-  { key: "readiness", title: "اللغة والجاهزية", kicker: "التفاصيل المهمة", icon: Languages },
-  { key: "dream", title: "صف حلمك", kicker: "أوشكت على الوصول", icon: Plane },
-  { key: "review", title: "قبل الإقلاع", kicker: "آخر خطوة", icon: Ticket },
+  { key: "who", title: "مين الطيار الجديد؟", kicker: "خلنا نتعرف عليك", icon: IdCard },
+  { key: "contact", title: "وين نلقاك؟", kicker: "ما ننساك أبدًا", icon: TowerControl },
+  { key: "money", title: "خلنا صرحاء بالفلوس", kicker: "بدون لف ودوران", icon: Wallet },
+  { key: "readiness", title: "جاهز فعلاً؟", kicker: "شوي أسئلة مهمة", icon: Languages },
+  { key: "dream", title: "شو حلمك بالضبط؟", kicker: "الجزء الحلو", icon: Plane },
+  { key: "review", title: "جاهز نطير؟", kicker: "آخر شي", icon: Ticket },
 ];
 
 const EASE = "cubic-bezier(0.65,0,0.35,1)";
@@ -86,6 +87,7 @@ export function ApplyWizard({
   const [step, setStep] = useState(0);
   const [showErrors, setShowErrors] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const hasMounted = useRef(false);
   const [data, setData] = useState({
     fullName: "",
@@ -115,8 +117,8 @@ export function ApplyWizard({
     const e: Record<string, string> = {};
     if (i === 0) {
       if (!data.fullName.trim()) e.fullName = "مطلوب";
-      if (!data.nationality) e.nationality = "اختر دولة الجنسية";
-      if (!data.currentResidence) e.currentResidence = "اختر دولة الإقامة";
+      if (!data.nationality) e.nationality = "اختر جنسيتك";
+      if (!data.currentResidence) e.currentResidence = "اختر وين تسكن";
     }
     if (i === 1) {
       if (!validatePhone(data.phoneCountry, data.phoneNumber)) e.phone = "رقم الهاتف غير صحيح";
@@ -218,7 +220,15 @@ export function ApplyWizard({
         </div>
       </div>
 
-      <form action={submitApplication}>
+      <form ref={formRef} action={submitApplication} onKeyDown={(e) => {
+        // Defense in depth: since every step's fields stay mounted
+        // (just faded/translated off-screen) for reliable form
+        // submission, a stray Enter key on ANY of them should never
+        // implicitly submit the whole application early.
+        if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "TEXTAREA") {
+          e.preventDefault();
+        }
+      }}>
         <input type="hidden" name="schoolSlug" value={schoolSlug} />
         <input type="hidden" name="fullName" value={data.fullName} />
         <input type="hidden" name="nationality" value={COUNTRIES.find((c) => c.code === data.nationality)?.name || ""} />
@@ -248,21 +258,21 @@ export function ApplyWizard({
               <div className="space-y-5">
                 <TextInput
                   id="fullNameInput"
-                  label="اسم القبطان الكامل"
+                  label="وش اسمك بالكامل؟"
                   value={data.fullName}
                   onChange={(v) => set("fullName", v)}
                   error={showErrors ? currentErrors.fullName : undefined}
                 />
                 <CountrySelect
                   id="nationalityInput"
-                  label="الجنسية"
+                  label="جنسيتك؟"
                   value={data.nationality}
                   onChange={(v) => set("nationality", v)}
                   error={showErrors ? currentErrors.nationality : undefined}
                 />
                 <CountrySelect
                   id="currentResidenceInput"
-                  label="أين تقيم حاليًا؟"
+                  label="وين تسكن حاليًا؟"
                   value={data.currentResidence}
                   onChange={(v) => set("currentResidence", v)}
                   error={showErrors ? currentErrors.currentResidence : undefined}
@@ -274,7 +284,7 @@ export function ApplyWizard({
             <Panel active={step === 1}>
               <StepHeading icon={STEPS[1].icon} kicker={STEPS[1].kicker} title={STEPS[1].title} />
               <p className="-mt-3 mb-6 text-sm text-nino-ink/60">
-                نحتاج طريقة نوصلك فيها بالأخبار الجيدة.
+                عشان ما نضيعك، ونوصلك بالأخبار الحلوة أول بأول.
               </p>
               <div className="space-y-5">
                 <PhoneField
@@ -310,25 +320,25 @@ export function ApplyWizard({
             <Panel active={step === 2}>
               <StepHeading icon={STEPS[2].icon} kicker={STEPS[2].kicker} title={STEPS[2].title} />
               <p className="-mt-3 mb-6 text-sm text-nino-ink/60">
-                هذا يساعدنا نرشح لك مدارس تناسب وضعك الحقيقي، بدون مفاجآت لاحقًا.
+                نبي نرشح لك مدارس تناسب جيبك الحقيقي — بدون مفاجآت بعدين.
               </p>
               <div className="space-y-6">
                 <ChoiceGroup
-                  label="ميزانيتك الإجمالية التقديرية (بالدولار)"
+                  label="كم ميزانيتك تقريبًا؟ (بالدولار)"
                   options={BUDGET_OPTIONS.map((b) => ({ value: b, label: b }))}
                   value={data.estimatedBudget}
                   onChange={(v) => set("estimatedBudget", v)}
                   error={showErrors ? currentErrors.estimatedBudget : undefined}
                 />
                 <ChoiceGroup
-                  label="مصدر التمويل"
+                  label="من وين بتمول رحلتك؟"
                   options={FUNDING_OPTIONS}
                   value={data.fundingSource}
                   onChange={(v) => set("fundingSource", v)}
                   error={showErrors ? currentErrors.fundingSource : undefined}
                 />
                 <ChoiceGroup
-                  label="هل ميزانيتك تشمل تكاليف السكن أيضًا؟"
+                  label="ميزانيتك تغطي السكن كمان؟"
                   options={ACCOMMODATION_BUDGET_OPTIONS}
                   value={data.accommodationBudgetOk}
                   onChange={(v) => set("accommodationBudgetOk", v)}
@@ -342,7 +352,7 @@ export function ApplyWizard({
               <StepHeading icon={STEPS[3].icon} kicker={STEPS[3].kicker} title={STEPS[3].title} />
               <div className="space-y-6">
                 <ChoiceGroup
-                  label="مستوى لغتك الإنجليزية"
+                  label="كيف إنجليزيتك؟"
                   options={ENGLISH_OPTIONS}
                   value={data.englishLevel}
                   onChange={(v) => set("englishLevel", v)}
@@ -351,14 +361,14 @@ export function ApplyWizard({
                 />
                 <div>
                   <ChoiceGroup
-                    label="هل تعتقد أن لديك ما قد يؤثر على شهادتك الطبية للطيران؟"
+                    label="فيه شي صحي ممكن يأثر على رخصتك الطبية؟"
                     options={MEDICAL_OPTIONS}
                     value={data.medicalConcern}
                     onChange={(v) => set("medicalConcern", v)}
                     error={showErrors ? currentErrors.medicalConcern : undefined}
                   />
                   <p className="mt-2 text-xs text-nino-ink/45">
-                    لسنا بحاجة لتفاصيل الآن — فقط لنعرف إن كان يجب مناقشة هذا مبكرًا.
+                    ما نبي تفاصيل الحين، بس نبي نعرف إذا في شي نتكلم عنه من البداية.
                   </p>
                 </div>
               </div>
@@ -369,7 +379,7 @@ export function ApplyWizard({
               <StepHeading icon={STEPS[4].icon} kicker={STEPS[4].kicker} title={STEPS[4].title} />
               <div className="space-y-6">
                 <div>
-                  <label htmlFor="currentLicenseSelect" className="block text-sm font-medium">رخصتك الحالية (إن وجدت)</label>
+                  <label htmlFor="currentLicenseSelect" className="block text-sm font-medium">عندك رخصة حالية؟ (إذا فيه)</label>
                   <select
                     id="currentLicenseSelect"
                     value={data.currentLicense}
@@ -385,7 +395,7 @@ export function ApplyWizard({
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium">الرخصة التي تطمح لها</label>
+                  <label className="block text-sm font-medium">وش الرخصة اللي تحلم فيها؟</label>
                   <div className="mt-2.5 grid gap-2.5 sm:grid-cols-2">
                     {LICENSE_OPTIONS.map((o) => {
                       const Icon = o.icon;
@@ -395,12 +405,17 @@ export function ApplyWizard({
                           type="button"
                           key={o.value}
                           onClick={() => set("desiredLicense", o.value)}
-                          className={`flex items-center gap-3 rounded-xl border p-3.5 text-start transition-colors ${
+                          className={`relative flex items-center gap-3 rounded-xl border p-3.5 text-start transition-all active:scale-[0.98] ${
                             active
                               ? "border-nino-orange bg-nino-orange/5"
                               : "border-nino-line bg-nino-white hover:border-nino-ink/30"
                           }`}
                         >
+                          {active && (
+                            <span className="absolute -top-1.5 -end-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-nino-orange text-white">
+                              <Check size={10} strokeWidth={3} />
+                            </span>
+                          )}
                           <div
                             className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${
                               active ? "bg-nino-orange text-white" : "bg-nino-cream text-nino-ink/50"
@@ -417,7 +432,7 @@ export function ApplyWizard({
                     })}
                   </div>
                 </div>
-                <TextInput id="preferredStart" label="الموعد المفضل للبدء" placeholder="مثال: يناير 2027" value={data.preferredStart} onChange={(v) => set("preferredStart", v)} />
+                <TextInput id="preferredStart" label="متى تحب تبدأ؟" placeholder="مثال: يناير 2027" value={data.preferredStart} onChange={(v) => set("preferredStart", v)} />
               </div>
             </Panel>
 
@@ -425,7 +440,7 @@ export function ApplyWizard({
             <Panel active={step === 5}>
               <StepHeading icon={STEPS[5].icon} kicker={STEPS[5].kicker} title={STEPS[5].title} />
               <div>
-                <label htmlFor="notes" className="block text-sm font-medium">ملاحظات إضافية (اختياري)</label>
+                <label htmlFor="notes" className="block text-sm font-medium">أي شي ثاني تحب تقوله؟ (اختياري)</label>
                 <textarea
                   id="notes"
                   value={data.notes}
@@ -453,7 +468,7 @@ export function ApplyWizard({
               <button
                 type="button"
                 onClick={back}
-                className="flex items-center gap-1.5 rounded-full border border-nino-ink/20 px-5 py-3 text-sm font-medium text-nino-ink hover:border-nino-ink"
+                className="flex items-center gap-1.5 rounded-full border border-nino-ink/20 px-5 py-3 text-sm font-medium text-nino-ink transition-transform hover:border-nino-ink active:scale-95"
               >
                 <ChevronRight size={15} />
                 رجوع
@@ -469,17 +484,18 @@ export function ApplyWizard({
               <button
                 type="button"
                 onClick={next}
-                className="flex items-center gap-1.5 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white hover:bg-nino-orange"
+                className="flex items-center gap-1.5 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white transition-transform hover:bg-nino-orange active:scale-95"
               >
                 التالي
                 <ChevronLeft size={15} />
               </button>
             ) : (
               <button
-                type="submit"
-                className="flex items-center gap-2 rounded-full bg-nino-orange px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-nino-orange/30 hover:bg-nino-ink"
+                type="button"
+                onClick={() => formRef.current?.requestSubmit()}
+                className="flex items-center gap-2 rounded-full bg-nino-orange px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-nino-orange/30 transition-transform hover:bg-nino-ink active:scale-95"
               >
-                أطلق طلبي
+                يلا نطلقها 🚀
                 <PlaneTakeoff size={16} />
               </button>
             )}
@@ -592,7 +608,7 @@ function ChoiceGroup({
               key={o.value}
               onClick={() => onChange(o.value)}
               dir={labelDir}
-              className={`rounded-lg border px-3.5 py-2.5 text-start text-sm transition-colors ${
+              className={`flex items-center justify-between gap-2 rounded-lg border px-3.5 py-2.5 text-start text-sm transition-all active:scale-[0.98] ${
                 active
                   ? "border-nino-orange bg-nino-orange/5 font-medium text-nino-ink"
                   : error
@@ -600,7 +616,12 @@ function ChoiceGroup({
                     : "border-nino-line bg-nino-white text-nino-ink/70 hover:border-nino-ink/30"
               }`}
             >
-              {o.label}
+              <span>{o.label}</span>
+              {active && (
+                <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-nino-orange text-white">
+                  <Check size={10} strokeWidth={3} />
+                </span>
+              )}
             </button>
           );
         })}
