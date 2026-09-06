@@ -136,6 +136,10 @@ export default function StudyAviationGuidePage() {
                 <Link href="/schools" className="text-nino-orange hover:underline">
                   قارن أسعار المدارس مباشرة
                 </Link>
+                . للتفاصيل الكاملة، راجع{" "}
+                <Link href="/guides/flight-training-cost-south-africa" className="text-nino-orange hover:underline">
+                  دليل التكلفة الشامل
+                </Link>
                 .
               </p>
             </section>
@@ -173,7 +177,11 @@ export default function StudyAviationGuidePage() {
                 <Link href="/schools" className="text-nino-orange hover:underline">
                   المدارس المعتمدة حسب الرخصة التي تستهدفها
                 </Link>{" "}
-                لمعرفة أيها يقدم المسار الذي يناسبك.
+                لمعرفة أيها يقدم المسار الذي يناسبك، أو اقرأ{" "}
+                <Link href="/guides/ppl-vs-cpl" className="text-nino-orange hover:underline">
+                  مقارنة تفصيلية بين PPL وCPL
+                </Link>
+                .
               </p>
             </section>
 
@@ -184,7 +192,11 @@ export default function StudyAviationGuidePage() {
                 شهرًا، بافتراض تدريب متواصل بدون انقطاعات كبيرة. المسارات
                 المعيارية (خطوة بخطوة، رخصة بعد رخصة) قد تأخذ وقتًا أطول لأنها
                 تعتمد على تجميع ساعات الطيران تدريجيًا، أحيانًا بين رحلات
-                متباعدة.
+                متباعدة. راجع{" "}
+                <Link href="/guides/how-long-to-become-a-pilot" className="text-nino-orange hover:underline">
+                  الجدول الزمني التفصيلي
+                </Link>{" "}
+                لمعرفة ما يؤثر فعليًا على المدة.
               </p>
             </section>
 
@@ -194,14 +206,22 @@ export default function StudyAviationGuidePage() {
                 المتطلبات الأساسية تختلف قليلًا بين المدارس، لكنها غالبًا تشمل:
                 جواز سفر ساري المفعول، شهادة ثانوية عامة، مستوى إنجليزي مقبول
                 (لا يشترط أن يكون ممتازًا من البداية)، وشهادة طبية أولية من طبيب
-                طيران معتمد.
+                طيران معتمد — راجع{" "}
+                <Link href="/guides/sacaa-medical-requirements" className="text-nino-orange hover:underline">
+                  دليل المتطلبات الطبية
+                </Link>{" "}
+                للتفاصيل.
               </p>
               <p className="mt-3">
                 بعد قبولك، ستحتاج تأشيرة دراسة (Study Visa) للدخول القانوني
                 والتدريب في جنوب أفريقيا. المستندات الأساسية عادة تشمل خطاب قبول
                 من المدرسة، إثبات قدرة مالية على تغطية التكاليف، وجواز سفر ساري
-                لمدة كافية. نينو إديوكيشن يرشدك خطوة بخطوة في هذه العملية بعد
-                قبولك في المدرسة المناسبة.
+                لمدة كافية. راجع{" "}
+                <Link href="/guides/south-africa-study-visa" className="text-nino-orange hover:underline">
+                  دليل التأشيرة الكامل خطوة بخطوة
+                </Link>{" "}
+                — نينو إديوكيشن يرشدك في هذه العملية بعد قبولك في المدرسة
+                المناسبة.
               </p>
             </section>
 
@@ -267,6 +287,38 @@ export default function StudyAviationGuidePage() {
                 </details>
               ))}
             </div>
+          </section>
+
+          {/* Related guides */}
+          <section className="mt-12 border-t border-nino-line pt-10">
+            <h2 className="font-display text-xl">أدلة ذات صلة</h2>
+            <ul className="mt-4 space-y-2">
+              <li>
+                <Link href="/guides/south-africa-study-visa" className="text-nino-orange hover:underline">
+                  التأشيرة الدراسية لجنوب أفريقيا ←
+                </Link>
+              </li>
+              <li>
+                <Link href="/guides/ppl-vs-cpl" className="text-nino-orange hover:underline">
+                  الفرق بين PPL و CPL ←
+                </Link>
+              </li>
+              <li>
+                <Link href="/guides/flight-training-cost-south-africa" className="text-nino-orange hover:underline">
+                  كم تكلفة تعلم الطيران في جنوب أفريقيا؟ ←
+                </Link>
+              </li>
+              <li>
+                <Link href="/guides/sacaa-medical-requirements" className="text-nino-orange hover:underline">
+                  متطلبات SACAA والفحص الطبي ←
+                </Link>
+              </li>
+              <li>
+                <Link href="/guides/how-long-to-become-a-pilot" className="text-nino-orange hover:underline">
+                  كم تستغرق مدة دراسة الطيران؟ ←
+                </Link>
+              </li>
+            </ul>
           </section>
 
           {/* Final CTA */}
