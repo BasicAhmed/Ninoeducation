@@ -24,53 +24,6 @@ import { dictionaries } from "@/lib/i18n/dictionaries";
 // deployment build.
 export const dynamic = "force-dynamic";
 
-const stats = [
-  { value: "+30", label: "مدرسة طيران شريكة في جميع أنحاء جنوب أفريقيا" },
-  { value: "0", label: "رسوم يدفعها الطالب، مهما كانت الخدمة" },
-  { value: "PPL–ATPL", label: "كل مسارات التدريب، من الرخصة الخاصة حتى رخصة النقل الجوي" },
-];
-
-const whyUs = [
-  {
-    icon: ShieldCheck,
-    title: "بلا رسوم على الإطلاق",
-    body: "نينو إديوكيشن تتقاضى عمولتها من مدارس الطيران الشريكة، وليس منك. لا رسوم خفية، ولا اشتراك.",
-  },
-  {
-    icon: ListChecks,
-    title: "مدارس تم التحقق منها",
-    body: "كل مدرسة على المنصة تمت مراجعتها يدويًا من فريقنا قبل نشرها، مع تحديث دوري للأسعار والتفاصيل.",
-  },
-  {
-    icon: Compass,
-    title: "مقارنة حقيقية بالأرقام",
-    body: "قارن الأسعار، المدة، والأسطول جنبًا إلى جنب بدل التنقل بين عشرات المواقع والمجموعات.",
-  },
-  {
-    icon: HomeIcon,
-    title: "دعم كامل بعد القبول",
-    body: "سكن، استقبال من المطار، شريحة اتصال، ومتابعة مستمرة من أول يوم حتى تخرجك.",
-  },
-];
-
-const steps = [
-  {
-    icon: Compass,
-    n: "قارِن",
-    body: "صنّف جميع المدارس الشريكة حسب الميزانية، الرخصة، الأسطول، والموقع.",
-  },
-  {
-    icon: PlaneTakeoff,
-    n: "قدِّم",
-    body: "أرسل طلبًا واحدًا عبر نينو إديوكيشن، ونحن نتولى إيصاله للمدرسة والمتابعة.",
-  },
-  {
-    icon: HomeIcon,
-    n: "صِل",
-    body: "سكن، استقبال من المطار، وشخص تتواصل معه في أول أسبوع لك في جنوب أفريقيا.",
-  },
-];
-
 function Kicker({ children }: { children: React.ReactNode }) {
   return (
     <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
@@ -81,9 +34,29 @@ function Kicker({ children }: { children: React.ReactNode }) {
 
 export default async function Home() {
   const lang = await getLang();
-  const t = dictionaries[lang].hero;
+  const dict = dictionaries[lang];
+  const t = dict.hero;
   const featured = (await getPublishedSchools()).slice(0, 3);
   const accommodation = (await getPublishedAccommodations()).slice(0, 3);
+
+  const stats = [
+    { value: "+30", label: dict.stats.stat1 },
+    { value: "0", label: dict.stats.stat2 },
+    { value: "PPL–ATPL", label: dict.stats.stat3 },
+  ];
+
+  const whyUs = [
+    { icon: ShieldCheck, title: dict.whyUs.item1Title, body: dict.whyUs.item1Body },
+    { icon: ListChecks, title: dict.whyUs.item2Title, body: dict.whyUs.item2Body },
+    { icon: Compass, title: dict.whyUs.item3Title, body: dict.whyUs.item3Body },
+    { icon: HomeIcon, title: dict.whyUs.item4Title, body: dict.whyUs.item4Body },
+  ];
+
+  const steps = [
+    { icon: Compass, n: dict.howItWorks.step1, body: dict.howItWorks.step1Body },
+    { icon: PlaneTakeoff, n: dict.howItWorks.step2, body: dict.howItWorks.step2Body },
+    { icon: HomeIcon, n: dict.howItWorks.step3, body: dict.howItWorks.step3Body },
+  ];
 
   // Accurate to what Nino Education actually is — an enrollment
   // consultancy connecting students to accredited flight schools, not
@@ -163,17 +136,16 @@ export default async function Home() {
         <section className="bg-nino-cream">
           <div className="mx-auto max-w-6xl px-6 py-16">
             <div className="text-center">
-              <Kicker>من بلدك إلى هناك</Kicker>
+              <Kicker>{dict.routeMap.kicker}</Kicker>
               <h2 className="mt-3 font-display text-3xl md:text-4xl">
-                المسافة أقرب مما تتخيل
+                {dict.routeMap.title}
               </h2>
               <p className="mx-auto mt-2 max-w-xl text-nino-ink/70">
-                من الرياض إلى الخرطوم، كل رحلة تنتهي في نفس المكان: جنوب
-                أفريقيا.
+                {dict.routeMap.subtitle}
               </p>
             </div>
             <div className="mt-10">
-              <WorldRouteMap />
+              <WorldRouteMap lang={lang} />
             </div>
           </div>
         </section>
@@ -183,12 +155,12 @@ export default async function Home() {
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="grid gap-10 md:grid-cols-[minmax(0,320px)_1fr]">
               <div>
-                <Kicker>+30 مدرسة، خيار واحد صحيح</Kicker>
+                <Kicker>{dict.whyUs.kicker}</Kicker>
                 <h2 className="mt-3 font-display text-3xl md:text-4xl">
-                  لماذا نينو إديوكيشن
+                  {dict.whyUs.title}
                 </h2>
                 <p className="mt-3 text-nino-ink/70">
-                  لست وحدك في هذا القرار. إليك كيف نساعدك تختار بثقة.
+                  {dict.whyUs.subtitle}
                 </p>
               </div>
               <div className="grid gap-px overflow-hidden rounded-2xl border border-nino-line bg-nino-line sm:grid-cols-2">
@@ -227,8 +199,8 @@ export default async function Home() {
             className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(#0b0d0f_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,black_40%,transparent_100%)]"
           />
           <div className="relative mx-auto max-w-6xl px-6 pt-20 text-center">
-            <Kicker>لا تصدّق كلامنا فقط</Kicker>
-            <h2 className="mt-3 font-display text-3xl md:text-4xl">أرقام، لا وعود</h2>
+            <Kicker>{dict.stats.kicker}</Kicker>
+            <h2 className="mt-3 font-display text-3xl md:text-4xl">{dict.stats.title}</h2>
           </div>
           <div className="relative mx-auto grid max-w-6xl gap-8 px-6 pb-20 pt-10 md:grid-cols-3">
             {stats.map((s, i) => (
@@ -248,15 +220,15 @@ export default async function Home() {
         <section className="bg-nino-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="text-center">
-              <Kicker>من الأرقام إلى الواقع</Kicker>
+              <Kicker>{dict.schoolsSection.kicker}</Kicker>
               <h2 className="mt-3 font-display text-3xl md:text-4xl">
-                هذه ليست كل المدارس — إنها البداية فقط
+                {dict.schoolsSection.title}
               </h2>
             </div>
             {featured.length > 0 && (
               <div className="mt-10 grid gap-6 md:grid-cols-3">
                 {featured.map((s, i) => (
-                  <SchoolCard key={s.id} school={s} badge={i === 0 ? "الأعلى تقييمًا" : undefined} />
+                  <SchoolCard key={s.id} school={s} badge={i === 0 ? dict.schoolsSection.topRated : undefined} />
                 ))}
               </div>
             )}
@@ -264,17 +236,16 @@ export default async function Home() {
             {/* Prominent, unmissable browse-all banner */}
             <div className="mt-12 flex flex-col items-center justify-between gap-6 rounded-2xl bg-nino-ink px-8 py-10 text-center text-white sm:flex-row sm:text-start">
               <div>
-                <h3 className="font-display text-2xl">تصفّح كل المدارس المتاحة</h3>
+                <h3 className="font-display text-2xl">{dict.schoolsSection.browseTitle}</h3>
                 <p className="mt-2 text-white/70">
-                  فلترة حسب الميزانية، الرخصة، الموقع، ومقارنة أكثر من مدرسة
-                  في نفس الوقت.
+                  {dict.schoolsSection.browseBody}
                 </p>
               </div>
               <Link
                 href="/schools"
                 className="shrink-0 rounded-full bg-nino-orange px-8 py-3.5 text-sm font-medium hover:bg-white hover:text-nino-ink"
               >
-                عرض جميع مدارس الطيران ←
+                {dict.schoolsSection.browseCta}
               </Link>
             </div>
           </div>
@@ -285,13 +256,12 @@ export default async function Home() {
           <section className="bg-nino-cream">
             <div className="mx-auto max-w-6xl px-6 py-20">
               <div className="text-center">
-                <Kicker>وين هسكن؟</Kicker>
+                <Kicker>{dict.accommodationSection.kicker}</Kicker>
                 <h2 className="mt-3 font-display text-3xl md:text-4xl">
-                  السكن جاهز قبل ما توصل
+                  {dict.accommodationSection.title}
                 </h2>
                 <p className="mx-auto mt-2 max-w-xl text-nino-ink/70">
-                  خيارات سكن قريبة من المدرسة، ننسقها معك من الرياض أو
-                  القاهرة أو أي بلد — قبل أن تحجز تذكرتك حتى.
+                  {dict.accommodationSection.subtitle}
                 </p>
               </div>
               <div className="mt-10 grid gap-6 md:grid-cols-3">
@@ -307,11 +277,11 @@ export default async function Home() {
                     <h3 className="mt-3 font-display text-xl">{a.nameAr}</h3>
                     <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
                       <div dir="ltr" className="text-end text-sm font-medium">
-                        ${formatUsd(a.monthlyPriceZar)} / شهريًا
+                        ${formatUsd(a.monthlyPriceZar)} {dict.accommodationSection.perMonth}
                       </div>
                       {a.distanceToAirport && (
                         <span className="text-xs text-nino-ink/50">
-                          {a.distanceToAirport} من المطار
+                          {a.distanceToAirport} {dict.accommodationSection.fromAirport}
                         </span>
                       )}
                     </div>
@@ -323,7 +293,7 @@ export default async function Home() {
                   href="/accommodation"
                   className="inline-block rounded-full border border-nino-ink/20 px-8 py-3.5 text-sm font-medium text-nino-ink hover:border-nino-ink"
                 >
-                  عرض كل خيارات السكن ←
+                  {dict.accommodationSection.browseCta}
                 </Link>
               </div>
             </div>
@@ -334,8 +304,8 @@ export default async function Home() {
         <section className="bg-nino-cream">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="text-center">
-              <Kicker>اخترت مدرستك؟</Kicker>
-              <h2 className="mt-3 font-display text-3xl md:text-4xl">إليك ما يحدث بعد ذلك</h2>
+              <Kicker>{dict.howItWorks.kicker}</Kicker>
+              <h2 className="mt-3 font-display text-3xl md:text-4xl">{dict.howItWorks.title}</h2>
             </div>
             <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-nino-line bg-nino-line md:grid-cols-3">
               {steps.map((s, i) => {
@@ -378,13 +348,13 @@ export default async function Home() {
           />
           <div className="relative mx-auto max-w-4xl px-6 py-20 text-center">
             <Kicker>
-              <span className="text-white/70">من الحلم إلى قمرة القيادة</span>
+              <span className="text-white/70">{dict.finalCta.kicker}</span>
             </Kicker>
             <h2 className="mt-3 font-display text-3xl md:text-4xl">
-              هل أنت مستعد لبدء ملفك؟
+              {dict.finalCta.title}
             </h2>
             <p className="mx-auto mt-3 max-w-md text-white/90">
-              أخبرنا بميزانيتك وأهدافك — وسنطابقك مع المدارس المناسبة اليوم.
+              {dict.finalCta.subtitle}
             </p>
 
             <div className="mx-auto mt-10 grid max-w-2xl gap-3 sm:grid-cols-[1.4fr_1fr_1fr]">
@@ -392,13 +362,13 @@ export default async function Home() {
                 href="/apply"
                 className="rounded-full bg-nino-ink px-6 py-4 text-sm font-medium hover:bg-white hover:text-nino-ink"
               >
-                ابدأ طلبي الآن
+                {dict.finalCta.ctaApply}
               </Link>
               <Link
                 href="/quiz"
                 className="rounded-full border border-white/40 px-6 py-4 text-sm font-medium hover:bg-white/10"
               >
-                لست متأكدًا؟ ابحث عن مدرستي
+                {dict.finalCta.ctaQuiz}
               </Link>
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}`}
@@ -406,7 +376,7 @@ export default async function Home() {
                 rel="noopener noreferrer"
                 className="rounded-full border border-white/40 px-6 py-4 text-sm font-medium hover:bg-white/10"
               >
-                تحدث معنا واتساب
+                {dict.finalCta.ctaWhatsapp}
               </a>
             </div>
           </div>

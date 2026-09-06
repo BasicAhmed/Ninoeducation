@@ -38,6 +38,143 @@ export const dictionaries = {
       feesLabel: "0 رسوم على الطالب",
       feesSub: "الخدمة مجانية بالكامل",
     },
+    whySouthAfrica: {
+      kicker: "لماذا جنوب أفريقيا",
+      title: "وجهة التدريب الأولى للطلاب العرب منذ سنوات",
+      point1Title: "اعتماد دولي",
+      point1Body:
+        "هيئة الطيران المدني الجنوب أفريقية (SACAA) معتمدة من منظمة الطيران المدني الدولي (ICAO)، ورخصتك قابلة للتحويل عالميًا.",
+      point2Title: "طقس يسمح بالتدريب طوال السنة",
+      point2Body:
+        "أكثر من 300 يوم مشمس سنويًا في معظم مناطق التدريب، ما يعني تدريبًا أسرع وساعات طيران فعلية أكثر.",
+      point3Title: "تكلفة أقل بكثير",
+      point3Body: "تدريب بجودة عالمية بجزء من تكلفة أمريكا أو أوروبا أو حتى بعض الدول العربية.",
+      point4Title: "بيئة إنجليزية جاهزة",
+      point4Body: "التدريب والاختبارات بالكامل باللغة الإنجليزية، دون الحاجة لتعلم لغة جديدة.",
+      watchFull: "شاهد الفيديو الكامل",
+    },
+    routeMap: {
+      kicker: "من بلدك إلى هناك",
+      title: "المسافة أقرب مما تتخيل",
+      subtitle: "من الرياض إلى الخرطوم، كل رحلة تنتهي في نفس المكان: جنوب أفريقيا.",
+      toJoburg: "جوهانسبرغ",
+    },
+    whyUs: {
+      kicker: "+30 مدرسة، خيار واحد صحيح",
+      title: "لماذا نينو إديوكيشن",
+      subtitle: "لست وحدك في هذا القرار. إليك كيف نساعدك تختار بثقة.",
+      item1Title: "بلا رسوم على الإطلاق",
+      item1Body: "نينو إديوكيشن تتقاضى عمولتها من مدارس الطيران الشريكة، وليس منك. لا رسوم خفية، ولا اشتراك.",
+      item2Title: "مدارس تم التحقق منها",
+      item2Body: "كل مدرسة على المنصة تمت مراجعتها يدويًا من فريقنا قبل نشرها، مع تحديث دوري للأسعار والتفاصيل.",
+      item3Title: "مقارنة حقيقية بالأرقام",
+      item3Body: "قارن الأسعار، المدة، والأسطول جنبًا إلى جنب بدل التنقل بين عشرات المواقع والمجموعات.",
+      item4Title: "دعم كامل بعد القبول",
+      item4Body: "سكن، استقبال من المطار، شريحة اتصال، ومتابعة مستمرة من أول يوم حتى تخرجك.",
+    },
+    stats: {
+      kicker: "لا تصدّق كلامنا فقط",
+      title: "أرقام، لا وعود",
+      stat1: "مدرسة طيران شريكة في جميع أنحاء جنوب أفريقيا",
+      stat2: "رسوم يدفعها الطالب، مهما كانت الخدمة",
+      stat3: "كل مسارات التدريب، من الرخصة الخاصة حتى رخصة النقل الجوي",
+    },
+    schoolsSection: {
+      kicker: "من الأرقام إلى الواقع",
+      title: "هذه ليست كل المدارس — إنها البداية فقط",
+      topRated: "الأعلى تقييمًا",
+      browseTitle: "تصفّح كل المدارس المتاحة",
+      browseBody: "فلترة حسب الميزانية، الرخصة، الموقع، ومقارنة أكثر من مدرسة في نفس الوقت.",
+      browseCta: "عرض جميع مدارس الطيران ←",
+    },
+    accommodationSection: {
+      kicker: "وين هسكن؟",
+      title: "السكن جاهز قبل ما توصل",
+      subtitle: "خيارات سكن قريبة من المدرسة، ننسقها معك من الرياض أو القاهرة أو أي بلد — قبل أن تحجز تذكرتك حتى.",
+      perMonth: "شهريًا",
+      fromAirport: "من المطار",
+      browseCta: "عرض كل خيارات السكن ←",
+    },
+    howItWorks: {
+      kicker: "اخترت مدرستك؟",
+      title: "إليك ما يحدث بعد ذلك",
+      step1: "قارِن",
+      step1Body: "صنّف جميع المدارس الشريكة حسب الميزانية، الرخصة، الأسطول، والموقع.",
+      step2: "قدِّم",
+      step2Body: "أرسل طلبًا واحدًا عبر نينو إديوكيشن، ونحن نتولى إيصاله للمدرسة والمتابعة.",
+      step3: "صِل",
+      step3Body: "سكن، استقبال من المطار، وشخص تتواصل معه في أول أسبوع لك في جنوب أفريقيا.",
+    },
+    testimonials: {
+      kicker: "آراء حقيقية",
+      title: "ما يقوله الطلاب",
+      items: [
+        {
+          name: "عبدالله",
+          origin: "الرياض، السعودية",
+          quote:
+            "كنت خايف من موضوع الفيزا والسكن أكثر من التدريب نفسه. نينو تكفلت بكل التفاصيل الصغيرة اللي ما كنت أعرف حتى أسأل عنها.",
+        },
+        {
+          name: "مريم",
+          origin: "القاهرة، مصر",
+          quote:
+            "قارنت بين 4 مدارس بنفسي قبل ما أتواصل معهم، ووفروا علي وقت كبير في المقارنة والتفاوض على السعر مع المدرسة.",
+        },
+        {
+          name: "يوسف",
+          origin: "الخرطوم، السودان",
+          quote:
+            "التواصل كان سريع من أول يوم، وما حسيت اني بس رقم في نظام. كانوا يردون على استفساراتي حتى بعد ساعات العمل.",
+        },
+      ],
+    },
+    faq: {
+      kicker: "أسئلة قبل ما تقرر",
+      title: "الأسئلة اللي الكل يسألها",
+      items: [
+        {
+          q: "هل الخدمة فعلاً مجانية؟ ما هي الحيلة؟",
+          a: "نعم، مجانية بالكامل على الطالب. نينو إديوكيشن تتقاضى عمولة من مدرسة الطيران نفسها عند التسجيل، تمامًا كما تعمل وكالات السفر مع شركات الطيران. أنت لا تدفع لنا أي شيء مقابل المقارنة أو التقديم أو المتابعة.",
+        },
+        {
+          q: "كيف تسير عملية الفيزا؟",
+          a: "بعد قبولك في المدرسة، نرسل لك قائمة المستندات المطلوبة (خطاب قبول، إثبات تمويل، جواز سفر ساري) ونوجهك خطوة بخطوة للتقديم على تأشيرة الدراسة الجنوب أفريقية. لا نتولى تقديم الطلب نيابة عنك، لكننا نبقى معك حتى تحصل عليها.",
+        },
+        {
+          q: "لمن أدفع رسوم المدرسة؟ هل تمر عبركم؟",
+          a: "تدفع مباشرة لحساب المدرسة الرسمي، وليس لنينو إديوكيشن. نساعدك في التنسيق مع المدرسة وفهم جدول الدفعات، لكن المال ينتقل بينك وبين المدرسة مباشرة دون وسيط.",
+        },
+        {
+          q: "ماذا لو لم تكن لغتي الإنجليزية ممتازة؟",
+          a: "التدريب والاختبارات النظرية بالكامل بالإنجليزية، لكن معظم الطلاب العرب يصلون بمستوى متوسط ويتحسنون بسرعة أثناء البرنامج. بعض المدارس تقدم دورة تأسيسية قصيرة قبل بدء التدريب الفعلي إن احتجت ذلك.",
+        },
+        {
+          q: "ما هي فرص العمل بعد الحصول على الرخصة؟",
+          a: "رخصة SACAA معتمدة من ICAO، أي قابلة للتحويل لمعظم دول العالم. بعدها يمكنك التقديم على شركات الطيران في الخليج، مصر، أو حتى العودة لتحويل رخصتك محليًا. سوق الطيران في الخليج تحديدًا في توسع مستمر ويبحث عن طيارين جدد باستمرار.",
+        },
+        {
+          q: "كم تستغرق عملية التدريب كاملة؟",
+          a: "تختلف حسب المدرسة ونوع البرنامج (متكامل أو منفصل)، لكن غالبًا بين 12 إلى 18 شهرًا من الوصول حتى الحصول على رخصة CPL. نعرض المدة التقديرية لكل مدرسة في صفحتها.",
+        },
+        {
+          q: "ماذا يحدث بعد أن أرسل طلبي؟",
+          a: "نتواصل معك خلال 24-48 ساعة لفهم ميزانيتك وأهدافك بدقة أكبر، ثم نطابقك مع المدارس الأنسب ونرسل لك خطاب قبول أولي من المدرسة. بعدها نبدأ معك بالتنسيق للفيزا والسكن والسفر.",
+        },
+      ],
+    },
+    instagram: {
+      kicker: "خلف الكواليس",
+      title: "تابعنا على إنستقرام",
+    },
+    finalCta: {
+      kicker: "من الحلم إلى قمرة القيادة",
+      title: "هل أنت مستعد لبدء ملفك؟",
+      subtitle: "أخبرنا بميزانيتك وأهدافك — وسنطابقك مع المدارس المناسبة اليوم.",
+      ctaApply: "ابدأ طلبي الآن",
+      ctaQuiz: "لست متأكدًا؟ ابحث عن مدرستي",
+      ctaWhatsapp: "تحدث معنا واتساب",
+    },
   },
   en: {
     nav: {
@@ -77,6 +214,143 @@ export const dictionaries = {
       schoolsSub: "Across South Africa",
       feesLabel: "0 Fees to Students",
       feesSub: "The service is completely free",
+    },
+    whySouthAfrica: {
+      kicker: "Why South Africa",
+      title: "The top training destination for Arab students for years",
+      point1Title: "Internationally Recognized",
+      point1Body:
+        "The South African Civil Aviation Authority (SACAA) is accredited by ICAO, so your license is transferable worldwide.",
+      point2Title: "Year-Round Flying Weather",
+      point2Body:
+        "Over 300 sunny days a year across most training regions — faster training and more real flight hours.",
+      point3Title: "Far Lower Cost",
+      point3Body: "World-class training for a fraction of the cost of the US, Europe, or even some Arab countries.",
+      point4Title: "English-Speaking Environment",
+      point4Body: "Training and exams are entirely in English, with no need to learn a new language.",
+      watchFull: "Watch the full video",
+    },
+    routeMap: {
+      kicker: "From Your Country to There",
+      title: "The distance is closer than you think",
+      subtitle: "From Riyadh to Khartoum, every route ends in the same place: South Africa.",
+      toJoburg: "Johannesburg",
+    },
+    whyUs: {
+      kicker: "30+ Schools, One Right Choice",
+      title: "Why Nino Education",
+      subtitle: "You're not alone in this decision. Here's how we help you choose with confidence.",
+      item1Title: "No Fees, Ever",
+      item1Body: "Nino Education earns its commission from partner flight schools, not from you. No hidden fees, no subscription.",
+      item2Title: "Verified Schools",
+      item2Body: "Every school on the platform is manually reviewed by our team before listing, with prices and details kept up to date.",
+      item3Title: "Real, Numbers-Based Comparison",
+      item3Body: "Compare prices, duration, and fleet side by side instead of hopping between dozens of sites and groups.",
+      item4Title: "Full Support After Acceptance",
+      item4Body: "Housing, airport pickup, a SIM card, and ongoing support from day one until graduation.",
+    },
+    stats: {
+      kicker: "Don't Just Take Our Word",
+      title: "Numbers, Not Promises",
+      stat1: "Partner flight schools across South Africa",
+      stat2: "Fees paid by the student, for any service",
+      stat3: "Every training path, from private license to airline transport license",
+    },
+    schoolsSection: {
+      kicker: "From Numbers to Reality",
+      title: "This isn't all the schools — it's just the start",
+      topRated: "Top Rated",
+      browseTitle: "Browse All Available Schools",
+      browseBody: "Filter by budget, license, location, and compare more than one school at the same time.",
+      browseCta: "View All Flight Schools →",
+    },
+    accommodationSection: {
+      kicker: "Where Will You Stay?",
+      title: "Housing sorted before you even land",
+      subtitle: "Accommodation options near your school, arranged with you from Riyadh, Cairo, or anywhere — before you even book your ticket.",
+      perMonth: "/ month",
+      fromAirport: "from the airport",
+      browseCta: "View All Accommodation Options →",
+    },
+    howItWorks: {
+      kicker: "Picked Your School?",
+      title: "Here's what happens next",
+      step1: "Compare",
+      step1Body: "Filter every partner school by budget, license, fleet, and location.",
+      step2: "Apply",
+      step2Body: "Send one application through Nino Education, and we handle getting it to the school and following up.",
+      step3: "Arrive",
+      step3Body: "Housing, airport pickup, and a point of contact for your first week in South Africa.",
+    },
+    testimonials: {
+      kicker: "Real Voices",
+      title: "What Students Say",
+      items: [
+        {
+          name: "Abdullah",
+          origin: "Riyadh, Saudi Arabia",
+          quote:
+            "I was more worried about the visa and housing than the training itself. Nino handled every small detail I didn't even know to ask about.",
+        },
+        {
+          name: "Mariam",
+          origin: "Cairo, Egypt",
+          quote:
+            "I compared 4 schools myself before reaching out to them, and they saved me a lot of time on comparison and negotiating the price with the school.",
+        },
+        {
+          name: "Youssef",
+          origin: "Khartoum, Sudan",
+          quote:
+            "Communication was fast from day one, and I never felt like just a number in a system. They replied to my questions even after work hours.",
+        },
+      ],
+    },
+    faq: {
+      kicker: "Questions Before You Decide",
+      title: "The questions everyone asks",
+      items: [
+        {
+          q: "Is the service really free? What's the catch?",
+          a: "Yes, completely free to the student. Nino Education earns a commission from the flight school itself upon enrollment, exactly like a travel agency works with airlines. You never pay us anything for comparing, applying, or follow-up.",
+        },
+        {
+          q: "How does the visa process work?",
+          a: "Once you're accepted by a school, we send you the list of required documents (acceptance letter, proof of funds, valid passport) and guide you step by step through applying for the South African study visa. We don't submit the application on your behalf, but we stay with you until you get it.",
+        },
+        {
+          q: "Who do I pay the school fees to? Do they go through you?",
+          a: "You pay directly to the school's official account, not to Nino Education. We help you coordinate with the school and understand the payment schedule, but the money moves directly between you and the school with no middleman.",
+        },
+        {
+          q: "What if my English isn't excellent?",
+          a: "Training and theory exams are entirely in English, but most Arab students arrive at an intermediate level and improve quickly during the program. Some schools offer a short foundational course before actual training begins if you need it.",
+        },
+        {
+          q: "What are the job prospects after getting the license?",
+          a: "The SACAA license is ICAO-accredited, meaning it's transferable to most countries in the world. Afterward you can apply to airlines in the Gulf, Egypt, or even convert your license back home. The Gulf aviation market specifically is expanding constantly and always looking for new pilots.",
+        },
+        {
+          q: "How long does the full training process take?",
+          a: "It varies by school and program type (integrated or modular), but it's usually 12 to 18 months from arrival to getting your CPL. We show the estimated duration for each school on its page.",
+        },
+        {
+          q: "What happens after I submit my application?",
+          a: "We reach out within 24-48 hours to understand your budget and goals more precisely, then match you with the most suitable schools and send you an initial acceptance letter from the school. After that we start coordinating your visa, housing, and travel with you.",
+        },
+      ],
+    },
+    instagram: {
+      kicker: "Behind the Scenes",
+      title: "Follow Us on Instagram",
+    },
+    finalCta: {
+      kicker: "From the Dream to the Cockpit",
+      title: "Ready to start your file?",
+      subtitle: "Tell us your budget and goals — and we'll match you with the right schools today.",
+      ctaApply: "Start My Application",
+      ctaQuiz: "Not sure? Find My School",
+      ctaWhatsapp: "Chat With Us on WhatsApp",
     },
   },
 } as const;

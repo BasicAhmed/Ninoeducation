@@ -1,12 +1,16 @@
 import Image from "next/image";
 import { Heart, AtSign } from "lucide-react";
 import { getPublishedSocialPosts } from "@/lib/social";
+import { getLang } from "@/lib/i18n/get-lang";
+import { dictionaries } from "@/lib/i18n/dictionaries";
 
 const ROTATIONS = [-4, 3, -2, 4, -3, 2];
 
 export async function InstagramGallery() {
   const posts = await getPublishedSocialPosts(6);
   if (posts.length === 0) return null;
+  const lang = await getLang();
+  const t = dictionaries[lang].instagram;
 
   return (
     <section className="bg-nino-white py-20">
@@ -14,10 +18,10 @@ export async function InstagramGallery() {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
-              خلف الكواليس
+              {t.kicker}
             </p>
             <h2 className="mt-3 font-display text-3xl md:text-4xl">
-              تابعنا على إنستقرام
+              {t.title}
             </h2>
           </div>
           <a

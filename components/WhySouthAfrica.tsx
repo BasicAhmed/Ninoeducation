@@ -1,30 +1,24 @@
-const points = [
-  {
-    title: "اعتماد دولي",
-    body: "هيئة الطيران المدني الجنوب أفريقية (SACAA) معتمدة من منظمة الطيران المدني الدولي (ICAO)، ورخصتك قابلة للتحويل عالميًا.",
-  },
-  {
-    title: "طقس يسمح بالتدريب طوال السنة",
-    body: "أكثر من 300 يوم مشمس سنويًا في معظم مناطق التدريب، ما يعني تدريبًا أسرع وساعات طيران فعلية أكثر.",
-  },
-  {
-    title: "تكلفة أقل بكثير",
-    body: "تدريب بجودة عالمية بجزء من تكلفة أمريكا أو أوروبا أو حتى بعض الدول العربية.",
-  },
-  {
-    title: "بيئة إنجليزية جاهزة",
-    body: "التدريب والاختبارات بالكامل باللغة الإنجليزية، دون الحاجة لتعلم لغة جديدة.",
-  },
-];
+import { getLang } from "@/lib/i18n/get-lang";
+import { dictionaries } from "@/lib/i18n/dictionaries";
 
-export function WhySouthAfrica() {
+export async function WhySouthAfrica() {
+  const lang = await getLang();
+  const t = dictionaries[lang].whySouthAfrica;
+
+  const points = [
+    { title: t.point1Title, body: t.point1Body },
+    { title: t.point2Title, body: t.point2Body },
+    { title: t.point3Title, body: t.point3Body },
+    { title: t.point4Title, body: t.point4Body },
+  ];
+
   return (
     <section className="relative isolate overflow-hidden">
       {/* video background */}
       <div className="absolute inset-0 overflow-hidden">
         <iframe
           src="https://www.youtube.com/embed/VzqWO5EaSps?start=15&autoplay=1&mute=1&loop=1&playlist=VzqWO5EaSps&controls=0&showinfo=0&modestbranding=1&rel=0&iv_load_policy=3&disablekb=1"
-          title="لماذا جنوب أفريقيا"
+          title={t.kicker}
           allow="autoplay; encrypted-media"
           className="pointer-events-none absolute left-1/2 top-1/2 h-[100vw] min-h-full w-[177.78vh] min-w-full -translate-x-1/2 -translate-y-1/2"
         />
@@ -33,10 +27,10 @@ export function WhySouthAfrica() {
 
       <div className="relative mx-auto max-w-6xl px-6 py-24 text-white md:py-32">
         <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
-          لماذا جنوب أفريقيا
+          {t.kicker}
         </p>
         <h2 className="mt-4 max-w-xl font-display text-3xl md:text-4xl">
-          وجهة التدريب الأولى للطلاب العرب منذ سنوات
+          {t.title}
         </h2>
         <div className="mt-12 grid gap-8 sm:grid-cols-2">
           {points.map((p) => (
@@ -52,7 +46,7 @@ export function WhySouthAfrica() {
           rel="noopener noreferrer"
           className="mt-10 inline-block text-sm text-white/60 underline underline-offset-4 hover:text-white"
         >
-          شاهد الفيديو الكامل
+          {t.watchFull}
         </a>
       </div>
       <div

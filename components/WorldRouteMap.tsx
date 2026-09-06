@@ -2,24 +2,28 @@ import { geoMercator, geoPath, geoBounds } from "d3-geo";
 import { feature } from "topojson-client";
 import type { Topology, GeometryCollection } from "topojson-specification";
 import worldTopology from "world-atlas/countries-110m.json";
+import type { Lang } from "@/lib/i18n/dictionaries";
+import { dictionaries } from "@/lib/i18n/dictionaries";
 
 type City = {
   code: string;
   nameAr: string;
+  nameEn: string;
   lon: number;
   lat: number;
-  flightHours: string;
+  hoursAr: string;
+  hoursEn: string;
 };
 
 const CITIES: City[] = [
-  { code: "RUH", nameAr: "الرياض", lon: 46.7, lat: 24.7, flightHours: "≈ 8 ساعات" },
-  { code: "CAI", nameAr: "القاهرة", lon: 31.2, lat: 30.0, flightHours: "≈ 9 ساعات" },
-  { code: "DXB", nameAr: "دبي", lon: 55.3, lat: 25.2, flightHours: "≈ 8.5 ساعة" },
-  { code: "KRT", nameAr: "الخرطوم", lon: 32.5, lat: 15.6, flightHours: "≈ 6 ساعات" },
-  { code: "BOM", nameAr: "مومباي", lon: 72.8, lat: 19.1, flightHours: "≈ 9 ساعات" },
+  { code: "RUH", nameAr: "الرياض", nameEn: "Riyadh", lon: 46.7, lat: 24.7, hoursAr: "≈ 8 ساعات", hoursEn: "≈ 8 hrs" },
+  { code: "CAI", nameAr: "القاهرة", nameEn: "Cairo", lon: 31.2, lat: 30.0, hoursAr: "≈ 9 ساعات", hoursEn: "≈ 9 hrs" },
+  { code: "DXB", nameAr: "دبي", nameEn: "Dubai", lon: 55.3, lat: 25.2, hoursAr: "≈ 8.5 ساعة", hoursEn: "≈ 8.5 hrs" },
+  { code: "KRT", nameAr: "الخرطوم", nameEn: "Khartoum", lon: 32.5, lat: 15.6, hoursAr: "≈ 6 ساعات", hoursEn: "≈ 6 hrs" },
+  { code: "BOM", nameAr: "مومباي", nameEn: "Mumbai", lon: 72.8, lat: 19.1, hoursAr: "≈ 9 ساعات", hoursEn: "≈ 9 hrs" },
 ];
 
-const DEST = { code: "JNB", nameAr: "جوهانسبرغ", lon: 28.0, lat: -26.2 };
+const DEST = { code: "JNB", nameAr: "جوهانسبرغ", nameEn: "Johannesburg", lon: 28.0, lat: -26.2 };
 
 const W = 800;
 const H = 560;
@@ -53,7 +57,8 @@ function arcPath(from: { x: number; y: number }, to: { x: number; y: number }) {
   return `M ${from.x} ${from.y} Q ${mx} ${my} ${to.x} ${to.y}`;
 }
 
-export function WorldRouteMap() {
+export function WorldRouteMap({ lang }: { lang: Lang }) {
+  const t = dictionaries[lang].routeMap;
   const allCountries = (
     feature(
       worldTopology as unknown as Topology,
@@ -89,7 +94,11 @@ export function WorldRouteMap() {
         viewBox={`0 0 ${W} ${H}`}
         className="w-full"
         role="img"
-        aria-label="خريطة توضح انطلاق الطلاب من عدة دول عربية نحو جنوب أفريقيا"
+        aria-label={
+          lang === "ar"
+            ? "خريطة توضح انطلاق الطلاب من عدة دول عربية نحو جنوب أفريقيا"
+            : "Map showing students traveling from several countries to South Africa"
+        }
       >
         {/* land */}
         {countries.map((c, i) => {
@@ -140,7 +149,7 @@ export function WorldRouteMap() {
                 fill="#0b0d0f"
                 style={{ paintOrder: "stroke", stroke: "#eef2f6", strokeWidth: 4 }}
               >
-                {c.nameAr}
+                {lang === "ar" ? c.nameAr : c.nameEn}
               </text>
               <text
                 x={p.x}
@@ -151,7 +160,7 @@ export function WorldRouteMap() {
                 opacity={0.6}
                 style={{ paintOrder: "stroke", stroke: "#eef2f6", strokeWidth: 4 }}
               >
-                {c.flightHours}
+                {lang === "ar" ? c.hoursAr : c.hoursEn}
               </text>
             </g>
           );
@@ -170,15 +179,15 @@ export function WorldRouteMap() {
             fill="#0b0d0f"
             style={{ paintOrder: "stroke", stroke: "#eef2f6", strokeWidth: 4 }}
           >
-            جنوب أفريقيا
+            {lang === "ar" ? "جنوب أفريقيا" : "South Africa"}
           </text>
         </g>
       </svg>
 
-      <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-nino-line bg-white/70 px-6 py-4 text-xs text-nino-ink/60" dir="rtl">
+      <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-nino-line bg-white/70 px-6 py-4 text-xs text-nino-ink/60" dir={lang === "ar" ? "rtl" : "ltr"}>
         {CITIES.map((c) => (
           <span key={c.code}>
-            {c.nameAr} → جوهانسبرغ · {c.flightHours}
+            {lang === "ar" ? c.nameAr : c.nameEn} → {lang === "ar" ? DEST.nameAr : DEST.nameEn} · {lang === "ar" ? c.hoursAr : c.hoursEn}
           </span>
         ))}
       </div>
