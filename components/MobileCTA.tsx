@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 
-export function MobileCTA() {
+export function MobileCTA({ lang }: { lang: Lang }) {
   const pathname = usePathname();
   const [visible, setVisible] = useState(false);
+  const t = dictionaries[lang].sticky;
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 400);
@@ -30,13 +32,13 @@ export function MobileCTA() {
         href="/quiz"
         className="flex-1 rounded-full border border-white/25 px-4 py-2.5 text-center text-sm font-medium text-white"
       >
-        ابحث عن مدرستي
+        {t.quiz}
       </Link>
       <Link
         href="/apply"
         className="flex-[1.4] rounded-full bg-gradient-to-r from-nino-orange to-[#ff7a3d] px-4 py-2.5 text-center text-sm font-medium text-white shadow-lg shadow-black/30"
       >
-        قدّم الآن ←
+        {t.apply}
       </Link>
     </div>
   );

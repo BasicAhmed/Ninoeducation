@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { LICENSE_LABELS } from "@/lib/constants";
+import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 import { formatUsdRange } from "@/lib/currency";
 
 type School = {
@@ -23,11 +23,14 @@ export function SchoolCard({
   school,
   selectable = false,
   badge,
+  lang = "ar",
 }: {
   school: School;
   selectable?: boolean;
   badge?: string;
+  lang?: Lang;
 }) {
+  const t = dictionaries[lang];
   const licenses = school.licenses.split(",").slice(0, 3);
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-nino-line bg-white shadow-sm transition hover:-translate-y-1 hover:border-nino-orange hover:shadow-lg">
@@ -54,7 +57,7 @@ export function SchoolCard({
       )}
       <div className="flex items-center justify-between">
         <span className="text-xs text-nino-ink/50">
-          {school.city} · {school.province}
+          {school.city} · {t.provinces[school.province as keyof typeof t.provinces] ?? school.province}
         </span>
         <span dir="ltr" className="font-mono text-xs text-nino-orange">
           ★ {school.rating.toFixed(1)}
@@ -68,12 +71,12 @@ export function SchoolCard({
         <div className="mt-3 flex flex-wrap gap-2">
           {school.nextIntakeDate && (
             <span className="rounded-full bg-nino-orange/10 px-2.5 py-1 text-xs font-medium text-nino-orange">
-              الدفعة القادمة: {school.nextIntakeDate}
+              {t.schoolCard.nextIntake}: {school.nextIntakeDate}
             </span>
           )}
           {school.seatsAvailable != null && (
             <span className="rounded-full bg-nino-orange/10 px-2.5 py-1 text-xs font-medium text-nino-orange">
-              {school.seatsAvailable} مقاعد متبقية
+              {school.seatsAvailable} {t.schoolCard.seatsLeft}
             </span>
           )}
         </div>
@@ -84,7 +87,7 @@ export function SchoolCard({
             key={l}
             className="rounded-full border border-nino-line px-2.5 py-1 text-xs"
           >
-            {LICENSE_LABELS[l] ?? l}
+            {t.licenses[l as keyof typeof t.licenses] ?? l}
           </span>
         ))}
       </div>
@@ -93,13 +96,13 @@ export function SchoolCard({
           <div className="font-medium">
             {formatUsdRange(school.priceMinZar, school.priceMaxZar)}
           </div>
-          <div className="text-xs text-nino-ink/50">تقديري بالدولار</div>
+          <div className="text-xs text-nino-ink/50">{t.schoolCard.estimatedUsd}</div>
         </div>
         <Link
           href={`/schools/${school.slug}`}
           className="rounded-full bg-nino-ink px-4 py-2 text-xs font-medium text-white group-hover:bg-nino-orange"
         >
-          عرض التفاصيل
+          {t.schoolCard.viewDetails}
         </Link>
       </div>
       </div>

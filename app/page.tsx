@@ -228,7 +228,7 @@ export default async function Home() {
             {featured.length > 0 && (
               <div className="mt-10 grid gap-6 md:grid-cols-3">
                 {featured.map((s, i) => (
-                  <SchoolCard key={s.id} school={s} badge={i === 0 ? dict.schoolsSection.topRated : undefined} />
+                  <SchoolCard key={s.id} school={s} lang={lang} badge={i === 0 ? dict.schoolsSection.topRated : undefined} />
                 ))}
               </div>
             )}

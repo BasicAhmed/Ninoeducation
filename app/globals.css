@@ -25,6 +25,13 @@ html {
   scroll-behavior: smooth;
 }
 
+/* English content uses Inter instead of leaning on Plex Arabic's
+   Latin fallback glyphs — swapped via the cascade so nothing in the
+   component tree needs to know which language it's rendering. */
+html:lang(en) {
+  --font-sans: var(--font-inter);
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

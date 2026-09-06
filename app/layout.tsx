@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans_Arabic } from "next/font/google";
+import { IBM_Plex_Sans_Arabic, Inter } from "next/font/google";
 import "./globals.css";
 import { MobileCTA } from "@/components/MobileCTA";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
@@ -9,6 +9,15 @@ import { getLang } from "@/lib/i18n/get-lang";
 const plexArabic = IBM_Plex_Sans_Arabic({
   variable: "--font-plex-arabic",
   subsets: ["arabic", "latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+// Used for English content instead of leaning on Plex Arabic's Latin
+// fallback glyphs — Inter reads as more natural, purpose-built English
+// UI type, while still pairing cleanly with Plex Arabic's proportions.
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
@@ -43,12 +52,12 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang={lang}
       dir={lang === "ar" ? "rtl" : "ltr"}
-      className={`${plexArabic.variable} h-full antialiased`}
+      className={`${plexArabic.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-nino-cream text-nino-ink pb-16 md:pb-0">
         {children}
-        <WhatsAppButton />
-        <MobileCTA />
+        <WhatsAppButton lang={lang} />
+        <MobileCTA lang={lang} />
       </body>
     </html>
   );

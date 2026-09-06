@@ -2,6 +2,8 @@ import { getPublishedSchools } from "@/lib/schools";
 import { QuizFlow } from "@/components/QuizFlow";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { getLang } from "@/lib/i18n/get-lang";
+import { dictionaries } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +13,8 @@ export const metadata = {
 };
 
 export default async function QuizPage() {
+  const lang = await getLang();
+  const t = dictionaries[lang].quiz;
   const schools = await getPublishedSchools();
 
   return (
@@ -18,12 +22,12 @@ export default async function QuizPage() {
       <SiteHeader />
       <main className="flex-1 bg-nino-cream">
         <div className="mx-auto max-w-2xl px-6 py-14">
-          <h1 className="font-display text-4xl">ابحث عن مدرستي</h1>
+          <h1 className="font-display text-4xl">{t.title}</h1>
           <p className="mt-2 text-nino-ink/70">
-            ثلاثة أسئلة سريعة، ونرشح لك أفضل المدارس المناسبة لأهدافك.
+            {t.subtitle}
           </p>
           <div className="mt-8">
-            <QuizFlow schools={schools} />
+            <QuizFlow schools={schools} lang={lang} />
           </div>
         </div>
       </main>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { SchoolCard } from "@/components/SchoolCard";
+import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 
 type School = {
   id: string;
@@ -18,26 +19,27 @@ type School = {
   trainingType: string;
 };
 
-const GOALS = [
-  { key: "PPL", label: "الحصول على رخصة طيار خاص فقط" },
-  { key: "CPL", label: "أن أصبح طيارًا محترفًا (تجاري)" },
-  { key: "ATPL_THEORY", label: "مسار كامل نحو شركات الطيران" },
-];
-
-const BUDGETS = [
-  { key: 250000, label: "أقل من $13,500" },
-  { key: 450000, label: "$13,500 – $24,000" },
-  { key: 700000, label: "$24,000 – $38,000" },
-  { key: 999999999, label: "أكثر من $38,000" },
-];
-
-export function QuizFlow({ schools }: { schools: School[] }) {
+export function QuizFlow({ schools, lang }: { schools: School[]; lang: Lang }) {
+  const t = dictionaries[lang].quiz;
   const [step, setStep] = useState(0);
   const [goal, setGoal] = useState<string | null>(null);
   const [budget, setBudget] = useState<number | null>(null);
   const [needsAccommodation, setNeedsAccommodation] = useState<boolean | null>(
     null
   );
+
+  const GOALS = [
+    { key: "PPL", label: t.goalPpl },
+    { key: "CPL", label: t.goalCpl },
+    { key: "ATPL_THEORY", label: t.goalAtpl },
+  ];
+
+  const BUDGETS = [
+    { key: 250000, label: t.budget1 },
+    { key: 450000, label: t.budget2 },
+    { key: 700000, label: t.budget3 },
+    { key: 999999999, label: t.budget4 },
+  ];
 
   const done = step === 3;
 
@@ -53,16 +55,15 @@ export function QuizFlow({ schools }: { schools: School[] }) {
   if (done) {
     return (
       <div>
-        <h2 className="font-display text-2xl">أفضل المدارس المناسبة لك</h2>
+        <h2 className="font-display text-2xl">{t.resultsTitle}</h2>
         {matches.length === 0 ? (
           <p className="mt-4 rounded-2xl border border-dashed border-nino-line bg-nino-white p-8 text-nino-ink/60">
-            لم نجد تطابقًا دقيقًا بهذه المعايير. جرّب توسيع الميزانية أو تصفح
-            كل المدارس مباشرة.
+            {t.noMatches}
           </p>
         ) : (
           <div className="mt-6 grid gap-6 md:grid-cols-3">
             {matches.map((s) => (
-              <SchoolCard key={s.id} school={s} />
+              <SchoolCard key={s.id} school={s} lang={lang} />
             ))}
           </div>
         )}
@@ -70,7 +71,7 @@ export function QuizFlow({ schools }: { schools: School[] }) {
           onClick={() => setStep(0)}
           className="mt-8 text-sm font-medium text-nino-orange hover:underline"
         >
-          إعادة الإجابة
+          {t.retake}
         </button>
       </div>
     );
@@ -79,12 +80,12 @@ export function QuizFlow({ schools }: { schools: School[] }) {
   return (
     <div className="rounded-2xl border border-nino-line bg-nino-white p-8">
       <div className="mb-6 text-xs text-nino-ink/40">
-        السؤال {step + 1} من 3
+        {t.questionOf} {step + 1} {t.of3}
       </div>
 
       {step === 0 && (
         <Question
-          title="ما هدفك من التدريب؟"
+          title={t.goalQuestion}
           options={GOALS}
           onSelect={(v) => {
             setGoal(v as string);
@@ -95,7 +96,7 @@ export function QuizFlow({ schools }: { schools: School[] }) {
 
       {step === 1 && (
         <Question
-          title="ما ميزانيتك التقريبية؟"
+          title={t.budgetQuestion}
           options={BUDGETS.map((b) => ({ key: String(b.key), label: b.label }))}
           onSelect={(v) => {
             setBudget(Number(v));
@@ -106,10 +107,10 @@ export function QuizFlow({ schools }: { schools: School[] }) {
 
       {step === 2 && (
         <Question
-          title="هل تحتاج إلى سكن توفره المدرسة؟"
+          title={t.accommodationQuestion}
           options={[
-            { key: "yes", label: "نعم، أفضّل أن يكون السكن متوفرًا" },
-            { key: "no", label: "لا، سأرتب سكني بنفسي" },
+            { key: "yes", label: t.accommodationYes },
+            { key: "no", label: t.accommodationNo },
           ]}
           onSelect={(v) => {
             setNeedsAccommodation(v === "yes");

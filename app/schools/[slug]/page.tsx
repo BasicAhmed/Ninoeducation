@@ -1,11 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { getSchoolBySlug, LICENSE_LABELS } from "@/lib/schools";
+import { getSchoolBySlug } from "@/lib/schools";
 import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { formatUsdRange } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { getLang } from "@/lib/i18n/get-lang";
+import { dictionaries } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
 
@@ -17,8 +19,10 @@ export async function generateMetadata({
   const { slug } = await params;
   const school = await getSchoolBySlug(slug);
   if (!school) return {};
+  const lang = await getLang();
+  const t = dictionaries[lang].schoolProfile;
   return {
-    title: `${school.nameAr} — التدريب والأسعار والتفاصيل | نينو إديوكيشن`,
+    title: `${school.nameAr} — ${t.metaTitleSuffix} | نينو إديوكيشن`,
     description: school.shortDescriptionAr,
   };
 }
@@ -32,10 +36,14 @@ export default async function SchoolProfilePage({
   const school = await getSchoolBySlug(slug);
   if (!school || school.status !== "published") notFound();
 
+  const lang = await getLang();
+  const dict = dictionaries[lang];
+  const t = dict.schoolProfile;
+
   const licenses = school.licenses.split(",");
   const fleet = school.aircraftFleet.split(",");
   const updated = new Date(school.lastPricingUpdate).toLocaleDateString(
-    "ar-EG",
+    lang === "ar" ? "ar-EG" : "en-US",
     { year: "numeric", month: "long", day: "numeric" }
   );
 
@@ -52,7 +60,7 @@ export default async function SchoolProfilePage({
           )}
           <div className="mx-auto max-w-5xl px-6 py-16">
             <p className="text-xs text-nino-ink/50">
-              {school.city} · {school.province} · {school.airportName} (
+              {school.city} · {dict.provinces[school.province as keyof typeof dict.provinces] ?? school.province} · {school.airportName} (
               <span dir="ltr">{school.airportCode}</span>)
             </p>
             <h1 className="mt-3 font-display text-4xl text-nino-ink md:text-5xl">
@@ -65,12 +73,12 @@ export default async function SchoolProfilePage({
               <div className="mt-4 flex flex-wrap gap-2">
                 {school.nextIntakeDate && (
                   <span className="rounded-full bg-nino-orange/10 px-3 py-1.5 text-sm font-medium text-nino-orange">
-                    الدفعة القادمة: {school.nextIntakeDate}
+                    {dict.schoolCard.nextIntake}: {school.nextIntakeDate}
                   </span>
                 )}
                 {school.seatsAvailable != null && (
                   <span className="rounded-full bg-nino-orange/10 px-3 py-1.5 text-sm font-medium text-nino-orange">
-                    {school.seatsAvailable} مقاعد متبقية فقط
+                    {school.seatsAvailable} {dict.schoolCard.seatsLeft}
                   </span>
                 )}
               </div>
@@ -80,15 +88,15 @@ export default async function SchoolProfilePage({
                 href={`/apply?school=${school.slug}`}
                 className="rounded-full bg-nino-orange px-6 py-3 text-sm font-medium text-white hover:bg-nino-ink"
               >
-                قدّم إلى {school.nameAr}
+                {t.applyTo} {school.nameAr}
               </Link>
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-                  `مرحبًا، أريد الاستفسار عن ${school.nameAr}`
+                  `${t.whatsappTemplate} ${school.nameAr}`
                 )}`}
                 className="rounded-full border border-nino-ink/20 px-6 py-3 text-sm font-medium text-nino-ink hover:border-nino-ink"
               >
-                اسأل عن هذه المدرسة عبر واتساب
+                {t.askViaWhatsapp}
               </a>
             </div>
           </div>
@@ -97,38 +105,38 @@ export default async function SchoolProfilePage({
         <div className="mx-auto grid max-w-5xl gap-10 px-6 py-14 md:grid-cols-3">
           <div className="md:col-span-2 space-y-10">
             <section>
-              <h2 className="font-display text-2xl">نظرة عامة</h2>
+              <h2 className="font-display text-2xl">{t.overview}</h2>
               <p className="mt-3 leading-relaxed text-nino-ink/80">
                 {school.descriptionAr}
               </p>
             </section>
 
             <section>
-              <h2 className="font-display text-2xl">برامج التدريب</h2>
+              <h2 className="font-display text-2xl">{t.programs}</h2>
               <div className="mt-4 flex flex-wrap gap-2">
                 {licenses.map((l) => (
                   <span
                     key={l}
                     className="rounded-full border border-nino-line px-3 py-1.5 text-sm"
                   >
-                    {LICENSE_LABELS[l] ?? l}
+                    {dict.licenses[l as keyof typeof dict.licenses] ?? l}
                   </span>
                 ))}
               </div>
               <p className="mt-3 text-sm text-nino-ink/60">
-                نوع البرنامج:{" "}
+                {t.programType}:{" "}
                 {school.trainingType === "integrated"
-                  ? "متكامل"
+                  ? dict.schoolsPage.integrated
                   : school.trainingType === "modular"
-                  ? "معياري"
-                  : "متكامل ومعياري"}{" "}
-                — المدة التقديرية {school.durationMonthsMin}–
-                {school.durationMonthsMax} شهرًا.
+                  ? dict.schoolsPage.modular
+                  : t.integratedAndModular}{" "}
+                — {t.estimatedDuration} {school.durationMonthsMin}–
+                {school.durationMonthsMax} {t.months}.
               </p>
             </section>
 
             <section>
-              <h2 className="font-display text-2xl">الأسطول</h2>
+              <h2 className="font-display text-2xl">{t.fleet}</h2>
               <ul className="mt-3 list-inside list-disc text-nino-ink/80">
                 {fleet.map((f) => (
                   <li key={f}>{f}</li>
@@ -137,14 +145,10 @@ export default async function SchoolProfilePage({
             </section>
 
             <section>
-              <h2 className="font-display text-2xl">الطلاب الدوليون والسكن</h2>
+              <h2 className="font-display text-2xl">{t.internationalAndHousing}</h2>
               <p className="mt-3 text-nino-ink/80">
-                {school.acceptsInternational
-                  ? "تستقبل هذه المدرسة طلابًا دوليين."
-                  : "لا تستقبل هذه المدرسة طلابًا دوليين حاليًا."}{" "}
-                {school.hasAccommodation
-                  ? "تتوفر خيارات سكن مرتبطة بالمدرسة."
-                  : "لا يوجد سكن مباشر من المدرسة، لكن نينو إديوكيشن يساعدك في إيجاد سكن قريب."}
+                {school.acceptsInternational ? t.acceptsIntl : t.noAcceptsIntl}{" "}
+                {school.hasAccommodation ? t.hasHousing : t.noHousing}
               </p>
             </section>
           </div>
@@ -157,17 +161,17 @@ export default async function SchoolProfilePage({
               </div>
             </div>
             <p className="mt-1 text-xs text-nino-ink/50">
-              سعر تقديري لكامل البرنامج — آخر تحديث: {updated}
+              {t.estimatedFullProgram} {updated}
             </p>
             <div className="mt-5 flex items-center justify-between border-t border-nino-line pt-4 text-sm">
-              <span className="text-nino-ink/60">التقييم</span>
+              <span className="text-nino-ink/60">{t.rating}</span>
               <span dir="ltr">★ {school.rating.toFixed(1)} / 5</span>
             </div>
             <Link
               href={`/apply?school=${school.slug}`}
               className="mt-6 block rounded-full bg-nino-ink py-3 text-center text-sm font-medium text-white hover:bg-nino-orange"
             >
-              قدّم الآن
+              {t.apply}
             </Link>
           </aside>
         </div>
