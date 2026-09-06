@@ -41,6 +41,11 @@ export async function submitApplication(formData: FormData) {
     notes: String(formData.get("notes") || "") || null,
     status: "new",
     flightSchoolId,
+    currentResidence: String(formData.get("currentResidence") || "") || null,
+    englishLevel: String(formData.get("englishLevel") || "") || null,
+    fundingSource: String(formData.get("fundingSource") || "") || null,
+    accommodationBudgetOk: String(formData.get("accommodationBudgetOk") || "") || null,
+    medicalConcern: String(formData.get("medicalConcern") || "") || null,
     createdAt: now,
     updatedAt: now,
   };

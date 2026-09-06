@@ -110,3 +110,11 @@ ALTER TABLE "flight_schools" ADD COLUMN "seats_available" integer;
 -- submission from now on always sets one)
 ALTER TABLE "applications" ADD COLUMN "reference_code" text;
 ALTER TABLE "applications" ADD CONSTRAINT "applications_reference_code_unique" UNIQUE("reference_code");
+
+-- Added: deeper lead-qualification fields on applications (all
+-- nullable — safe on existing rows)
+ALTER TABLE "applications" ADD COLUMN "current_residence" text;
+ALTER TABLE "applications" ADD COLUMN "english_level" text;
+ALTER TABLE "applications" ADD COLUMN "funding_source" text;
+ALTER TABLE "applications" ADD COLUMN "accommodation_budget_ok" text;
+ALTER TABLE "applications" ADD COLUMN "medical_concern" text;

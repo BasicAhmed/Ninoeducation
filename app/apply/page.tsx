@@ -30,7 +30,7 @@ export default async function ApplyPage({
           <p className="mt-2 text-nino-ink/70">
             {school
               ? `طلبك سيكون موجّهًا إلى ${school.nameAr}. سيتواصل معك مستشار نينو إديوكيشن خلال وقت قصير.`
-              : "أربع خطوات قصيرة، وأنت أقرب لأول تحليق لك."}
+              : "بضع خطوات قصيرة، وأنت أقرب لأول تحليق لك."}
           </p>
 
           <div className="mt-10">

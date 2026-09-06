@@ -14,6 +14,32 @@ const STATUS_LABELS: Record<string, string> = {
   enrolled: "مسجَّل",
 };
 
+const ENGLISH_LABELS: Record<string, string> = {
+  beginner: "إنجليزي: مبتدئ",
+  intermediate: "إنجليزي: متوسط",
+  good: "إنجليزي: جيد",
+  fluent: "إنجليزي: بطلاقة",
+};
+
+const FUNDING_LABELS: Record<string, string> = {
+  personal_savings: "تمويل: مدخرات شخصية",
+  family_support: "تمويل: دعم عائلي",
+  loan: "تمويل: قرض بنكي",
+  undecided: "تمويل: غير محدد",
+};
+
+const ACCOMMODATION_BUDGET_LABELS: Record<string, string> = {
+  yes: "الميزانية تشمل السكن",
+  no: "بحاجة تقدير سكن منفصل",
+  unsure: "السكن: غير متأكد",
+};
+
+const MEDICAL_LABELS: Record<string, string> = {
+  no: "لا استفسار طبي",
+  unsure: "طبي: غير متأكد",
+  yes: "⚠ لديه استفسار طبي",
+};
+
 type Application = {
   id: string;
   fullName: string;
@@ -27,6 +53,11 @@ type Application = {
   notes: string | null;
   status: string;
   referenceCode: string | null;
+  currentResidence: string | null;
+  englishLevel: string | null;
+  fundingSource: string | null;
+  accommodationBudgetOk: string | null;
+  medicalConcern: string | null;
 };
 
 export function ApplicationsList({
@@ -97,7 +128,8 @@ export function ApplicationsList({
                   )}
                 </div>
                 <p className="text-sm text-nino-ink/60">
-                  {a.nationality} · {a.email} · {a.phone}
+                  {a.nationality}
+                  {a.currentResidence ? ` (مقيم في ${a.currentResidence})` : ""} · {a.email} · {a.phone}
                   {a.whatsapp ? ` · واتساب: ${a.whatsapp}` : ""}
                 </p>
                 <p className="mt-1 text-sm text-nino-ink/60">
@@ -105,6 +137,30 @@ export function ApplicationsList({
                   {a.flightSchoolId ? ` · المدرسة: ${schoolMap[a.flightSchoolId] ?? "غير معروفة"}` : ""}
                   {a.estimatedBudget ? ` · الميزانية: ${a.estimatedBudget}` : ""}
                 </p>
+                {(a.englishLevel || a.fundingSource || a.accommodationBudgetOk || a.medicalConcern) && (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {a.englishLevel && (
+                      <span className="rounded-full bg-nino-cream px-2.5 py-1 text-xs text-nino-ink/70">
+                        {ENGLISH_LABELS[a.englishLevel] ?? a.englishLevel}
+                      </span>
+                    )}
+                    {a.fundingSource && (
+                      <span className="rounded-full bg-nino-cream px-2.5 py-1 text-xs text-nino-ink/70">
+                        {FUNDING_LABELS[a.fundingSource] ?? a.fundingSource}
+                      </span>
+                    )}
+                    {a.accommodationBudgetOk && (
+                      <span className="rounded-full bg-nino-cream px-2.5 py-1 text-xs text-nino-ink/70">
+                        {ACCOMMODATION_BUDGET_LABELS[a.accommodationBudgetOk] ?? a.accommodationBudgetOk}
+                      </span>
+                    )}
+                    {a.medicalConcern && a.medicalConcern !== "no" && (
+                      <span className="rounded-full bg-amber-50 px-2.5 py-1 text-xs text-amber-700">
+                        {MEDICAL_LABELS[a.medicalConcern] ?? a.medicalConcern}
+                      </span>
+                    )}
+                  </div>
+                )}
                 {a.notes && <p className="mt-2 text-sm text-nino-ink/70">{a.notes}</p>}
               </div>
               <form action={updateApplicationStatus} className="flex items-center gap-2">

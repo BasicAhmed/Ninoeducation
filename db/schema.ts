@@ -64,6 +64,11 @@ export const applications = pgTable("applications", {
   status: text("status").notNull().default("new"),
   flightSchoolId: text("flight_school_id"),
   referenceCode: text("reference_code").unique(), // e.g. NE26-4821 — the applicant's trackable "flight number". Nullable so this migrates safely onto existing rows; every new insert always sets it.
+  currentResidence: text("current_residence"), // city/country they currently live in — distinct from nationality
+  englishLevel: text("english_level"), // beginner | intermediate | good | fluent
+  fundingSource: text("funding_source"), // personal_savings | family_support | loan | undecided
+  accommodationBudgetOk: text("accommodation_budget_ok"), // yes | no | unsure — does their budget also cover accommodation
+  medicalConcern: text("medical_concern"), // no | unsure | yes — self-reported flag for aviation medical fitness, not details
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
 });
