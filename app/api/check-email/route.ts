@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db/client";
-import { applications } from "@/db/schema";
-import { sql } from "drizzle-orm";
+import { applications, flightSchools } from "@/db/schema";
+import { sql, eq } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
+
+const STATUS_LABELS: Record<string, string> = {
+  new: "تم استلام طلبك",
+  contacted: "تم التواصل معك",
+  documents_required: "بانتظار مستندات منك",
+  submitted_to_school: "أُرسل طلبك للمدرسة",
+  accepted: "تم قبولك",
+  rejected: "لم يُقبل هذه المرة",
+  enrolled: "تم تسجيلك",
+};
 
 export async function POST(req: NextRequest) {
   const { email } = await req.json().catch(() => ({ email: "" }));
@@ -15,20 +25,39 @@ export async function POST(req: NextRequest) {
 
   try {
     const rows = await db
-      .select({ referenceCode: applications.referenceCode })
+      .select()
       .from(applications)
       .where(sql`lower(${applications.email}) = ${clean}`)
       .limit(1);
 
-    if (!rows[0]) {
+    const app = rows[0];
+    if (!app) {
       return NextResponse.json({ exists: false });
     }
 
-    // Only ever return the reference code, never name/phone/notes/etc —
-    // this endpoint is unauthenticated by design (called mid-form,
-    // before we know this really is the same person), so it must stay
-    // minimal. Full details still require the matching email on /track.
-    return NextResponse.json({ exists: true, referenceCode: rows[0].referenceCode });
+    let schoolName: string | null = null;
+    if (app.flightSchoolId) {
+      const schoolRows = await db
+        .select()
+        .from(flightSchools)
+        .where(eq(flightSchools.id, app.flightSchoolId))
+        .limit(1);
+      schoolName = schoolRows[0]?.nameAr ?? null;
+    }
+
+    // This shows a bit more than a bare existence check (name, status,
+    // school) since the whole point is showing their current status
+    // immediately rather than making them click through to /track.
+    // Kept to non-sensitive fields only — no phone, budget, medical
+    // flag, or notes here regardless of who typed the email.
+    return NextResponse.json({
+      exists: true,
+      referenceCode: app.referenceCode,
+      fullName: app.fullName,
+      status: app.status,
+      statusLabel: STATUS_LABELS[app.status] ?? app.status,
+      schoolName,
+    });
   } catch (err) {
     console.error("check-email failed:", err);
     // Fail open — never block a real applicant from continuing just

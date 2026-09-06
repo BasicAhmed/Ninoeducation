@@ -16,6 +16,7 @@ import {
   Languages,
   PlaneTakeoff,
   Check,
+  CheckCircle2,
 } from "lucide-react";
 import { submitApplication } from "@/lib/actions";
 import { CountrySelect } from "@/components/CountrySelect";
@@ -87,7 +88,12 @@ export function ApplyWizard({
   const [step, setStep] = useState(0);
   const [showErrors, setShowErrors] = useState(false);
   const [checkingEmail, setCheckingEmail] = useState(false);
-  const [duplicate, setDuplicate] = useState<{ referenceCode: string | null } | null>(null);
+  const [duplicate, setDuplicate] = useState<{
+    referenceCode: string | null;
+    fullName: string;
+    statusLabel: string;
+    schoolName: string | null;
+  } | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const hasMounted = useRef(false);
@@ -168,7 +174,12 @@ export function ApplyWizard({
         });
         const json = await res.json();
         if (json.exists) {
-          setDuplicate({ referenceCode: json.referenceCode });
+          setDuplicate({
+            referenceCode: json.referenceCode,
+            fullName: json.fullName,
+            statusLabel: json.statusLabel,
+            schoolName: json.schoolName,
+          });
           setCheckingEmail(false);
           return;
         }
@@ -208,27 +219,54 @@ export function ApplyWizard({
       ? `/track?ref=${duplicate.referenceCode}&email=${encodeURIComponent(data.email)}&already=1`
       : `/track?email=${encodeURIComponent(data.email)}`;
     return (
-      <div className="rounded-2xl border border-nino-orange/30 bg-nino-orange/5 p-8 text-center">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-nino-orange text-white">
-          <Check size={20} strokeWidth={3} />
+      <div className="overflow-hidden rounded-2xl border border-nino-orange/30 bg-nino-orange/5">
+        <div className="p-8 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-nino-orange text-white">
+            <Check size={20} strokeWidth={3} />
+          </div>
+          <h2 className="mt-4 font-display text-2xl">لقيناك! قدّمت طلبك من قبل</h2>
+          <p className="mt-2 text-sm text-nino-ink/60">
+            هذا الإيميل عنده طلب مسجّل عندنا — ما نبي نسوي لك طلب مكرر ونضيع وقتك.
+          </p>
         </div>
-        <h2 className="mt-4 font-display text-2xl">لقيناك! قدّمت طلبك من قبل</h2>
-        <p className="mt-2 text-sm text-nino-ink/60">
-          هذا الإيميل عنده طلب مسجّل عندنا — ما نبي نسوي لك طلب مكرر ونضيع وقتك. تقدر تشوف وين وصل حالًا.
-        </p>
-        <a
-          href={trackHref}
-          className="mt-6 inline-flex items-center gap-2 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white hover:bg-nino-orange"
-        >
-          شوف وضع طلبي
-        </a>
-        <button
-          type="button"
-          onClick={() => setDuplicate(null)}
-          className="mt-4 block w-full text-xs text-nino-ink/40 hover:text-nino-ink/60"
-        >
-          هذا مو إيميلي، رجّعني
-        </button>
+
+        <div className="mx-6 mb-6 overflow-hidden rounded-xl border border-nino-ink bg-nino-ink text-white">
+          <div className="flex items-center justify-between px-5 py-3">
+            <span className="font-display text-sm">{duplicate.referenceCode || "طلبك"}</span>
+            <PlaneTakeoff size={15} className="text-nino-orange" />
+          </div>
+          <div className="border-t border-dashed border-white/20 px-5 py-4 text-sm">
+            <div className="text-xs text-white/40">القبطان</div>
+            <div className="mt-0.5 font-medium">{duplicate.fullName}</div>
+            {duplicate.schoolName && (
+              <>
+                <div className="mt-3 text-xs text-white/40">الوجهة</div>
+                <div className="mt-0.5 font-medium">{duplicate.schoolName}</div>
+              </>
+            )}
+            <div className="mt-3 text-xs text-white/40">الوضع الحالي</div>
+            <div className="mt-0.5 flex items-center gap-1.5 font-medium text-nino-orange">
+              <CheckCircle2 size={14} />
+              {duplicate.statusLabel}
+            </div>
+          </div>
+        </div>
+
+        <div className="px-6 pb-8 text-center">
+          <a
+            href={trackHref}
+            className="inline-flex items-center gap-2 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white hover:bg-nino-orange"
+          >
+            تفاصيل أكثر عن طلبي
+          </a>
+          <button
+            type="button"
+            onClick={() => setDuplicate(null)}
+            className="mt-4 block w-full text-xs text-nino-ink/40 hover:text-nino-ink/60"
+          >
+            هذا مو إيميلي، رجّعني
+          </button>
+        </div>
       </div>
     );
   }
