@@ -66,7 +66,7 @@ export default function StudyAviationGuidePage() {
           <Breadcrumbs
             items={[
               { label: "الرئيسية", href: "/" },
-              { label: "أدلة الطيران" },
+              { label: "أدلة الطيران", href: "/guides" },
               { label: "دراسة الطيران في جنوب أفريقيا" },
             ]}
           />

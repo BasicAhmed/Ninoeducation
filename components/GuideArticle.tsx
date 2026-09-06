@@ -56,7 +56,7 @@ export function GuideArticle({
           <Breadcrumbs
             items={[
               { label: "الرئيسية", href: "/" },
-              { label: "أدلة الطيران", href: "/guides/study-aviation-in-south-africa" },
+              { label: "أدلة الطيران", href: "/guides" },
               { label: title },
             ]}
           />

@@ -9,7 +9,7 @@ import { SchoolCard } from "@/components/SchoolCard";
 import { WorldRouteMap } from "@/components/WorldRouteMap";
 import { WhySouthAfrica } from "@/components/WhySouthAfrica";
 import { InstagramGallery } from "@/components/InstagramGallery";
-import { TrustBar } from "@/components/TrustBar";
+import { HomeGuides } from "@/components/HomeGuides";import { TrustBar } from "@/components/TrustBar";
 import { FAQ } from "@/components/FAQ";
 import { Testimonials } from "@/components/Testimonials";
 import { Reveal } from "@/components/Reveal";
@@ -352,6 +352,8 @@ export default async function Home() {
         <Testimonials />
 
         <FAQ />
+
+        <HomeGuides lang={lang} />
 
         <InstagramGallery />
 

@@ -170,6 +170,12 @@ export const dictionaries = {
       kicker: "خلف الكواليس",
       title: "تابعنا على إنستقرام",
     },
+    guidesSection: {
+      kicker: "قبل ما تقرر",
+      title: "أدلة تجاوب على كل سؤال عندك",
+      subtitle: "من التكلفة للتأشيرة لأنواع الرخص — اقرأ قبل ما تسأل.",
+      viewAll: "عرض كل الأدلة ←",
+    },
     finalCta: {
       kicker: "من الحلم إلى قمرة القيادة",
       title: "هل أنت مستعد لبدء ملفك؟",
@@ -605,6 +611,12 @@ export const dictionaries = {
     instagram: {
       kicker: "Behind the Scenes",
       title: "Follow Us on Instagram",
+    },
+    guidesSection: {
+      kicker: "Before You Decide",
+      title: "Guides that answer every question you have",
+      subtitle: "From cost to visas to license types — read before you ask.",
+      viewAll: "View All Guides →",
     },
     finalCta: {
       kicker: "From the Dream to the Cockpit",
