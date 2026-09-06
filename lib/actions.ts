@@ -3,7 +3,7 @@
 import { db } from "@/db/client";
 import { applications, flightSchools } from "@/db/schema";
 import { randomUUID } from "crypto";
-import { eq } from "drizzle-orm";
+import { eq, ilike } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
 function generateReferenceCode() {
@@ -14,6 +14,7 @@ function generateReferenceCode() {
 
 export async function submitApplication(formData: FormData) {
   const schoolSlug = String(formData.get("schoolSlug") || "");
+  const email = String(formData.get("email") || "").trim();
   let flightSchoolId: string | null = null;
 
   if (schoolSlug) {
@@ -25,6 +26,20 @@ export async function submitApplication(formData: FormData) {
     flightSchoolId = rows[0]?.id ?? null;
   }
 
+  // Same email can't apply twice — send them straight to their
+  // existing application's status instead of creating a duplicate.
+  const existing = await db
+    .select()
+    .from(applications)
+    .where(ilike(applications.email, email))
+    .limit(1);
+
+  if (existing[0]?.referenceCode) {
+    redirect(
+      `/track?ref=${existing[0].referenceCode}&email=${encodeURIComponent(email)}&already=1`
+    );
+  }
+
   const now = new Date().toISOString();
 
   const values = {
@@ -33,7 +48,7 @@ export async function submitApplication(formData: FormData) {
     nationality: String(formData.get("nationality") || ""),
     phone: String(formData.get("phone") || ""),
     whatsapp: String(formData.get("whatsapp") || "") || null,
-    email: String(formData.get("email") || ""),
+    email,
     currentLicense: String(formData.get("currentLicense") || "") || null,
     desiredLicense: String(formData.get("desiredLicense") || ""),
     estimatedBudget: String(formData.get("estimatedBudget") || "") || null,

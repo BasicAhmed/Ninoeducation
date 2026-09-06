@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { PlaneTakeoff, Search, CheckCircle2, Clock } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -35,14 +35,14 @@ export default function TrackPage() {
 
 function TrackPageInner() {
   const searchParams = useSearchParams();
+  const alreadyApplied = searchParams.get("already") === "1";
   const [referenceCode, setReferenceCode] = useState(() => searchParams.get("ref") || "");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(() => searchParams.get("email") || "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<Result | null>(null);
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const runLookup = useCallback(async (ref: string, mail: string) => {
     setLoading(true);
     setError(null);
     setResult(null);
@@ -50,7 +50,7 @@ function TrackPageInner() {
       const res = await fetch("/api/track", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ referenceCode, email }),
+        body: JSON.stringify({ referenceCode: ref, email: mail }),
       });
       const json = await res.json();
       if (!res.ok) {
@@ -63,6 +63,24 @@ function TrackPageInner() {
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  // Coming from "you already applied" — both ref and email are
+  // already known, so show the status immediately without making
+  // them type anything again.
+  useEffect(() => {
+    const ref = searchParams.get("ref");
+    const mail = searchParams.get("email");
+    if (ref && mail) {
+      const t = setTimeout(() => runLookup(ref, mail), 0);
+      return () => clearTimeout(t);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    runLookup(referenceCode, email);
   }
 
   const currentIndex = result ? STATUS_ORDER.indexOf(result.status) : -1;
@@ -74,47 +92,57 @@ function TrackPageInner() {
       <main className="flex-1 bg-nino-cream px-6 py-16">
         <div className="mx-auto max-w-md">
           <p className="text-center font-mono text-xs uppercase tracking-widest text-nino-orange">
-            تتبّع رحلتك
+            {alreadyApplied ? "قدّمت طلبك من قبل" : "تتبّع رحلتك"}
           </p>
-          <h1 className="mt-2 text-center font-display text-3xl">وين وصل طلبك؟</h1>
+          <h1 className="mt-2 text-center font-display text-3xl">
+            {alreadyApplied ? "لقيناك! خذ آخر تحديث" : "وين وصل طلبك؟"}
+          </h1>
           <p className="mt-2 text-center text-sm text-nino-ink/60">
-            أدخل رقم الرحلة الذي استلمته بعد التقديم، مع البريد الإلكتروني نفسه.
+            {alreadyApplied
+              ? "هذا البريد قدّم طلب قبل كذا — ما نبي نسوي لك طلب مكرر، فهذا آخر وضعك."
+              : "أدخل رقم الرحلة اللي وصلك بعد التقديم، مع نفس الإيميل."}
           </p>
 
-          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-            <div>
-              <label htmlFor="referenceCode" className="block text-sm font-medium">رقم الرحلة</label>
-              <input
-                id="referenceCode"
-                value={referenceCode}
-                onChange={(e) => setReferenceCode(e.target.value)}
-                dir="ltr"
-                placeholder="NE26-4821"
-                required
-                className="mt-1.5 w-full rounded-lg border border-nino-line bg-nino-white px-3 py-3 text-center text-sm tracking-wider"
-              />
-            </div>
-            <div>
-              <label htmlFor="trackEmail" className="block text-sm font-medium">البريد الإلكتروني المستخدم عند التقديم</label>
-              <input
-                id="trackEmail"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                dir="ltr"
-                required
-                className="mt-1.5 w-full rounded-lg border border-nino-line bg-nino-white px-3 py-3 text-sm"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-nino-ink py-3.5 text-sm font-medium text-white hover:bg-nino-orange disabled:opacity-50"
-            >
-              <Search size={15} />
-              {loading ? "جارٍ البحث..." : "تتبّع الرحلة"}
-            </button>
-          </form>
+          {alreadyApplied && loading && (
+            <p className="mt-8 text-center text-sm text-nino-ink/50">جارٍ إحضار آخر تحديث...</p>
+          )}
+
+          {!(alreadyApplied && loading) && (
+            <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+              <div>
+                <label htmlFor="referenceCode" className="block text-sm font-medium">رقم الرحلة</label>
+                <input
+                  id="referenceCode"
+                  value={referenceCode}
+                  onChange={(e) => setReferenceCode(e.target.value)}
+                  dir="ltr"
+                  placeholder="NE26-4821"
+                  required
+                  className="mt-1.5 w-full rounded-lg border border-nino-line bg-nino-white px-3 py-3 text-center text-sm tracking-wider"
+                />
+              </div>
+              <div>
+                <label htmlFor="trackEmail" className="block text-sm font-medium">الإيميل اللي قدّمت فيه</label>
+                <input
+                  id="trackEmail"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  dir="ltr"
+                  required
+                  className="mt-1.5 w-full rounded-lg border border-nino-line bg-nino-white px-3 py-3 text-sm"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-nino-ink py-3.5 text-sm font-medium text-white hover:bg-nino-orange disabled:opacity-50"
+              >
+                <Search size={15} />
+                {loading ? "جارٍ البحث..." : "شوف وضعي"}
+              </button>
+            </form>
+          )}
 
           {error && (
             <p className="mt-5 rounded-xl border border-red-200 bg-red-50 p-4 text-center text-sm text-red-600">
