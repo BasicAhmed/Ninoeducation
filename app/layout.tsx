@@ -4,10 +4,11 @@ import "./globals.css";
 import { MobileCTA } from "@/components/MobileCTA";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { SITE_URL } from "@/lib/constants";
+import { getLang } from "@/lib/i18n/get-lang";
 
 const plexArabic = IBM_Plex_Sans_Arabic({
   variable: "--font-plex-arabic",
-  subsets: ["arabic"],
+  subsets: ["arabic", "latin"],
   weight: ["400", "500", "600", "700"],
 });
 
@@ -36,11 +37,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const lang = await getLang();
   return (
     <html
-      lang="ar"
-      dir="rtl"
+      lang={lang}
+      dir={lang === "ar" ? "rtl" : "ltr"}
       className={`${plexArabic.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-nino-cream text-nino-ink pb-16 md:pb-0">

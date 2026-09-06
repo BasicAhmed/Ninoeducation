@@ -1,8 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { MobileNav } from "@/components/MobileNav";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { getLang } from "@/lib/i18n/get-lang";
+import { dictionaries } from "@/lib/i18n/dictionaries";
 
-export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
+export async function SiteHeader({ transparent = false }: { transparent?: boolean }) {
+  const lang = await getLang();
+  const t = dictionaries[lang].nav;
+
   return (
     <header
       className={
@@ -23,25 +29,26 @@ export function SiteHeader({ transparent = false }: { transparent?: boolean }) {
         </Link>
         <nav className="hidden gap-8 text-sm font-medium md:flex">
           <Link href="/schools" className="hover:text-nino-orange">
-            مدارس الطيران
+            {t.schools}
           </Link>
           <Link href="/accommodation" className="hover:text-nino-orange">
-            السكن الطلابي
+            {t.accommodation}
           </Link>
           <Link href="/quiz" className="hover:text-nino-orange">
-            ابحث عن مدرستي
+            {t.quiz}
           </Link>
           <Link href="/calculator" className="hover:text-nino-orange">
-            حاسبة التكلفة
+            {t.calculator}
           </Link>
         </nav>
         <div className="flex items-center gap-3">
-          <MobileNav />
+          <LanguageToggle lang={lang} className="hidden sm:flex" />
+          <MobileNav lang={lang} />
           <Link
             href="/apply"
             className="rounded-full bg-nino-ink px-5 py-2.5 text-sm font-medium text-nino-white transition hover:bg-nino-orange"
           >
-            قدّم الآن
+            {t.apply}
           </Link>
         </div>
       </div>

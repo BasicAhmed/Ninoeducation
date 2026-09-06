@@ -14,6 +14,8 @@ import { FAQ } from "@/components/FAQ";
 import { Testimonials } from "@/components/Testimonials";
 import { Reveal } from "@/components/Reveal";
 import { CountUpNumber } from "@/components/CountUpNumber";
+import { getLang } from "@/lib/i18n/get-lang";
+import { dictionaries } from "@/lib/i18n/dictionaries";
 
 // This page reads from the database (schools, social posts). Force
 // dynamic rendering so it's always fetched per-request, never attempted
@@ -78,6 +80,8 @@ function Kicker({ children }: { children: React.ReactNode }) {
 }
 
 export default async function Home() {
+  const lang = await getLang();
+  const t = dictionaries[lang].hero;
   const featured = (await getPublishedSchools()).slice(0, 3);
   const accommodation = (await getPublishedAccommodations()).slice(0, 3);
 
@@ -118,29 +122,28 @@ export default async function Home() {
 
           <div className="relative mx-auto max-w-3xl px-6 pt-24 text-center md:pt-32">
             <p dir="ltr" className="font-mono text-xs uppercase tracking-widest text-nino-orange">
-              OR Tambo · FAJS · 26.13°S, 28.24°E
+              {t.coords}
             </p>
             <h1 className="mt-6 font-display text-5xl leading-[1.25] text-nino-ink md:text-6xl">
-              طريقك إلى قمرة القيادة
+              {t.titleLine1}
               <br />
-              يبدأ من هنا.
+              {t.titleLine2}
             </h1>
             <p className="mx-auto mt-6 max-w-md text-lg text-nino-ink/70">
-              نينو إديوكيشن تساعد الطلاب العرب على إيجاد ومقارنة والتقديم
-              لأفضل مدارس الطيران في جنوب أفريقيا — دون أي تكلفة عليك.
+              {t.subtitle}
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/quiz"
                 className="rounded-full bg-nino-orange px-6 py-3 text-sm font-medium text-white hover:bg-nino-ink"
               >
-                ابحث عن مدرستي
+                {t.ctaPrimary}
               </Link>
               <a
                 href="#why-south-africa"
                 className="rounded-full border border-nino-ink/20 px-6 py-3 text-sm font-medium text-nino-ink hover:border-nino-ink"
               >
-                لماذا جنوب أفريقيا؟
+                {t.ctaSecondary}
               </a>
             </div>
           </div>

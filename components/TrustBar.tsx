@@ -1,29 +1,18 @@
 import { ShieldCheck, Globe2, Wallet, Building2 } from "lucide-react";
+import { getLang } from "@/lib/i18n/get-lang";
+import { dictionaries } from "@/lib/i18n/dictionaries";
 
-const badges = [
-  {
-    icon: ShieldCheck,
-    label: "مدارس معتمدة من SACAA",
-    sub: "هيئة الطيران المدني الجنوب أفريقية",
-  },
-  {
-    icon: Globe2,
-    label: "رخصة معتمدة من ICAO",
-    sub: "قابلة للتحويل عالميًا",
-  },
-  {
-    icon: Building2,
-    label: "+30 مدرسة شريكة",
-    sub: "في جميع أنحاء جنوب أفريقيا",
-  },
-  {
-    icon: Wallet,
-    label: "0 رسوم على الطالب",
-    sub: "الخدمة مجانية بالكامل",
-  },
-];
+export async function TrustBar() {
+  const lang = await getLang();
+  const t = dictionaries[lang].trustBar;
 
-export function TrustBar() {
+  const badges = [
+    { icon: ShieldCheck, label: t.sacaaLabel, sub: t.sacaaSub },
+    { icon: Globe2, label: t.icaoLabel, sub: t.icaoSub },
+    { icon: Building2, label: t.schoolsLabel, sub: t.schoolsSub },
+    { icon: Wallet, label: t.feesLabel, sub: t.feesSub },
+  ];
+
   return (
     <section className="border-y border-nino-line bg-nino-white">
       <div className="mx-auto max-w-6xl px-6 py-10">

@@ -3,22 +3,25 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 
-const links = [
-  { href: "/schools", label: "مدارس الطيران" },
-  { href: "/accommodation", label: "السكن الطلابي" },
-  { href: "/quiz", label: "ابحث عن مدرستي" },
-  { href: "/calculator", label: "حاسبة التكلفة" },
-];
-
-export function MobileNav() {
+export function MobileNav({ lang }: { lang: Lang }) {
   const [open, setOpen] = useState(false);
+  const t = dictionaries[lang].nav;
+
+  const links = [
+    { href: "/schools", label: t.schools },
+    { href: "/accommodation", label: t.accommodation },
+    { href: "/quiz", label: t.quiz },
+    { href: "/calculator", label: t.calculator },
+  ];
 
   return (
     <div className="md:hidden">
       <button
         onClick={() => setOpen((v) => !v)}
-        aria-label={open ? "إغلاق القائمة" : "فتح القائمة"}
+        aria-label={open ? t.closeMenu : t.openMenu}
         aria-expanded={open}
         className="flex h-10 w-10 items-center justify-center rounded-full border border-nino-ink/15 text-nino-ink"
       >
@@ -43,8 +46,11 @@ export function MobileNav() {
               onClick={() => setOpen(false)}
               className="mt-2 rounded-full bg-nino-ink px-4 py-3 text-center text-sm font-medium text-white"
             >
-              قدّم الآن
+              {t.apply}
             </Link>
+            <div className="mt-2 flex justify-center">
+              <LanguageToggle lang={lang} />
+            </div>
           </nav>
         </div>
       )}
