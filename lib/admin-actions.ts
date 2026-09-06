@@ -118,6 +118,13 @@ export async function updateApplicationStatus(formData: FormData) {
   redirect("/admin/applications");
 }
 
+export async function deleteApplication(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  await db.delete(applications).where(eq(applications.id, id));
+  redirect("/admin/applications");
+}
+
 export async function saveSocialPost(formData: FormData) {
   await requireAdmin();
   const id = String(formData.get("id") || "");
