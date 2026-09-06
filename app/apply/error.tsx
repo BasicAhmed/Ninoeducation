@@ -1,8 +1,8 @@
 "use client";
 
+import Link from "next/link";
+import Image from "next/image";
 import { useEffect } from "react";
-import { SiteHeader } from "@/components/SiteHeader";
-import { SiteFooter } from "@/components/SiteFooter";
 
 export default function ApplyError({
   error,
@@ -17,7 +17,15 @@ export default function ApplyError({
 
   return (
     <>
-      <SiteHeader />
+      {/* Minimal standalone header — this boundary must stay a Client
+          Component (Next.js requirement for error.tsx), and SiteHeader/
+          SiteFooter are async Server Components that read the language
+          cookie, which a Client Component cannot render directly. */}
+      <header className="border-b border-nino-line bg-nino-cream px-6 py-5">
+        <Link href="/">
+          <Image src="/brand/nino-icon-color.svg" alt="نينو إديوكيشن" width={40} height={40} />
+        </Link>
+      </header>
       <main className="flex flex-1 items-center justify-center bg-nino-cream px-6 py-24">
         <div className="max-w-sm text-center">
           <h1 className="font-display text-2xl">تعذّر إرسال طلبك</h1>
@@ -32,7 +40,6 @@ export default function ApplyError({
           </button>
         </div>
       </main>
-      <SiteFooter />
     </>
   );
 }
