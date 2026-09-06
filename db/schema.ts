@@ -63,6 +63,7 @@ export const applications = pgTable("applications", {
   notes: text("notes"),
   status: text("status").notNull().default("new"),
   flightSchoolId: text("flight_school_id"),
+  accommodationId: text("accommodation_id"), // assigned by admin from the real accommodations list
   referenceCode: text("reference_code").unique(), // e.g. NE26-4821 — the applicant's trackable "flight number". Nullable so this migrates safely onto existing rows; every new insert always sets it.
   currentResidence: text("current_residence"), // city/country they currently live in — distinct from nationality
   englishLevel: text("english_level"), // beginner | intermediate | good | fluent
@@ -71,6 +72,22 @@ export const applications = pgTable("applications", {
   medicalConcern: text("medical_concern"), // no | unsure | yes — self-reported flag for aviation medical fitness, not details
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
+});
+
+// Audit trail per application — every status change, school/accommodation
+// assignment, and creation gets a row here. This is the foundation for
+// future automation (e.g. an automated email triggered when status
+// changes to "accepted"), not just a display feature: anything that
+// wants to react to application changes can read from this table
+// instead of polling for diffs.
+export const applicationEvents = pgTable("application_events", {
+  id: text("id").primaryKey(),
+  applicationId: text("application_id")
+    .notNull()
+    .references(() => applications.id, { onDelete: "cascade" }),
+  type: text("type").notNull(), // created | status_change | school_assigned | accommodation_assigned
+  message: text("message").notNull(),
+  createdAt: text("created_at").notNull(),
 });
 
 export const socialPosts = pgTable("social_posts", {

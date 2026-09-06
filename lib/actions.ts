@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/client";
-import { applications, flightSchools } from "@/db/schema";
+import { applications, flightSchools, applicationEvents } from "@/db/schema";
 import { randomUUID } from "crypto";
 import { eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
@@ -97,6 +97,14 @@ export async function submitApplication(formData: FormData) {
       if (!isUniqueViolation || attempt === 5) throw err;
     }
   }
+
+  await db.insert(applicationEvents).values({
+    id: randomUUID(),
+    applicationId: values.id,
+    type: "created",
+    message: "تم استلام الطلب",
+    createdAt: now,
+  });
 
   const firstName = values.fullName.trim().split(/\s+/)[0] || "";
   redirect(`/apply/thank-you?ref=${referenceCode}&name=${encodeURIComponent(firstName)}`);

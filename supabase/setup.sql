@@ -118,3 +118,18 @@ ALTER TABLE "applications" ADD COLUMN "english_level" text;
 ALTER TABLE "applications" ADD COLUMN "funding_source" text;
 ALTER TABLE "applications" ADD COLUMN "accommodation_budget_ok" text;
 ALTER TABLE "applications" ADD COLUMN "medical_concern" text;
+
+-- Added: accommodation assignment on applications + a proper audit
+-- trail table (application_events) — every status change, school
+-- assignment, and accommodation assignment logs a row here. This is
+-- the foundation for future automation (e.g. an automated email when
+-- status changes to "accepted"), not just a display feature.
+CREATE TABLE "application_events" (
+	"id" text PRIMARY KEY NOT NULL,
+	"application_id" text NOT NULL,
+	"type" text NOT NULL,
+	"message" text NOT NULL,
+	"created_at" text NOT NULL
+);
+ALTER TABLE "applications" ADD COLUMN "accommodation_id" text;
+ALTER TABLE "application_events" ADD CONSTRAINT "application_events_application_id_applications_id_fk" FOREIGN KEY ("application_id") REFERENCES "public"."applications"("id") ON DELETE cascade ON UPDATE no action;

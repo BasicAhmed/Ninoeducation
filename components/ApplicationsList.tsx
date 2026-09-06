@@ -1,9 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { updateApplicationStatus, deleteApplication } from "@/lib/admin-actions";
+import { useEffect, useMemo, useState } from "react";
+import {
+  updateApplicationStatus,
+  deleteApplication,
+  assignApplicationSchool,
+  assignApplicationAccommodation,
+} from "@/lib/admin-actions";
 import { AdminSearchBar } from "@/components/admin/AdminSearchBar";
 import { Modal } from "@/components/Modal";
+import { History, Building2, Home } from "lucide-react";
 
 const STATUS_LABELS: Record<string, string> = {
   new: "جديد",
@@ -51,6 +57,8 @@ const MEDICAL_LABELS: Record<string, string> = {
   yes: "⚠ لديه استفسار طبي",
 };
 
+type Option = { id: string; nameAr: string };
+
 type Application = {
   id: string;
   fullName: string;
@@ -60,6 +68,7 @@ type Application = {
   whatsapp: string | null;
   desiredLicense: string;
   flightSchoolId: string | null;
+  accommodationId: string | null;
   estimatedBudget: string | null;
   notes: string | null;
   status: string;
@@ -73,11 +82,13 @@ type Application = {
 
 export function ApplicationsList({
   apps,
-  schoolMap,
+  schools,
+  accommodations,
   initialQuery = "",
 }: {
   apps: Application[];
-  schoolMap: Record<string, string>;
+  schools: Option[];
+  accommodations: Option[];
   initialQuery?: string;
 }) {
   const [query, setQuery] = useState(initialQuery);
@@ -158,7 +169,8 @@ export function ApplicationsList({
         {selected && (
           <ApplicationDetail
             app={selected}
-            schoolName={selected.flightSchoolId ? schoolMap[selected.flightSchoolId] : undefined}
+            schools={schools}
+            accommodations={accommodations}
           />
         )}
       </Modal>
@@ -176,13 +188,34 @@ function Field({ label, value }: { label: string; value?: string | null }) {
   );
 }
 
+type EventRow = { id: string; type: string; message: string; createdAt: string };
+
 function ApplicationDetail({
   app: a,
-  schoolName,
+  schools,
+  accommodations,
 }: {
   app: Application;
-  schoolName?: string;
+  schools: Option[];
+  accommodations: Option[];
 }) {
+  const [events, setEvents] = useState<EventRow[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`/api/admin/application-events?id=${a.id}`)
+      .then((res) => res.json())
+      .then((json) => {
+        if (!cancelled) setEvents(json.events || []);
+      })
+      .catch(() => {
+        if (!cancelled) setEvents([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [a.id]);
+
   return (
     <div className="space-y-6">
       {a.referenceCode && (
@@ -198,7 +231,6 @@ function ApplicationDetail({
         <Field label="الهاتف" value={a.phone} />
         <Field label="الواتساب" value={a.whatsapp} />
         <Field label="الرخصة المطلوبة" value={a.desiredLicense} />
-        <Field label="المدرسة المختارة" value={schoolName} />
         <Field label="الميزانية" value={a.estimatedBudget} />
       </div>
 
@@ -237,6 +269,60 @@ function ApplicationDetail({
         </div>
       )}
 
+      {/* School & accommodation assignment — real options from the system, not free text */}
+      <div className="grid gap-4 border-t border-nino-line pt-5 sm:grid-cols-2">
+        <form action={assignApplicationSchool} className="space-y-1.5">
+          <input type="hidden" name="id" value={a.id} />
+          <label className="flex items-center gap-1.5 text-xs font-medium text-nino-ink/60">
+            <Building2 size={13} />
+            المدرسة المختارة
+          </label>
+          <div className="flex gap-2">
+            <select
+              name="flightSchoolId"
+              defaultValue={a.flightSchoolId || ""}
+              className="flex-1 rounded-lg border border-nino-line bg-nino-cream px-3 py-2.5 text-sm"
+            >
+              <option value="">بدون مدرسة</option>
+              {schools.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.nameAr}
+                </option>
+              ))}
+            </select>
+            <button type="submit" className="shrink-0 rounded-lg bg-nino-ink px-3 py-2.5 text-xs font-medium text-white hover:bg-nino-orange">
+              حفظ
+            </button>
+          </div>
+        </form>
+
+        <form action={assignApplicationAccommodation} className="space-y-1.5">
+          <input type="hidden" name="id" value={a.id} />
+          <label className="flex items-center gap-1.5 text-xs font-medium text-nino-ink/60">
+            <Home size={13} />
+            السكن المختار
+          </label>
+          <div className="flex gap-2">
+            <select
+              name="accommodationId"
+              defaultValue={a.accommodationId || ""}
+              className="flex-1 rounded-lg border border-nino-line bg-nino-cream px-3 py-2.5 text-sm"
+            >
+              <option value="">بدون سكن</option>
+              {accommodations.map((acc) => (
+                <option key={acc.id} value={acc.id}>
+                  {acc.nameAr}
+                </option>
+              ))}
+            </select>
+            <button type="submit" className="shrink-0 rounded-lg bg-nino-ink px-3 py-2.5 text-xs font-medium text-white hover:bg-nino-orange">
+              حفظ
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Status update + delete */}
       <div className="flex items-center justify-between gap-3 border-t border-nino-line pt-5">
         <form action={updateApplicationStatus} className="flex flex-1 items-center gap-2">
           <input type="hidden" name="id" value={a.id} />
@@ -271,6 +357,30 @@ function ApplicationDetail({
             حذف
           </button>
         </form>
+      </div>
+
+      {/* Activity history — the audit trail future automation can hook into */}
+      <div className="border-t border-nino-line pt-5">
+        <div className="flex items-center gap-1.5 text-xs font-medium text-nino-ink/60">
+          <History size={13} />
+          سجل النشاط
+        </div>
+        <div className="mt-3 space-y-3">
+          {events === null && <p className="text-xs text-nino-ink/40">جارٍ التحميل...</p>}
+          {events && events.length === 0 && <p className="text-xs text-nino-ink/40">لا يوجد سجل بعد.</p>}
+          {events &&
+            events.map((e) => (
+              <div key={e.id} className="flex items-start gap-3 text-sm">
+                <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-nino-orange" />
+                <div>
+                  <div className="text-nino-ink/80">{e.message}</div>
+                  <div dir="ltr" className="text-end text-xs text-nino-ink/40">
+                    {new Date(e.createdAt).toLocaleString("ar-EG")}
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   );

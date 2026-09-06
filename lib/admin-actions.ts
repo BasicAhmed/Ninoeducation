@@ -1,11 +1,21 @@
 "use server";
 
 import { db } from "@/db/client";
-import { flightSchools, accommodations, applications, socialPosts } from "@/db/schema";
+import { flightSchools, accommodations, applications, socialPosts, applicationEvents } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin-auth";
+
+async function logEvent(applicationId: string, type: string, message: string) {
+  await db.insert(applicationEvents).values({
+    id: randomUUID(),
+    applicationId,
+    type,
+    message,
+    createdAt: new Date().toISOString(),
+  });
+}
 
 function slugify(input: string) {
   return input
@@ -107,14 +117,83 @@ export async function deleteAccommodation(formData: FormData) {
   redirect("/admin/accommodation");
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  new: "جديد",
+  contacted: "تم التواصل",
+  documents_required: "مستندات مطلوبة",
+  submitted_to_school: "أُرسل للمدرسة",
+  accepted: "مقبول",
+  rejected: "مرفوض",
+  enrolled: "مسجَّل",
+};
+
 export async function updateApplicationStatus(formData: FormData) {
   await requireAdmin();
   const id = String(formData.get("id") || "");
   const status = String(formData.get("status") || "new");
+
+  const before = await db.select().from(applications).where(eq(applications.id, id)).limit(1);
+  const previousStatus = before[0]?.status;
+
   await db
     .update(applications)
     .set({ status, updatedAt: new Date().toISOString() })
     .where(eq(applications.id, id));
+
+  if (previousStatus && previousStatus !== status) {
+    await logEvent(
+      id,
+      "status_change",
+      `تغيّرت الحالة من "${STATUS_LABELS[previousStatus] ?? previousStatus}" إلى "${STATUS_LABELS[status] ?? status}"`
+    );
+  }
+
+  redirect("/admin/applications");
+}
+
+export async function assignApplicationSchool(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  const flightSchoolId = String(formData.get("flightSchoolId") || "") || null;
+
+  const school = flightSchoolId
+    ? (await db.select().from(flightSchools).where(eq(flightSchools.id, flightSchoolId)).limit(1))[0]
+    : null;
+
+  await db
+    .update(applications)
+    .set({ flightSchoolId, updatedAt: new Date().toISOString() })
+    .where(eq(applications.id, id));
+
+  await logEvent(
+    id,
+    "school_assigned",
+    school ? `تم تحديد المدرسة: ${school.nameAr}` : "تم إلغاء تحديد المدرسة"
+  );
+
+  redirect("/admin/applications");
+}
+
+export async function assignApplicationAccommodation(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  const accommodationId = String(formData.get("accommodationId") || "") || null;
+
+  const acc = accommodationId
+    ? (await db.select().from(accommodations).where(eq(accommodations.id, accommodationId)).limit(1))[0]
+    : null;
+
+  await db
+    .update(applications)
+    .set({ accommodationId, updatedAt: new Date().toISOString() })
+    .where(eq(applications.id, id));
+
+  await logEvent(
+    id,
+    "accommodation_assigned",
+    acc ? `تم تحديد السكن: ${acc.nameAr}` : "تم إلغاء تحديد السكن"
+  );
+
   redirect("/admin/applications");
 }
 
