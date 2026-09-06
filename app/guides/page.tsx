@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { GuidesSearch } from "@/components/GuidesSearch";
 import { GUIDES } from "@/lib/guides";
 import { SITE_URL } from "@/lib/constants";
 
@@ -30,19 +30,7 @@ export default function GuidesIndexPage() {
             يحدث بعد تخرجك.
           </p>
 
-          <div className="mt-10 grid gap-5 sm:grid-cols-2">
-            {GUIDES.map((g) => (
-              <Link
-                key={g.href}
-                href={g.href}
-                className="flex flex-col rounded-2xl border border-nino-line bg-nino-white p-6 transition hover:border-nino-orange"
-              >
-                <h2 className="font-display text-lg">{g.title}</h2>
-                <p className="mt-2 text-sm text-nino-ink/60">{g.description}</p>
-                <span className="mt-4 text-sm font-medium text-nino-orange">اقرأ الدليل ←</span>
-              </Link>
-            ))}
-          </div>
+          <GuidesSearch guides={GUIDES} />
         </div>
       </main>
       <SiteFooter />
