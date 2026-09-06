@@ -1,6 +1,7 @@
 "use client";
 
 import { COUNTRIES } from "@/lib/countries";
+import { inputClass } from "@/lib/form-styles";
 
 export function CountrySelect({
   id,
@@ -22,9 +23,7 @@ export function CountrySelect({
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`mt-1.5 w-full rounded-lg border bg-nino-white px-3 py-3 text-sm ${
-          error ? "border-red-400" : "border-nino-line"
-        }`}
+        className={`mt-1.5 w-full ${inputClass(!!error)}`}
       >
         <option value="">اختر الدولة</option>
         {COUNTRIES.map((c) => (

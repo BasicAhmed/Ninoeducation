@@ -2,6 +2,7 @@
 
 import { COUNTRIES } from "@/lib/countries";
 import { isValidPhoneNumber, type CountryCode } from "libphonenumber-js/min";
+import { inputClass } from "@/lib/form-styles";
 
 export function validatePhone(countryCode: string, national: string): boolean {
   if (!countryCode || !national.trim()) return false;
@@ -41,9 +42,7 @@ export function PhoneField({
         <select
           value={countryCode}
           onChange={(e) => onCountryChange(e.target.value)}
-          className={`w-28 shrink-0 rounded-lg border bg-nino-white px-2 py-3 text-sm ${
-            error ? "border-red-400" : "border-nino-line"
-          }`}
+          className={`w-28 shrink-0 ${inputClass(!!error)}`}
         >
           <option value="">+--</option>
           {COUNTRIES.map((c) => (
@@ -58,9 +57,7 @@ export function PhoneField({
           value={national}
           onChange={(e) => onNationalChange(e.target.value.replace(/[^\d\s]/g, ""))}
           placeholder={dial ? "5xxxxxxxx" : "اختر الدولة أولًا"}
-          className={`min-w-0 flex-1 rounded-lg border bg-nino-white px-3 py-3 text-sm ${
-            error ? "border-red-400" : "border-nino-line"
-          }`}
+          className={`min-w-0 flex-1 ${inputClass(!!error)}`}
         />
       </div>
       {error && <p className="mt-1 text-xs text-red-500">{error}</p>}

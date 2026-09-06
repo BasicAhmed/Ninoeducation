@@ -22,6 +22,7 @@ import { submitApplication } from "@/lib/actions";
 import { CountrySelect } from "@/components/CountrySelect";
 import { PhoneField, validatePhone } from "@/components/PhoneField";
 import { COUNTRIES } from "@/lib/countries";
+import { inputClass } from "@/lib/form-styles";
 
 const LICENSE_OPTIONS = [
   { value: "PPL", label: "رخصة طيار خاص", hint: "أول خطوة نحو السماء", icon: Plane },
@@ -273,6 +274,16 @@ export function ApplyWizard({
 
   return (
     <div ref={rootRef} className="pb-24">
+      <form ref={formRef} action={submitApplication} onKeyDown={(e) => {
+        // Defense in depth: since every step's fields stay mounted
+        // (just faded/translated off-screen) for reliable form
+        // submission, a stray Enter key on ANY of them should never
+        // implicitly submit the whole application early.
+        if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "TEXTAREA") {
+          e.preventDefault();
+        }
+      }}>
+      <div className="rounded-3xl border border-nino-line/60 bg-white p-6 shadow-[0_8px_40px_rgba(11,13,15,0.07)] sm:p-8">
       {/* Flight-path progress tracker — icon dots only, no repeated text */}
       <div className="mb-10">
         <div className="relative h-1 rounded-full bg-nino-line">
@@ -316,15 +327,6 @@ export function ApplyWizard({
         </div>
       </div>
 
-      <form ref={formRef} action={submitApplication} onKeyDown={(e) => {
-        // Defense in depth: since every step's fields stay mounted
-        // (just faded/translated off-screen) for reliable form
-        // submission, a stray Enter key on ANY of them should never
-        // implicitly submit the whole application early.
-        if (e.key === "Enter" && (e.target as HTMLElement).tagName !== "TEXTAREA") {
-          e.preventDefault();
-        }
-      }}>
         <input type="hidden" name="schoolSlug" value={schoolSlug} />
         <input type="hidden" name="fullName" value={data.fullName} />
         <input type="hidden" name="nationality" value={COUNTRIES.find((c) => c.code === data.nationality)?.name || ""} />
@@ -480,7 +482,7 @@ export function ApplyWizard({
                     id="currentLicenseSelect"
                     value={data.currentLicense}
                     onChange={(e) => set("currentLicense", e.target.value)}
-                    className="mt-1.5 w-full rounded-lg border border-nino-line bg-nino-white px-3 py-3 text-sm"
+                    className={`mt-1.5 w-full ${inputClass()}`}
                   >
                     <option value="">لا يوجد بعد</option>
                     {LICENSE_OPTIONS.map((o) => (
@@ -501,10 +503,10 @@ export function ApplyWizard({
                           type="button"
                           key={o.value}
                           onClick={() => set("desiredLicense", o.value)}
-                          className={`relative flex items-center gap-3 rounded-xl border p-3.5 text-start transition-all active:scale-[0.98] ${
+                          className={`relative flex items-center gap-3 rounded-xl border p-3.5 text-start transition-all duration-200 active:scale-[0.98] ${
                             active
-                              ? "border-nino-orange bg-nino-orange/5"
-                              : "border-nino-line bg-nino-white hover:border-nino-ink/30"
+                              ? "border-nino-orange bg-nino-orange/5 shadow-sm shadow-nino-orange/10"
+                              : "border-nino-line/70 bg-nino-cream/40 hover:border-nino-ink/25 hover:bg-white hover:shadow-sm"
                           }`}
                         >
                           {active && (
@@ -542,7 +544,7 @@ export function ApplyWizard({
                   value={data.notes}
                   onChange={(e) => set("notes", e.target.value)}
                   rows={3}
-                  className="mt-1.5 w-full rounded-lg border border-nino-line bg-nino-white px-3 py-2.5 text-sm"
+                  className={`mt-1.5 w-full resize-none ${inputClass()}`}
                 />
               </div>
 
@@ -556,9 +558,10 @@ export function ApplyWizard({
             </Panel>
           </div>
         </div>
+      </div>
 
         {/* Sticky navigation — always reachable, never buried at the bottom of a long step */}
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-nino-line bg-nino-cream/95 px-6 py-4 backdrop-blur">
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-nino-line/70 bg-white/90 px-6 py-4 shadow-[0_-8px_30px_rgba(11,13,15,0.06)] backdrop-blur-md">
           <div className="mx-auto flex max-w-2xl items-center justify-between gap-4">
             {step > 0 ? (
               <button
@@ -667,9 +670,7 @@ function TextInput({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         dir={dir}
-        className={`mt-1.5 w-full rounded-lg border bg-nino-white px-3 py-3 text-sm ${
-          error ? "border-red-400" : "border-nino-line"
-        }`}
+        className={`mt-1.5 w-full ${inputClass(!!error)}`}
       />
       {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
     </div>
@@ -705,12 +706,12 @@ function ChoiceGroup({
               key={o.value}
               onClick={() => onChange(o.value)}
               dir={labelDir}
-              className={`flex items-center justify-between gap-2 rounded-lg border px-3.5 py-2.5 text-start text-sm transition-all active:scale-[0.98] ${
+              className={`flex items-center justify-between gap-2 rounded-xl border px-4 py-3 text-start text-sm transition-all duration-200 active:scale-[0.98] ${
                 active
-                  ? "border-nino-orange bg-nino-orange/5 font-medium text-nino-ink"
+                  ? "border-nino-orange bg-nino-orange/5 font-medium text-nino-ink shadow-sm shadow-nino-orange/10"
                   : error
-                    ? "border-red-300 bg-nino-white text-nino-ink/70"
-                    : "border-nino-line bg-nino-white text-nino-ink/70 hover:border-nino-ink/30"
+                    ? "border-red-300 bg-white text-nino-ink/70"
+                    : "border-nino-line/70 bg-nino-cream/40 text-nino-ink/70 hover:border-nino-ink/25 hover:bg-white hover:shadow-sm"
               }`}
             >
               <span>{o.label}</span>
