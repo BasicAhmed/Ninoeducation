@@ -1,6 +1,7 @@
 export const dictionaries = {
   ar: {
     nav: {
+      home: "الرئيسية",
       schools: "مدارس الطيران",
       accommodation: "السكن الطلابي",
       quiz: "ابحث عن مدرستي",
@@ -15,6 +16,7 @@ export const dictionaries = {
         "نساعد الطلاب العرب على الدراسة والتدرب ليصبحوا طيارين في جنوب أفريقيا، دون أي رسوم على الطالب.",
       linksHeading: "روابط",
       track: "تتبّع طلبك",
+      guide: "دليل الدراسة في جنوب أفريقيا",
       contactHeading: "تواصل معنا",
       whatsapp: "واتساب نينو إديوكيشن",
       rights: "نينو إديوكيشن. جميع الأسعار تقديرية وقابلة للتغيير من قبل مدارس الطيران.",
@@ -52,6 +54,7 @@ export const dictionaries = {
       point4Title: "بيئة إنجليزية جاهزة",
       point4Body: "التدريب والاختبارات بالكامل باللغة الإنجليزية، دون الحاجة لتعلم لغة جديدة.",
       watchFull: "شاهد الفيديو الكامل",
+      readFullGuide: "اقرأ الدليل الشامل لدراسة الطيران في جنوب أفريقيا ←",
     },
     routeMap: {
       kicker: "من بلدك إلى هناك",
@@ -204,6 +207,7 @@ export const dictionaries = {
       title: "مدارس الطيران",
       resultsSuffix: "مدرسة متاحة حسب المعايير الحالية. جميع الأسعار تقديرية وقابلة للتحديث من المدرسة.",
       allProvinces: "كل المقاطعات",
+      searchPlaceholder: "ابحث باسم المدرسة أو المدينة...",
       allLicenses: "كل الرخص",
       integratedOrModular: "متكامل أو معياري",
       integrated: "متكامل",
@@ -433,6 +437,7 @@ export const dictionaries = {
   },
   en: {
     nav: {
+      home: "Home",
       schools: "Flight Schools",
       accommodation: "Student Housing",
       quiz: "Find My School",
@@ -447,6 +452,7 @@ export const dictionaries = {
         "We help Arab students study and train to become pilots in South Africa, with no fees to the student.",
       linksHeading: "Links",
       track: "Track Your Application",
+      guide: "Study Guide: South Africa",
       contactHeading: "Contact Us",
       whatsapp: "WhatsApp Nino Education",
       rights: "Nino Education. All prices are estimates and subject to change by the flight schools.",
@@ -484,6 +490,7 @@ export const dictionaries = {
       point4Title: "English-Speaking Environment",
       point4Body: "Training and exams are entirely in English, with no need to learn a new language.",
       watchFull: "Watch the full video",
+      readFullGuide: "Read the full guide to studying aviation in South Africa →",
     },
     routeMap: {
       kicker: "From Your Country to There",
@@ -636,6 +643,7 @@ export const dictionaries = {
       title: "Flight Schools",
       resultsSuffix: "schools match your current criteria. All prices are estimates and subject to update by the school.",
       allProvinces: "All Provinces",
+      searchPlaceholder: "Search by school name or city...",
       allLicenses: "All Licenses",
       integratedOrModular: "Integrated or Modular",
       integrated: "Integrated",

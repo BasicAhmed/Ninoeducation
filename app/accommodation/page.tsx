@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getPublishedAccommodations } from "@/lib/schools";
+import { SITE_URL } from "@/lib/constants";
 import { formatUsd } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -11,6 +12,7 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "السكن الطلابي في جنوب أفريقيا | نينو إديوكيشن",
   description: "خيارات سكن قريبة من مدارس الطيران في جنوب أفريقيا.",
+  alternates: { canonical: `${SITE_URL}/accommodation` },
 };
 
 export default async function AccommodationPage() {

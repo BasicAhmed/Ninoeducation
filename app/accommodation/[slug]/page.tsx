@@ -4,8 +4,10 @@ import { getAccommodationBySlug } from "@/lib/schools";
 import { formatUsd } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
+import { SITE_URL } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +19,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const a = await getAccommodationBySlug(slug);
   if (!a) return {};
-  return { title: `${a.nameAr} | نينو إديوكيشن` };
+  return {
+    title: `${a.nameAr} | نينو إديوكيشن`,
+    description: a.descriptionAr,
+    alternates: { canonical: `${SITE_URL}/accommodation/${a.slug}` },
+  };
 }
 
 export default async function AccommodationProfilePage({
@@ -33,10 +39,37 @@ export default async function AccommodationProfilePage({
   const dict = dictionaries[lang];
   const t = dict.accommodationProfile;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    name: a.nameAr,
+    url: `${SITE_URL}/accommodation/${a.slug}`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: a.city,
+      addressRegion: a.province,
+      addressCountry: "ZA",
+    },
+    priceRange: `$${formatUsd(a.monthlyPriceZar)}/mo`,
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <SiteHeader />
       <main className="flex-1">
+        <div className="mx-auto max-w-4xl px-6 pt-6">
+          <Breadcrumbs
+            items={[
+              { label: dict.nav.home, href: "/" },
+              { label: dict.nav.accommodation, href: "/accommodation" },
+              { label: a.nameAr },
+            ]}
+          />
+        </div>
         <section className="border-b border-nino-line bg-nino-cream">
           <div className="mx-auto max-w-4xl px-6 py-16">
             <p className="text-xs text-nino-ink/50">

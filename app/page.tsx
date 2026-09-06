@@ -74,11 +74,30 @@ export default async function Home() {
     knowsAbout: "Flight training enrollment, SACAA-licensed flight schools in South Africa",
   };
 
+  // Enables Google's sitelinks search box for brand-name queries — a
+  // small, low-risk technical SEO addition since /schools already
+  // supports plain-text filtering via query params.
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    url: SITE_URL,
+    name: "نينو إديوكيشن",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${SITE_URL}/schools?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
       />
       <SiteHeader transparent />
       <main className="flex-1">

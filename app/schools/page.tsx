@@ -1,4 +1,5 @@
 import { getPublishedSchools, PROVINCES } from "@/lib/schools";
+import { SITE_URL } from "@/lib/constants";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SchoolCard } from "@/components/SchoolCard";
@@ -11,6 +12,7 @@ export const metadata = {
   title: "مدارس الطيران في جنوب أفريقيا | نينو إديوكيشن",
   description:
     "قارن أفضل مدارس تدريب الطيران في جنوب أفريقيا حسب الميزانية والرخصة والموقع.",
+  alternates: { canonical: `${SITE_URL}/schools` },
 };
 
 export default async function SchoolsPage({
@@ -22,6 +24,7 @@ export default async function SchoolsPage({
     maxBudget?: string;
     trainingType?: string;
     accommodation?: string;
+    q?: string;
   }>;
 }) {
   const lang = await getLang();
@@ -34,6 +37,7 @@ export default async function SchoolsPage({
     maxBudget: sp.maxBudget ? Number(sp.maxBudget) : undefined,
     trainingType: sp.trainingType || undefined,
     accommodation: sp.accommodation === "1",
+    q: sp.q || undefined,
   });
 
   return (
@@ -51,6 +55,13 @@ export default async function SchoolsPage({
             method="get"
             className="mt-8 grid gap-4 rounded-2xl border border-nino-line bg-nino-white p-6 md:grid-cols-5"
           >
+            <input
+              type="text"
+              name="q"
+              defaultValue={sp.q || ""}
+              placeholder={t.searchPlaceholder}
+              className="rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm md:col-span-5"
+            />
             <select
               name="province"
               defaultValue={sp.province || ""}

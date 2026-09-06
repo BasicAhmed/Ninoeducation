@@ -13,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/calculator`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/track`, changeFrequency: "monthly", priority: 0.4 },
     { url: `${SITE_URL}/apply`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/guides/study-aviation-in-south-africa`, changeFrequency: "monthly", priority: 0.9 },
   ];
 
   // A failed DB connection here should never take down the sitemap

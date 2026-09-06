@@ -39,6 +39,11 @@ export async function SiteFooter() {
                   {t.track}
                 </Link>
               </li>
+              <li>
+                <Link href="/guides/study-aviation-in-south-africa" className="hover:text-nino-orange">
+                  {t.guide}
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

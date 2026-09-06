@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
 
@@ -48,6 +49,12 @@ export async function WhySouthAfrica() {
         >
           {t.watchFull}
         </a>
+        <Link
+          href="/guides/study-aviation-in-south-africa"
+          className="mt-3 block text-sm text-white/60 underline underline-offset-4 hover:text-white"
+        >
+          {t.readFullGuide}
+        </Link>
       </div>
       <div
         aria-hidden

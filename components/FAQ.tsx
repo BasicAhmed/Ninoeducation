@@ -5,8 +5,25 @@ export async function FAQ() {
   const lang = await getLang();
   const t = dictionaries[lang].faq;
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: t.items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
+
   return (
     <section className="bg-nino-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="mx-auto max-w-3xl px-6 py-20">
         <div className="text-center">
           <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">

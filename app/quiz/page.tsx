@@ -1,4 +1,5 @@
 import { getPublishedSchools } from "@/lib/schools";
+import { SITE_URL } from "@/lib/constants";
 import { QuizFlow } from "@/components/QuizFlow";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -10,6 +11,7 @@ export const dynamic = "force-dynamic";
 export const metadata = {
   title: "ابحث عن مدرستي | نينو إديوكيشن",
   description: "أجب عن ثلاثة أسئلة لنرشح لك أفضل مدارس الطيران المناسبة لك.",
+  alternates: { canonical: `${SITE_URL}/quiz` },
 };
 
 export default async function QuizPage() {

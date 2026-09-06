@@ -2,10 +2,11 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { getSchoolBySlug } from "@/lib/schools";
-import { WHATSAPP_NUMBER } from "@/lib/constants";
+import { WHATSAPP_NUMBER, SITE_URL } from "@/lib/constants";
 import { formatUsdRange } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
 
@@ -24,6 +25,7 @@ export async function generateMetadata({
   return {
     title: `${school.nameAr} — ${t.metaTitleSuffix} | نينو إديوكيشن`,
     description: school.shortDescriptionAr,
+    alternates: { canonical: `${SITE_URL}/schools/${school.slug}` },
   };
 }
 
@@ -47,10 +49,53 @@ export default async function SchoolProfilePage({
     { year: "numeric", month: "long", day: "numeric" }
   );
 
+  // EducationalOrganization + a Course per license offered — genuine
+  // structured data since these are real training programs the school
+  // runs, not a generic page wrapper.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: school.nameAr,
+    url: `${SITE_URL}/schools/${school.slug}`,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: school.city,
+      addressRegion: school.province,
+      addressCountry: "ZA",
+    },
+    ...(school.rating
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: school.rating,
+            bestRating: 5,
+          },
+        }
+      : {}),
+    hasCourse: licenses.map((l) => ({
+      "@type": "Course",
+      name: dict.licenses[l as keyof typeof dict.licenses] ?? l,
+      provider: { "@type": "EducationalOrganization", name: school.nameAr },
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <SiteHeader />
       <main className="flex-1">
+        <div className="mx-auto max-w-5xl px-6 pt-6">
+          <Breadcrumbs
+            items={[
+              { label: dict.nav.home, href: "/" },
+              { label: dict.nav.schools, href: "/schools" },
+              { label: school.nameAr },
+            ]}
+          />
+        </div>
         {/* Hero */}
         <section className="border-b border-nino-line bg-nino-cream">
           {school.heroImageUrl && (

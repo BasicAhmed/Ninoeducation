@@ -10,6 +10,7 @@ export type SchoolFilters = {
   maxBudget?: number;
   trainingType?: string;
   accommodation?: boolean;
+  q?: string; // free-text match against name/city — backs the sitelinks search box
 };
 
 export async function getPublishedSchools(filters: SchoolFilters = {}) {
@@ -28,6 +29,11 @@ export async function getPublishedSchools(filters: SchoolFilters = {}) {
       if (filters.trainingType && s.trainingType !== filters.trainingType)
         return false;
       if (filters.accommodation && !s.hasAccommodation) return false;
+      if (filters.q) {
+        const q = filters.q.trim().toLowerCase();
+        const haystack = `${s.nameAr} ${s.city} ${s.province}`.toLowerCase();
+        if (q && !haystack.includes(q)) return false;
+      }
       return true;
     });
   } catch (err) {

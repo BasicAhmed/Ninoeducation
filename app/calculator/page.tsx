@@ -1,10 +1,12 @@
 import { CostCalculator } from "@/components/CostCalculator";
+import { SITE_URL } from "@/lib/constants";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
 export const metadata = {
   title: "حاسبة تكلفة دراسة الطيران في جنوب أفريقيا | نينو إديوكيشن",
   description: "احسب الميزانية التقديرية لدراسة الطيران في جنوب أفريقيا.",
+  alternates: { canonical: `${SITE_URL}/calculator` },
 };
 
 export default function CalculatorPage() {
