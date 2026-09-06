@@ -31,6 +31,11 @@ export function SiteFooter() {
                   التقديم
                 </Link>
               </li>
+              <li>
+                <Link href="/track" className="hover:text-nino-orange">
+                  تتبّع طلبك
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { PlaneTakeoff, MessageCircle, ListChecks, Home } from "lucide-react";
+import { PlaneTakeoff, MessageCircle, ListChecks, Home, Send } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 export const metadata = { title: "تم استلام طلبك | نينو إديوكيشن" };
 
@@ -23,7 +24,17 @@ const NEXT_STEPS = [
   },
 ];
 
-export default function ThankYouPage() {
+export default async function ThankYouPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ ref?: string }>;
+}) {
+  const { ref } = await searchParams;
+
+  const whatsappText = ref
+    ? `مرحبًا، رقم رحلتي هو ${ref} — أريد تأكيد استلام طلبي.`
+    : "مرحبًا، قدّمت طلبًا للتو وأريد التأكيد.";
+
   return (
     <>
       <SiteHeader />
@@ -40,6 +51,40 @@ export default function ThankYouPage() {
             استلمنا طلبك بنجاح. من هنا، نتولى نحن التفاصيل.
           </p>
         </div>
+
+        {ref && (
+          <div className="mx-auto mt-10 max-w-lg overflow-hidden rounded-2xl border border-nino-ink bg-nino-ink text-white">
+            <div className="flex items-center justify-between px-6 py-4">
+              <span className="font-display text-sm">رقم رحلتك</span>
+              <PlaneTakeoff size={16} className="text-nino-orange" />
+            </div>
+            <div className="border-t border-dashed border-white/20 px-6 py-6 text-center">
+              <div dir="ltr" className="font-display text-3xl tracking-widest text-nino-orange">
+                {ref}
+              </div>
+              <p className="mt-2 text-xs text-white/50">
+                احتفظ برقم رحلتك — يمكنك تتبّع حالة طلبك به في أي وقت
+              </p>
+            </div>
+            <div className="grid grid-cols-2 divide-x divide-x-reverse divide-dashed divide-white/20 border-t border-dashed border-white/20">
+              <Link
+                href={`/track?ref=${ref}`}
+                className="px-4 py-3.5 text-center text-sm font-medium hover:bg-white/5"
+              >
+                تتبّع رحلتي
+              </Link>
+              <a
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappText)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-1.5 px-4 py-3.5 text-center text-sm font-medium hover:bg-white/5"
+              >
+                <Send size={13} />
+                أرسله عبر واتساب
+              </a>
+            </div>
+          </div>
+        )}
 
         <div className="mx-auto mt-14 max-w-lg space-y-5">
           {NEXT_STEPS.map((s, i) => {

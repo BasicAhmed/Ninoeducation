@@ -104,3 +104,9 @@ with check ( bucket_id = 'social' );
 -- the UI only shows these when they're set, never invented numbers)
 ALTER TABLE "flight_schools" ADD COLUMN "next_intake_date" text;
 ALTER TABLE "flight_schools" ADD COLUMN "seats_available" integer;
+
+-- Added: trackable "flight number" reference code per application
+-- (nullable so it migrates safely onto existing rows — every new
+-- submission from now on always sets one)
+ALTER TABLE "applications" ADD COLUMN "reference_code" text;
+ALTER TABLE "applications" ADD CONSTRAINT "applications_reference_code_unique" UNIQUE("reference_code");

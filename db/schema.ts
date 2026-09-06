@@ -63,6 +63,7 @@ export const applications = pgTable("applications", {
   notes: text("notes"),
   status: text("status").notNull().default("new"),
   flightSchoolId: text("flight_school_id"),
+  referenceCode: text("reference_code").unique(), // e.g. NE26-4821 — the applicant's trackable "flight number". Nullable so this migrates safely onto existing rows; every new insert always sets it.
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
 });

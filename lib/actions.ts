@@ -6,6 +6,12 @@ import { randomUUID } from "crypto";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 
+function generateReferenceCode() {
+  const year = new Date().getFullYear().toString().slice(-2);
+  const digits = Math.floor(1000 + Math.random() * 9000); // 4 digits, never starts with 0
+  return `NE${year}-${digits}`;
+}
+
 export async function submitApplication(formData: FormData) {
   const schoolSlug = String(formData.get("schoolSlug") || "");
   let flightSchoolId: string | null = null;
@@ -21,7 +27,7 @@ export async function submitApplication(formData: FormData) {
 
   const now = new Date().toISOString();
 
-  await db.insert(applications).values({
+  const values = {
     id: randomUUID(),
     fullName: String(formData.get("fullName") || ""),
     nationality: String(formData.get("nationality") || ""),
@@ -37,7 +43,23 @@ export async function submitApplication(formData: FormData) {
     flightSchoolId,
     createdAt: now,
     updatedAt: now,
-  });
+  };
 
-  redirect("/apply/thank-you");
+  // Retry a handful of times on the rare chance two applicants land on
+  // the same 4-digit code in the same year (unique constraint on
+  // reference_code catches it — Postgres error code 23505).
+  let referenceCode = "";
+  for (let attempt = 0; attempt < 6; attempt++) {
+    referenceCode = generateReferenceCode();
+    try {
+      await db.insert(applications).values({ ...values, referenceCode });
+      break;
+    } catch (err: unknown) {
+      const isUniqueViolation =
+        typeof err === "object" && err !== null && "code" in err && err.code === "23505";
+      if (!isUniqueViolation || attempt === 5) throw err;
+    }
+  }
+
+  redirect(`/apply/thank-you?ref=${referenceCode}`);
 }

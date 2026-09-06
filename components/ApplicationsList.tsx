@@ -26,6 +26,7 @@ type Application = {
   estimatedBudget: string | null;
   notes: string | null;
   status: string;
+  referenceCode: string | null;
 };
 
 export function ApplicationsList({
@@ -48,7 +49,8 @@ export function ApplicationsList({
       return (
         a.fullName.toLowerCase().includes(q) ||
         a.email.toLowerCase().includes(q) ||
-        a.phone.toLowerCase().includes(q)
+        a.phone.toLowerCase().includes(q) ||
+        (a.referenceCode?.toLowerCase().includes(q) ?? false)
       );
     });
   }, [apps, query, statusFilter]);
@@ -86,7 +88,14 @@ export function ApplicationsList({
           <div key={a.id} className="rounded-2xl border border-nino-line bg-nino-white p-6">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <h3 className="font-display text-lg">{a.fullName}</h3>
+                <div className="flex items-center gap-2">
+                  <h3 className="font-display text-lg">{a.fullName}</h3>
+                  {a.referenceCode && (
+                    <span dir="ltr" className="rounded-full bg-nino-cream px-2.5 py-1 text-xs font-medium text-nino-orange">
+                      {a.referenceCode}
+                    </span>
+                  )}
+                </div>
                 <p className="text-sm text-nino-ink/60">
                   {a.nationality} · {a.email} · {a.phone}
                   {a.whatsapp ? ` · واتساب: ${a.whatsapp}` : ""}

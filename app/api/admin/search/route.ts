@@ -32,7 +32,14 @@ export async function GET(req: NextRequest) {
       db
         .select()
         .from(applications)
-        .where(or(ilike(applications.fullName, like), ilike(applications.email, like), ilike(applications.phone, like)))
+        .where(
+          or(
+            ilike(applications.fullName, like),
+            ilike(applications.email, like),
+            ilike(applications.phone, like),
+            ilike(applications.referenceCode, like)
+          )
+        )
         .limit(5),
     ]);
 
@@ -52,7 +59,7 @@ export async function GET(req: NextRequest) {
       applications: applicationResults.map((a) => ({
         id: a.id,
         label: a.fullName,
-        sublabel: `${a.email} · ${a.phone}`,
+        sublabel: a.referenceCode || a.email,
         href: `/admin/applications?q=${encodeURIComponent(a.fullName)}`,
       })),
     });

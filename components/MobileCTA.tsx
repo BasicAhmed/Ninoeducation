@@ -15,7 +15,9 @@ export function MobileCTA() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  if (pathname?.startsWith("/admin")) return null;
+  // /admin has its own nav; /apply has its own step-navigation bar —
+  // showing this generic bar on top of either would just clash.
+  if (pathname?.startsWith("/admin") || pathname?.startsWith("/apply")) return null;
 
   return (
     <div

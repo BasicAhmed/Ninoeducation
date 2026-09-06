@@ -1,7 +1,19 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Plane, Briefcase, CloudFog, Layers3, GraduationCap, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Plane,
+  Briefcase,
+  CloudFog,
+  Layers3,
+  GraduationCap,
+  ChevronLeft,
+  ChevronRight,
+  IdCard,
+  TowerControl,
+  Ticket,
+  PlaneTakeoff,
+} from "lucide-react";
 import { submitApplication } from "@/lib/actions";
 
 const LICENSE_OPTIONS = [
@@ -13,10 +25,10 @@ const LICENSE_OPTIONS = [
 ];
 
 const STEPS = [
-  { key: "who", title: "من أنت؟", kicker: "بداية القصة" },
-  { key: "contact", title: "لنبقى على تواصل", kicker: "خطوة أقرب" },
-  { key: "dream", title: "صف حلمك", kicker: "أوشكت على الوصول" },
-  { key: "review", title: "قبل الإقلاع", kicker: "آخر خطوة" },
+  { key: "who", title: "بيانات القبطان", kicker: "بداية القصة", icon: IdCard },
+  { key: "contact", title: "برج المراقبة", kicker: "خطوة أقرب", icon: TowerControl },
+  { key: "dream", title: "صف حلمك", kicker: "أوشكت على الوصول", icon: Plane },
+  { key: "review", title: "قبل الإقلاع", kicker: "آخر خطوة", icon: Ticket },
 ];
 
 export function ApplyWizard({
@@ -60,14 +72,20 @@ export function ApplyWizard({
     setStep((s) => Math.max(s - 1, 0));
   }
 
+  const hasMounted = useRef(false);
   useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
     rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [step]);
 
   const progressPct = (step / (STEPS.length - 1)) * 100;
+  const StepIcon = STEPS[step].icon;
 
   return (
-    <div ref={rootRef}>
+    <div ref={rootRef} className="pb-24">
       {/* Flight-path progress tracker */}
       <div className="mb-12">
         <div className="relative h-1 rounded-full bg-nino-line">
@@ -79,11 +97,11 @@ export function ApplyWizard({
             className="absolute top-1/2 -translate-y-1/2 transition-all duration-500"
             style={{
               insetInlineStart: `${progressPct}%`,
-              transform: "translate(50%, -50%) scaleX(-1)",
+              transform: "translate(50%, -50%)",
             }}
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-nino-orange text-white shadow-md shadow-nino-orange/30">
-              <Plane size={15} />
+              <Plane size={15} style={{ transform: "rotate(-150deg)" }} />
             </div>
           </div>
         </div>
@@ -120,14 +138,14 @@ export function ApplyWizard({
             className="flex transition-transform duration-500 ease-out motion-reduce:transition-none"
             style={{ transform: `translateX(-${step * 100}%)` }}
           >
-            {/* Step 1: Who */}
+            {/* Step 1: Captain's details */}
             <div dir="rtl" className="w-full shrink-0 px-1">
-              <StepHeading kicker={STEPS[0].kicker} title={STEPS[0].title} />
+              <StepHeading icon={STEPS[0].icon} kicker={STEPS[0].kicker} title={STEPS[0].title} />
               <div className="space-y-5">
-                <TextInput id="fullName" label="الاسم الكامل" value={data.fullName} onChange={(v) => set("fullName", v)} autoFocus={step === 0} />
-                <TextInput id="nationality" label="الجنسية" value={data.nationality} onChange={(v) => set("nationality", v)} />
+                <TextInput id="fullName" label="اسم القبطان الكامل" value={data.fullName} onChange={(v) => set("fullName", v)} />
+                <TextInput id="nationality" label="بلد الانطلاق (الجنسية)" value={data.nationality} onChange={(v) => set("nationality", v)} />
                 <div>
-                  <label htmlFor="currentLicense" className="block text-sm font-medium">الرخصة الحالية (إن وجدت)</label>
+                  <label htmlFor="currentLicense" className="block text-sm font-medium">رخصتك الحالية (إن وجدت)</label>
                   <select
                     id="currentLicense"
                     value={data.currentLicense}
@@ -145,9 +163,12 @@ export function ApplyWizard({
               </div>
             </div>
 
-            {/* Step 2: Contact */}
+            {/* Step 2: Control tower / contact */}
             <div dir="rtl" className="w-full shrink-0 px-1">
-              <StepHeading kicker={STEPS[1].kicker} title={STEPS[1].title} />
+              <StepHeading icon={STEPS[1].icon} kicker={STEPS[1].kicker} title={STEPS[1].title} />
+              <p className="-mt-3 mb-6 text-sm text-nino-ink/60">
+                نحتاج طريقة نوصلك فيها بالأخبار الجيدة.
+              </p>
               <div className="space-y-5">
                 <TextInput id="phone" label="رقم الهاتف" type="tel" value={data.phone} onChange={(v) => set("phone", v)} dir="ltr" autoFocus={step === 1} />
                 <TextInput id="whatsapp" label="رقم الواتساب (اختياري)" type="tel" value={data.whatsapp} onChange={(v) => set("whatsapp", v)} dir="ltr" />
@@ -157,7 +178,7 @@ export function ApplyWizard({
 
             {/* Step 3: Dream */}
             <div dir="rtl" className="w-full shrink-0 px-1">
-              <StepHeading kicker={STEPS[2].kicker} title={STEPS[2].title} />
+              <StepHeading icon={STEPS[2].icon} kicker={STEPS[2].kicker} title={STEPS[2].title} />
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium">الرخصة التي تطمح لها</label>
@@ -201,10 +222,11 @@ export function ApplyWizard({
 
             {/* Step 4: Review (boarding pass) */}
             <div dir="rtl" className="w-full shrink-0 px-1">
-              <StepHeading kicker={STEPS[3].kicker} title={STEPS[3].title} />
+              <StepHeading icon={STEPS[3].icon} kicker={STEPS[3].kicker} title={STEPS[3].title} />
               <div>
-                <label className="block text-sm font-medium">ملاحظات إضافية (اختياري)</label>
+                <label htmlFor="notes" className="block text-sm font-medium">ملاحظات إضافية (اختياري)</label>
                 <textarea
+                  id="notes"
                   value={data.notes}
                   onChange={(e) => set("notes", e.target.value)}
                   rows={3}
@@ -217,51 +239,69 @@ export function ApplyWizard({
           </div>
         </div>
 
-        {/* Navigation */}
-        <div className="mt-8 flex items-center justify-between gap-4">
-          {step > 0 ? (
-            <button
-              type="button"
-              onClick={back}
-              className="flex items-center gap-1.5 rounded-full border border-nino-ink/20 px-5 py-3 text-sm font-medium text-nino-ink hover:border-nino-ink"
-            >
-              <ChevronRight size={15} />
-              رجوع
-            </button>
-          ) : (
-            <span />
-          )}
+        {/* Sticky navigation — always reachable, never buried at the bottom of a long step */}
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-nino-line bg-nino-cream/95 px-6 py-4 backdrop-blur">
+          <div className="mx-auto flex max-w-2xl items-center justify-between gap-4">
+            {step > 0 ? (
+              <button
+                type="button"
+                onClick={back}
+                className="flex items-center gap-1.5 rounded-full border border-nino-ink/20 px-5 py-3 text-sm font-medium text-nino-ink hover:border-nino-ink"
+              >
+                <ChevronRight size={15} />
+                رجوع
+              </button>
+            ) : (
+              <span className="flex items-center gap-1.5 text-xs text-nino-ink/40">
+                <StepIcon size={14} />
+                {step + 1} / {STEPS.length}
+              </span>
+            )}
 
-          {step < STEPS.length - 1 ? (
-            <button
-              type="button"
-              onClick={next}
-              disabled={!stepValid(step)}
-              className="flex items-center gap-1.5 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white hover:bg-nino-orange disabled:opacity-30"
-            >
-              التالي
-              <ChevronLeft size={15} />
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="flex items-center gap-2 rounded-full bg-nino-orange px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-nino-orange/30 hover:bg-nino-ink"
-            >
-              أطلق طلبي
-              <Plane size={16} />
-            </button>
-          )}
+            {step < STEPS.length - 1 ? (
+              <button
+                type="button"
+                onClick={next}
+                disabled={!stepValid(step)}
+                className="flex items-center gap-1.5 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white hover:bg-nino-orange disabled:opacity-30"
+              >
+                التالي
+                <ChevronLeft size={15} />
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="flex items-center gap-2 rounded-full bg-nino-orange px-7 py-3.5 text-sm font-medium text-white shadow-lg shadow-nino-orange/30 hover:bg-nino-ink"
+              >
+                أطلق طلبي
+                <PlaneTakeoff size={16} />
+              </button>
+            )}
+          </div>
         </div>
       </form>
     </div>
   );
 }
 
-function StepHeading({ kicker, title }: { kicker: string; title: string }) {
+function StepHeading({
+  icon: Icon,
+  kicker,
+  title,
+}: {
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  kicker: string;
+  title: string;
+}) {
   return (
-    <div className="mb-6">
-      <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">{kicker}</p>
-      <h2 className="mt-1.5 font-display text-2xl">{title}</h2>
+    <div className="mb-6 flex items-center gap-3">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-nino-orange/10 text-nino-orange">
+        <Icon size={18} />
+      </div>
+      <div>
+        <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">{kicker}</p>
+        <h2 className="font-display text-2xl">{title}</h2>
+      </div>
     </div>
   );
 }
@@ -314,11 +354,11 @@ function BoardingPass({
     <div className="mt-8 overflow-hidden rounded-2xl border border-nino-ink bg-nino-ink text-white">
       <div className="flex items-center justify-between px-6 py-4">
         <span className="font-display text-sm">بطاقة صعود نينو إديوكيشن</span>
-        <Plane size={16} className="text-nino-orange" />
+        <PlaneTakeoff size={16} className="text-nino-orange" />
       </div>
       <div className="grid grid-cols-2 gap-5 border-t border-dashed border-white/20 px-6 py-5 text-sm">
         <div>
-          <div className="text-xs text-white/40">المسافر</div>
+          <div className="text-xs text-white/40">القبطان</div>
           <div className="mt-1 font-medium">{data.fullName || "—"}</div>
         </div>
         <div>
@@ -341,7 +381,7 @@ function BoardingPass({
         )}
       </div>
       <div className="border-t border-dashed border-white/20 px-6 py-3 text-center text-xs text-white/40">
-        اضغط &quot;أطلق طلبي&quot; لتأكيد الحجز
+        رقم رحلتك سيصدر فور الإقلاع — اضغط &quot;أطلق طلبي&quot; للتأكيد
       </div>
     </div>
   );
