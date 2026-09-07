@@ -17,6 +17,7 @@ export const dictionaries = {
       linksHeading: "روابط",
       track: "تتبّع طلبك",
       guide: "دليل الدراسة في جنوب أفريقيا",
+      journeyLink: "رحلتك خطوة بخطوة",
       contactHeading: "تواصل معنا",
       whatsapp: "واتساب نينو إديوكيشن",
       rights: "نينو إديوكيشن. جميع الأسعار تقديرية وقابلة للتغيير من قبل مدارس الطيران.",
@@ -107,6 +108,7 @@ export const dictionaries = {
       step2Body: "أرسل طلبًا واحدًا عبر نينو إديوكيشن، ونحن نتولى إيصاله للمدرسة والمتابعة.",
       step3: "صِل",
       step3Body: "سكن، استقبال من المطار، وشخص تتواصل معه في أول أسبوع لك في جنوب أفريقيا.",
+      seeFullJourney: "شوف رحلتك كاملة، خطوة بخطوة ←",
     },
     testimonials: {
       kicker: "آراء حقيقية",
@@ -456,6 +458,67 @@ export const dictionaries = {
       captain: "القبطان",
       destination: "الوجهة",
     },
+    journey: {
+      metaTitle: "رحلتك خطوة بخطوة | نينو إديوكيشن",
+      metaDescription: "من التقديم إلى قمرة القيادة — شوف كل خطوة من رحلتك معنا، تفاعليًا.",
+      kicker: "جرّب رحلتك",
+      title: "تخيل نفسك بعد سنة من هلحين",
+      subtitle: "9 محطات، من أول ضغطة على زر \"قدّم الآن\" إلى أول يوم لك كطيار. اضغط على أي محطة لتعيش التفاصيل.",
+      stepOf: "المحطة",
+      of9: "من 9",
+      restart: "ابدأ من جديد",
+      applyNow: "يلا نبدأ رحلتك الحقيقية",
+      importantNote: "مهم تعرفه",
+      behindScenes: "شغلنا خلف الكواليس",
+      stages: [
+        {
+          title: "تقدّم بطلبك",
+          narrative: "أنت الآن تملأ طلبك عبر نينو إديوكيشن — بياناتك، ميزانيتك، والرخصة اللي تحلم فيها. ما في رسوم عليك، وما راح تنتظر أسابيع بدون رد.",
+          behindScenes: "فريقنا يراجع طلبك خلال 24-48 ساعة ويرشح لك المدارس المناسبة فعليًا لميزانيتك.",
+        },
+        {
+          title: "تختار مدرستك وتدفع العربون",
+          narrative: "اخترت مدرستك من بين الترشيحات. الخطوة التالية: دفع العربون مباشرة لحساب المدرسة الرسمي.",
+          behindScenes: "",
+          important: "خلافًا للجامعات، القبول في مدارس الطيران ما يصدر إلا بعد دفع العربون. العربون هنا مو مجرد تأكيد حجز — هو اللي يفتح باب القبول الرسمي، والقبول الرسمي هو اللي يخليك تقدّم على التأشيرة. يعني ما تقدر تحصل على قبول أول وتفكر بالدفع بعدين.",
+        },
+        {
+          title: "توصلك رسالة القبول الرسمية",
+          narrative: "بعد الدفع مباشرة، تستلم خطاب القبول الرسمي من المدرسة — هذا المستند اللي راح تحتاجه لكل شي بعده.",
+          behindScenes: "نتأكد إن كل تفاصيل الخطاب صحيحة ومطابقة لما تحتاجه سفارتك قبل ما تبدأ إجراءات التأشيرة.",
+        },
+        {
+          title: "التأشيرة والسكن يتحركون مع بعض",
+          narrative: "وأنت تجهز مستندات التأشيرة، إحنا بنفس الوقت ننسق لك خيار سكن مناسب قريب من مدرستك.",
+          behindScenes: "نرسل لك قائمة دقيقة بمستندات التأشيرة حسب سفارتك، ونراجع خيارات السكن معك واحد واحد.",
+        },
+        {
+          title: "نساعدك في تحويل الأموال",
+          narrative: "قلق تحويل الأموال من بلدك لجنوب أفريقيا شي طبيعي — إحنا نوجهك لأفضل طريقة تحويل حسب بلدك، بأقل رسوم وأسرع وقت.",
+          behindScenes: "",
+        },
+        {
+          title: "تصل إلى جنوب أفريقيا",
+          narrative: "طيارتك هبطت. عند الباب — أحد مندوبينا بانتظارك بشريحة اتصال جاهزة، ياخذك مباشرة لسكنك المختار.",
+          behindScenes: "ما في لحظة توصل فيها وما تعرف تسوي وش — كل شي مرتب من قبل ما تسافر.",
+        },
+        {
+          title: "تبدأ تدريبك",
+          narrative: "أول يوم في المدرسة. نظري، محاكي، وأول مرة تحط يدك على عصا القيادة. الحلم اللي كان بس فكرة، صار روتين يومي.",
+          behindScenes: "",
+        },
+        {
+          title: "نتابعك خطوة بخطوة",
+          narrative: "طوال فترة تدريبك، إحنا معك — تحدّثنا بتقدمك، ونتابع وياك أي عائق أو سؤال يطرأ. مو بس تقديم وخلاص.",
+          behindScenes: "",
+        },
+        {
+          title: "تصير طيارًا",
+          narrative: "رخصتك جاهزة. من هنا تبدأ فعليًا: تجميع ساعات، تقديم على وظائف، ومسيرة كاملة قدامك في السماء.",
+          behindScenes: "",
+        },
+      ],
+    },
   },
   en: {
     nav: {
@@ -475,6 +538,7 @@ export const dictionaries = {
       linksHeading: "Links",
       track: "Track Your Application",
       guide: "Study Guide: South Africa",
+      journeyLink: "Your Journey, Step by Step",
       contactHeading: "Contact Us",
       whatsapp: "WhatsApp Nino Education",
       rights: "Nino Education. All prices are estimates and subject to change by the flight schools.",
@@ -565,6 +629,7 @@ export const dictionaries = {
       step2Body: "Send one application through Nino Education, and we handle getting it to the school and following up.",
       step3: "Arrive",
       step3Body: "Housing, airport pickup, and a point of contact for your first week in South Africa.",
+      seeFullJourney: "See your full journey, step by step →",
     },
     testimonials: {
       kicker: "Real Voices",
@@ -913,6 +978,67 @@ export const dictionaries = {
       searching: "Searching...",
       captain: "Captain",
       destination: "Destination",
+    },
+    journey: {
+      metaTitle: "Your Journey, Step by Step | Nino Education",
+      metaDescription: "From application to the cockpit — see every step of your journey with us, interactively.",
+      kicker: "Try Your Journey",
+      title: "Picture yourself a year from now",
+      subtitle: "9 stops, from the first click on \"Apply Now\" to your first day as a pilot. Click any stop to experience the details.",
+      stepOf: "Stop",
+      of9: "of 9",
+      restart: "Start Over",
+      applyNow: "Let's Start Your Real Journey",
+      importantNote: "Important to Know",
+      behindScenes: "What We're Doing Behind the Scenes",
+      stages: [
+        {
+          title: "You Submit Your Application",
+          narrative: "You're filling out your application through Nino Education right now — your details, your budget, and the license you're dreaming of. No fees, and no weeks of silence waiting for a reply.",
+          behindScenes: "Our team reviews your application within 24-48 hours and recommends schools that actually fit your budget.",
+        },
+        {
+          title: "You Choose Your School and Pay the Deposit",
+          narrative: "You've picked your school from the recommendations. Next step: paying the deposit directly to the school's official account.",
+          behindScenes: "",
+          important: "Unlike universities, flight schools don't issue acceptance until the deposit is paid. The deposit here isn't just a booking confirmation — it's what opens the door to official acceptance, and official acceptance is what lets you apply for your visa. You can't get accepted first and think about payment later.",
+        },
+        {
+          title: "Your Official Acceptance Letter Arrives",
+          narrative: "Right after payment, you receive the official acceptance letter from the school — the document you'll need for everything that follows.",
+          behindScenes: "We double-check every detail on the letter matches what your embassy needs before you start the visa process.",
+        },
+        {
+          title: "Visa and Housing Move Together",
+          narrative: "While you're preparing your visa documents, we're coordinating a suitable housing option near your school at the same time.",
+          behindScenes: "We send you an exact document checklist for your embassy, and go through housing options with you one by one.",
+        },
+        {
+          title: "We Help You Transfer Funds",
+          narrative: "Worrying about transferring money from your country to South Africa is completely normal — we guide you to the best transfer method for your country, with the lowest fees and fastest time.",
+          behindScenes: "",
+        },
+        {
+          title: "You Arrive in South Africa",
+          narrative: "Your plane has landed. At the gate — one of our representatives is waiting with a SIM card ready, and takes you straight to your chosen accommodation.",
+          behindScenes: "There's no moment where you land and don't know what to do — everything is arranged before you even travel.",
+        },
+        {
+          title: "You Start Your Training",
+          narrative: "First day at school. Theory, simulator, and the first time your hand is on the control stick. The dream that was just an idea becomes a daily routine.",
+          behindScenes: "",
+        },
+        {
+          title: "We Follow Up With You, Every Step",
+          narrative: "Throughout your training, we're with you — checking in on your progress, and following up on any obstacle or question that comes up. Not just apply and done.",
+          behindScenes: "",
+        },
+        {
+          title: "You Become a Pilot",
+          narrative: "Your license is ready. This is where it actually begins: building hours, applying for jobs, and a full career ahead of you in the sky.",
+          behindScenes: "",
+        },
+      ],
     },
   },
 } as const;

@@ -369,6 +369,14 @@ export default async function Home() {
                 );
               })}
             </div>
+            <div className="mt-8 text-center">
+              <Link
+                href="/journey"
+                className="text-sm font-medium text-nino-orange hover:underline"
+              >
+                {dict.howItWorks.seeFullJourney}
+              </Link>
+            </div>
           </div>
         </section>
 

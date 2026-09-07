@@ -44,6 +44,11 @@ export async function SiteFooter() {
                   {t.guide}
                 </Link>
               </li>
+              <li>
+                <Link href="/journey" className="hover:text-nino-orange">
+                  {t.journeyLink}
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
