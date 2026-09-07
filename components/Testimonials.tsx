@@ -1,5 +1,6 @@
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
+import { Reveal } from "@/components/Reveal";
 
 export async function Testimonials() {
   const lang = await getLang();
@@ -8,19 +9,20 @@ export async function Testimonials() {
   return (
     <section className="bg-nino-cream">
       <div className="mx-auto max-w-6xl px-6 py-20">
-        <div className="text-center">
+        <Reveal className="text-center">
           <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
             {t.kicker}
           </p>
           <h2 className="mt-3 font-display text-3xl md:text-4xl">
             {t.title}
           </h2>
-        </div>
+        </Reveal>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {t.items.map((item) => (
-            <div
+          {t.items.map((item, i) => (
+            <Reveal
               key={item.name}
+              delay={i * 100}
               className="flex flex-col rounded-2xl border border-nino-line bg-nino-white p-6"
             >
               <span className="font-display text-4xl leading-none text-nino-orange/30">
@@ -38,7 +40,7 @@ export async function Testimonials() {
                   <div className="text-xs text-nino-ink/50">{item.origin}</div>
                 </div>
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

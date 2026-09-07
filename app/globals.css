@@ -46,34 +46,34 @@ body {
 /* Ambient moving gradient glow used behind the hero */
 @keyframes ambient-drift {
   0% {
-    transform: translate(-8%, -6%) scale(1);
+    transform: translate(-12%, -10%) scale(1);
   }
   50% {
-    transform: translate(6%, 8%) scale(1.15);
+    transform: translate(10%, 12%) scale(1.25);
   }
   100% {
-    transform: translate(-8%, -6%) scale(1);
+    transform: translate(-12%, -10%) scale(1);
   }
 }
 
 @keyframes ambient-drift-slow {
   0% {
-    transform: translate(6%, 4%) scale(1.05);
+    transform: translate(10%, 6%) scale(1.1);
   }
   50% {
-    transform: translate(-8%, -10%) scale(0.95);
+    transform: translate(-12%, -14%) scale(0.9);
   }
   100% {
-    transform: translate(6%, 4%) scale(1.05);
+    transform: translate(10%, 6%) scale(1.1);
   }
 }
 
 .ambient-glow-a {
-  animation: ambient-drift 18s ease-in-out infinite;
+  animation: ambient-drift 13s ease-in-out infinite;
 }
 
 .ambient-glow-b {
-  animation: ambient-drift-slow 22s ease-in-out infinite;
+  animation: ambient-drift-slow 16s ease-in-out infinite;
 }
 
 @keyframes flight-dash {

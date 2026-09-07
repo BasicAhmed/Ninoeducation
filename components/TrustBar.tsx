@@ -14,7 +14,7 @@ export async function TrustBar() {
   ];
 
   return (
-    <section className="border-y border-nino-line bg-nino-white">
+    <section className="border-y border-nino-line bg-nino-cream">
       <div className="mx-auto max-w-6xl px-6 py-10">
         <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
           {badges.map((b) => {

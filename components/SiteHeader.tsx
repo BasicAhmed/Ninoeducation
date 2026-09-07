@@ -22,8 +22,8 @@ export async function SiteHeader({ transparent = false }: { transparent?: boolea
           <Image
             src="/brand/nino-icon-color.svg"
             alt="نينو إديوكيشن"
-            width={40}
-            height={40}
+            width={52}
+            height={52}
             priority
           />
         </Link>
@@ -46,7 +46,7 @@ export async function SiteHeader({ transparent = false }: { transparent?: boolea
           <MobileNav lang={lang} />
           <Link
             href="/apply"
-            className="rounded-full bg-nino-ink px-4 py-2.5 text-xs font-medium text-nino-white transition hover:bg-nino-orange sm:px-5 sm:text-sm"
+            className="rounded-full bg-nino-orange px-4 py-2.5 text-xs font-medium text-nino-white transition hover:bg-nino-ink sm:px-5 sm:text-sm"
           >
             {t.apply}
           </Link>

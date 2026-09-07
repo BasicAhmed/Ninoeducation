@@ -9,7 +9,8 @@ import { SchoolCard } from "@/components/SchoolCard";
 import { WorldRouteMap } from "@/components/WorldRouteMap";
 import { WhySouthAfrica } from "@/components/WhySouthAfrica";
 import { InstagramGallery } from "@/components/InstagramGallery";
-import { HomeGuides } from "@/components/HomeGuides";import { TrustBar } from "@/components/TrustBar";
+import { HomeGuides } from "@/components/HomeGuides";
+import { TrustBar } from "@/components/TrustBar";
 import { FAQ } from "@/components/FAQ";
 import { Testimonials } from "@/components/Testimonials";
 import { Reveal } from "@/components/Reveal";
@@ -102,14 +103,14 @@ export default async function Home() {
       <SiteHeader transparent />
       <main className="flex-1">
         {/* 1. Hero — the dream */}
-        <section className="relative overflow-hidden bg-nino-cream">
+        <section className="relative overflow-hidden bg-nino-white">
           <div
             aria-hidden
-            className="ambient-glow-a absolute -right-1/4 -top-1/4 h-64 w-64 rounded-full bg-nino-orange/40 blur-2xl sm:-top-1/3 sm:h-96 sm:w-96 sm:blur-3xl lg:h-[560px] lg:w-[560px] lg:bg-nino-orange/35"
+            className="ambient-glow-a absolute -right-1/4 -top-1/3 h-80 w-80 rounded-full bg-nino-orange/45 blur-3xl sm:-top-1/2 sm:h-[36rem] sm:w-[36rem] lg:h-[720px] lg:w-[720px] lg:bg-nino-orange/40"
           />
           <div
             aria-hidden
-            className="ambient-glow-b absolute -bottom-1/4 -left-1/4 h-56 w-56 rounded-full bg-nino-orange/30 blur-2xl sm:-bottom-1/3 sm:h-80 sm:w-80 sm:blur-3xl lg:h-[480px] lg:w-[480px] lg:bg-nino-orange/25"
+            className="ambient-glow-b absolute -bottom-1/3 -left-1/4 h-72 w-72 rounded-full bg-nino-orange/35 blur-3xl sm:-bottom-1/2 sm:h-96 sm:w-96 lg:h-[600px] lg:w-[600px] lg:bg-nino-orange/30"
           />
 
           <div className="relative mx-auto max-w-3xl px-6 pt-24 text-center md:pt-32">
@@ -127,13 +128,13 @@ export default async function Home() {
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/quiz"
-                className="rounded-full bg-nino-orange px-6 py-3 text-sm font-medium text-white hover:bg-nino-ink"
+                className="rounded-full bg-nino-orange px-6 py-3 text-sm font-medium text-white transition-transform hover:bg-nino-ink active:scale-95"
               >
                 {t.ctaPrimary}
               </Link>
               <a
                 href="#why-south-africa"
-                className="rounded-full border border-nino-ink/20 px-6 py-3 text-sm font-medium text-nino-ink hover:border-nino-ink"
+                className="rounded-full border border-nino-ink/20 px-6 py-3 text-sm font-medium text-nino-ink transition-transform hover:border-nino-ink active:scale-95"
               >
                 {t.ctaSecondary}
               </a>
@@ -154,7 +155,7 @@ export default async function Home() {
         {/* 3. Route map — now that you know why, see how close it actually is */}
         <section className="bg-nino-cream">
           <div className="mx-auto max-w-6xl px-6 py-16">
-            <div className="text-center">
+            <Reveal className="text-center">
               <Kicker>{dict.routeMap.kicker}</Kicker>
               <h2 className="mt-3 font-display text-3xl md:text-4xl">
                 {dict.routeMap.title}
@@ -162,10 +163,10 @@ export default async function Home() {
               <p className="mx-auto mt-2 max-w-xl text-nino-ink/70">
                 {dict.routeMap.subtitle}
               </p>
-            </div>
-            <div className="mt-10">
+            </Reveal>
+            <Reveal delay={150} className="mt-10">
               <WorldRouteMap lang={lang} />
-            </div>
+            </Reveal>
           </div>
         </section>
 
@@ -173,7 +174,7 @@ export default async function Home() {
         <section id="why" className="bg-nino-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="grid gap-10 md:grid-cols-[minmax(0,320px)_1fr]">
-              <div>
+              <Reveal>
                 <Kicker>{dict.whyUs.kicker}</Kicker>
                 <h2 className="mt-3 font-display text-3xl md:text-4xl">
                   {dict.whyUs.title}
@@ -181,13 +182,14 @@ export default async function Home() {
                 <p className="mt-3 text-nino-ink/70">
                   {dict.whyUs.subtitle}
                 </p>
-              </div>
+              </Reveal>
               <div className="grid gap-px overflow-hidden rounded-2xl border border-nino-line bg-nino-line sm:grid-cols-2">
                 {whyUs.map((item, i) => {
                   const Icon = item.icon;
                   return (
-                    <div
+                    <Reveal
                       key={item.title}
+                      delay={i * 100}
                       className={`group relative overflow-hidden p-7 transition hover:z-10 hover:shadow-xl ${
                         i % 2 === 0 ? "bg-nino-cream" : "bg-white"
                       }`}
@@ -203,7 +205,7 @@ export default async function Home() {
                       </div>
                       <h3 className="relative mt-5 font-display text-xl">{item.title}</h3>
                       <p className="relative mt-2 text-sm text-nino-ink/70">{item.body}</p>
-                    </div>
+                    </Reveal>
                   );
                 })}
               </div>
@@ -218,8 +220,10 @@ export default async function Home() {
             className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(#0b0d0f_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,black_40%,transparent_100%)]"
           />
           <div className="relative mx-auto max-w-6xl px-6 pt-20 text-center">
-            <Kicker>{dict.stats.kicker}</Kicker>
-            <h2 className="mt-3 font-display text-3xl md:text-4xl">{dict.stats.title}</h2>
+            <Reveal>
+              <Kicker>{dict.stats.kicker}</Kicker>
+              <h2 className="mt-3 font-display text-3xl md:text-4xl">{dict.stats.title}</h2>
+            </Reveal>
           </div>
           <div className="relative mx-auto grid max-w-6xl gap-8 px-6 pb-20 pt-10 md:grid-cols-3">
             {stats.map((s, i) => (
@@ -238,22 +242,24 @@ export default async function Home() {
         {/* 6. Featured schools — the real, concrete choices */}
         <section className="bg-nino-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
-            <div className="text-center">
+            <Reveal className="text-center">
               <Kicker>{dict.schoolsSection.kicker}</Kicker>
               <h2 className="mt-3 font-display text-3xl md:text-4xl">
                 {dict.schoolsSection.title}
               </h2>
-            </div>
+            </Reveal>
             {featured.length > 0 && (
               <div className="mt-10 grid gap-6 md:grid-cols-3">
                 {featured.map((s, i) => (
-                  <SchoolCard key={s.id} school={s} lang={lang} badge={i === 0 ? dict.schoolsSection.topRated : undefined} />
+                  <Reveal key={s.id} delay={i * 100}>
+                    <SchoolCard school={s} lang={lang} badge={i === 0 ? dict.schoolsSection.topRated : undefined} />
+                  </Reveal>
                 ))}
               </div>
             )}
 
             {/* Prominent, unmissable browse-all banner */}
-            <div className="mt-12 flex flex-col items-center justify-between gap-6 rounded-2xl bg-nino-ink px-8 py-10 text-center text-white sm:flex-row sm:text-start">
+            <Reveal className="mt-12 flex flex-col items-center justify-between gap-6 rounded-2xl bg-nino-ink px-8 py-10 text-center text-white sm:flex-row sm:text-start">
               <div>
                 <h3 className="font-display text-2xl">{dict.schoolsSection.browseTitle}</h3>
                 <p className="mt-2 text-white/70">
@@ -266,7 +272,7 @@ export default async function Home() {
               >
                 {dict.schoolsSection.browseCta}
               </Link>
-            </div>
+            </Reveal>
           </div>
         </section>
 
@@ -274,7 +280,7 @@ export default async function Home() {
         {accommodation.length > 0 && (
           <section className="bg-nino-cream">
             <div className="mx-auto max-w-6xl px-6 py-20">
-              <div className="text-center">
+              <Reveal className="text-center">
                 <Kicker>{dict.accommodationSection.kicker}</Kicker>
                 <h2 className="mt-3 font-display text-3xl md:text-4xl">
                   {dict.accommodationSection.title}
@@ -282,29 +288,30 @@ export default async function Home() {
                 <p className="mx-auto mt-2 max-w-xl text-nino-ink/70">
                   {dict.accommodationSection.subtitle}
                 </p>
-              </div>
+              </Reveal>
               <div className="mt-10 grid gap-6 md:grid-cols-3">
-                {accommodation.map((a) => (
-                  <Link
-                    key={a.id}
-                    href={`/accommodation/${a.slug}`}
-                    className="flex flex-col rounded-2xl border border-nino-line bg-nino-white p-6 transition hover:border-nino-orange"
-                  >
-                    <span className="text-xs text-nino-ink/50">
-                      {a.city} · {a.province}
-                    </span>
-                    <h3 className="mt-3 font-display text-xl">{a.nameAr}</h3>
-                    <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
-                      <div dir="ltr" className="text-end text-sm font-medium">
-                        ${formatUsd(a.monthlyPriceZar)} {dict.accommodationSection.perMonth}
+                {accommodation.map((a, i) => (
+                  <Reveal key={a.id} delay={i * 100}>
+                    <Link
+                      href={`/accommodation/${a.slug}`}
+                      className="flex flex-col rounded-2xl border border-nino-line bg-nino-white p-6 transition hover:border-nino-orange"
+                    >
+                      <span className="text-xs text-nino-ink/50">
+                        {a.city} · {a.province}
+                      </span>
+                      <h3 className="mt-3 font-display text-xl">{a.nameAr}</h3>
+                      <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
+                        <div dir="ltr" className="text-end text-sm font-medium">
+                          ${formatUsd(a.monthlyPriceZar)} {dict.accommodationSection.perMonth}
+                        </div>
+                        {a.distanceToAirport && (
+                          <span className="text-xs text-nino-ink/50">
+                            {a.distanceToAirport} {dict.accommodationSection.fromAirport}
+                          </span>
+                        )}
                       </div>
-                      {a.distanceToAirport && (
-                        <span className="text-xs text-nino-ink/50">
-                          {a.distanceToAirport} {dict.accommodationSection.fromAirport}
-                        </span>
-                      )}
-                    </div>
-                  </Link>
+                    </Link>
+                  </Reveal>
                 ))}
               </div>
               <div className="mt-10 text-center">
@@ -320,17 +327,17 @@ export default async function Home() {
         )}
 
         {/* 7. How it works — you've seen the schools, here's what happens next */}
-        <section className="bg-nino-cream">
+        <section className="bg-nino-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
-            <div className="text-center">
+            <Reveal className="text-center">
               <Kicker>{dict.howItWorks.kicker}</Kicker>
               <h2 className="mt-3 font-display text-3xl md:text-4xl">{dict.howItWorks.title}</h2>
-            </div>
+            </Reveal>
             <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-nino-line bg-nino-line md:grid-cols-3">
               {steps.map((s, i) => {
                 const Icon = s.icon;
                 return (
-                  <div key={s.n} className="relative overflow-hidden bg-nino-white p-8">
+                  <Reveal key={s.n} delay={i * 100} className="relative overflow-hidden bg-nino-white p-8">
                     <span
                       aria-hidden
                       className="pointer-events-none absolute -top-6 end-4 font-display text-9xl text-nino-orange/[0.06]"
@@ -342,7 +349,7 @@ export default async function Home() {
                     </div>
                     <h3 className="relative mt-6 font-display text-xl">{s.n}</h3>
                     <p className="relative mt-2 text-sm text-nino-ink/70">{s.body}</p>
-                  </div>
+                  </Reveal>
                 );
               })}
             </div>
@@ -368,20 +375,21 @@ export default async function Home() {
             className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-nino-white to-transparent"
           />
           <div className="relative mx-auto max-w-4xl px-6 py-20 text-center">
-            <Kicker>
-              <span className="text-white/70">{dict.finalCta.kicker}</span>
-            </Kicker>
-            <h2 className="mt-3 font-display text-3xl md:text-4xl">
-              {dict.finalCta.title}
-            </h2>
-            <p className="mx-auto mt-3 max-w-md text-white/90">
-              {dict.finalCta.subtitle}
-            </p>
+            <Reveal>
+              <Kicker>
+                <span className="text-white/70">{dict.finalCta.kicker}</span>
+              </Kicker>
+              <h2 className="mt-3 font-display text-3xl md:text-4xl">
+                {dict.finalCta.title}
+              </h2>
+              <p className="mx-auto mt-3 max-w-md text-white/90">
+                {dict.finalCta.subtitle}
+              </p>
 
-            <div className="mx-auto mt-10 grid max-w-2xl gap-3 sm:grid-cols-[1.4fr_1fr_1fr]">
+              <div className="mx-auto mt-10 grid max-w-2xl gap-3 sm:grid-cols-[1.4fr_1fr_1fr]">
               <Link
                 href="/apply"
-                className="rounded-full bg-nino-ink px-6 py-4 text-sm font-medium hover:bg-white hover:text-nino-ink"
+                className="rounded-full bg-white px-6 py-4 text-sm font-medium text-nino-ink hover:bg-nino-ink hover:text-white"
               >
                 {dict.finalCta.ctaApply}
               </Link>
@@ -399,7 +407,8 @@ export default async function Home() {
               >
                 {dict.finalCta.ctaWhatsapp}
               </a>
-            </div>
+              </div>
+            </Reveal>
           </div>
         </section>
       </main>

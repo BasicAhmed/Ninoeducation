@@ -43,7 +43,7 @@ export function MobileNav({ lang }: { lang: Lang }) {
             <Link
               href="/apply"
               onClick={() => setOpen(false)}
-              className="mt-2 rounded-full bg-nino-ink px-4 py-3 text-center text-sm font-medium text-white"
+              className="mt-2 rounded-full bg-nino-orange px-4 py-3 text-center text-sm font-medium text-white hover:bg-nino-ink"
             >
               {t.apply}
             </Link>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { GUIDES } from "@/lib/guides";
 import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
+import { Reveal } from "@/components/Reveal";
 
 export function HomeGuides({ lang }: { lang: Lang }) {
   const t = dictionaries[lang].guidesSection;
@@ -8,7 +9,7 @@ export function HomeGuides({ lang }: { lang: Lang }) {
   return (
     <section className="bg-nino-cream">
       <div className="mx-auto max-w-6xl px-6 py-20">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+        <Reveal className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
               {t.kicker}
@@ -19,18 +20,19 @@ export function HomeGuides({ lang }: { lang: Lang }) {
           <Link href="/guides" className="shrink-0 text-sm font-medium text-nino-orange hover:underline">
             {t.viewAll}
           </Link>
-        </div>
+        </Reveal>
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {GUIDES.map((g) => (
-            <Link
-              key={g.href}
-              href={g.href}
-              className="flex flex-col rounded-2xl border border-nino-line bg-nino-white p-6 transition hover:border-nino-orange"
-            >
-              <h3 className="font-display text-base">{g.title}</h3>
-              <p className="mt-2 text-sm text-nino-ink/60">{g.description}</p>
-            </Link>
+          {GUIDES.map((g, i) => (
+            <Reveal key={g.href} delay={Math.min(i, 5) * 80}>
+              <Link
+                href={g.href}
+                className="flex h-full flex-col rounded-2xl border border-nino-line bg-nino-white p-6 transition hover:border-nino-orange"
+              >
+                <h3 className="font-display text-base">{g.title}</h3>
+                <p className="mt-2 text-sm text-nino-ink/60">{g.description}</p>
+              </Link>
+            </Reveal>
           ))}
         </div>
       </div>

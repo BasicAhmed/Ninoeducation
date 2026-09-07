@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
+import { Reveal } from "@/components/Reveal";
 
 export async function WhySouthAfrica() {
   const lang = await getLang();
@@ -25,20 +26,26 @@ export async function WhySouthAfrica() {
         />
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-nino-ink/90 via-nino-ink/70 to-nino-ink/40" />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-nino-cream to-transparent"
+      />
 
       <div className="relative mx-auto max-w-6xl px-6 py-24 text-white md:py-32">
-        <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
-          {t.kicker}
-        </p>
-        <h2 className="mt-4 max-w-xl font-display text-3xl md:text-4xl">
-          {t.title}
-        </h2>
+        <Reveal>
+          <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
+            {t.kicker}
+          </p>
+          <h2 className="mt-4 max-w-xl font-display text-3xl md:text-4xl">
+            {t.title}
+          </h2>
+        </Reveal>
         <div className="mt-12 grid gap-8 sm:grid-cols-2">
-          {points.map((p) => (
-            <div key={p.title} className="border-t border-white/20 pt-4">
+          {points.map((p, i) => (
+            <Reveal key={p.title} delay={i * 100} className="border-t border-white/20 pt-4">
               <h3 className="font-display text-lg">{p.title}</h3>
               <p className="mt-2 text-sm text-white/75">{p.body}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
         <a

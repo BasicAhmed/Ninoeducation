@@ -3,6 +3,7 @@ import { Heart, AtSign } from "lucide-react";
 import { getPublishedSocialPosts } from "@/lib/social";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
+import { Reveal } from "@/components/Reveal";
 
 const ROTATIONS = [-4, 3, -2, 4, -3, 2];
 
@@ -15,7 +16,7 @@ export async function InstagramGallery() {
   return (
     <section className="bg-nino-white py-20">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+        <Reveal className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
               {t.kicker}
@@ -33,7 +34,7 @@ export async function InstagramGallery() {
             <AtSign size={16} />
             nino.education
           </a>
-        </div>
+        </Reveal>
 
         <div className="mt-14 flex gap-6 overflow-x-auto px-2 pb-6 [scrollbar-width:none] sm:grid sm:grid-cols-3 sm:gap-8 sm:overflow-visible sm:px-0 lg:grid-cols-6">
           {posts.map((p, i) => (
