@@ -152,9 +152,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* 1.5 Trust bar — immediate credibility right under the fold */}
-        <TrustBar />
-
         {/* 2. Why South Africa — the destination that makes the dream possible */}
         <div id="why-south-africa">
           <WhySouthAfrica />
@@ -178,7 +175,10 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* 4. Why us — with 30+ schools out there, you need a guide */}
+        {/* 4. Trust bar — credibility markers, once you've seen why South Africa and how close it is */}
+        <TrustBar />
+
+        {/* 5. Why us — with 30+ schools out there, you need a guide */}
         <section id="why" className="bg-nino-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="grid gap-10 md:grid-cols-[minmax(0,320px)_1fr]">
@@ -221,7 +221,7 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* 5. Stats — proof, not promises */}
+        {/* 6. Stats — proof, not promises */}
         <section className="relative overflow-hidden bg-nino-cream">
           <div
             aria-hidden
@@ -247,7 +247,7 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* 6. Featured schools — the real, concrete choices */}
+        {/* 7. Featured schools — the real, concrete choices */}
         <section className="bg-nino-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <Reveal className="text-center">
@@ -284,7 +284,7 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* 6.5 Accommodation — the next real worry after picking a school */}
+        {/* 7.5 Accommodation — the next real worry after picking a school */}
         {accommodation.length > 0 && (
           <section className="bg-nino-cream">
             <div className="mx-auto max-w-6xl px-6 py-20">
@@ -334,7 +334,7 @@ export default async function Home() {
           </section>
         )}
 
-        {/* 7. How it works — you've seen the schools, here's what happens next */}
+        {/* 8. How it works — you've seen the schools, here's what happens next */}
         <section className="bg-nino-white">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <Reveal className="text-center">
@@ -372,7 +372,7 @@ export default async function Home() {
 
         <InstagramGallery />
 
-        {/* 8. Final CTA — close the story, but meet people where they are */}
+        {/* 9. Final CTA — close the story, but meet people where they are */}
         <section className="relative overflow-hidden bg-gradient-to-br from-nino-orange to-[#ff7a3d] text-white">
           <div
             aria-hidden
