@@ -118,10 +118,6 @@ export default async function Home() {
               immediately, deepening toward the bottom where the text sits */}
           <div className="absolute inset-0 bg-gradient-to-t from-nino-ink via-nino-ink/55 to-nino-ink/10" />
           <div className="absolute inset-0 bg-gradient-to-b from-nino-ink/30 via-transparent to-transparent" />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-nino-cream"
-          />
 
           <div className="relative mx-auto max-w-3xl px-6 pb-16 pt-40 text-center text-white sm:pb-24">
             <p dir="ltr" className="font-mono text-xs uppercase tracking-widest text-nino-orange">

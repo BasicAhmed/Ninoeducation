@@ -26,10 +26,6 @@ export async function WhySouthAfrica() {
         />
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-nino-ink/90 via-nino-ink/70 to-nino-ink/40" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-nino-cream to-transparent"
-      />
 
       <div className="relative mx-auto max-w-6xl px-6 py-24 text-white md:py-32">
         <Reveal>
