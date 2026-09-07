@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import {
   FileEdit,
@@ -12,11 +12,10 @@ import {
   GraduationCap,
   MessagesSquare,
   Trophy,
+  AlertTriangle,
+  RotateCcw,
   ChevronLeft,
   ChevronRight,
-  AlertTriangle,
-  Sparkles,
-  RotateCcw,
 } from "lucide-react";
 import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 
@@ -33,65 +32,95 @@ const ICONS = [
 ];
 
 const EASE = "cubic-bezier(0.65,0,0.35,1)";
+const SWIPE_THRESHOLD = 60;
 
 export function JourneyTimeline({ lang }: { lang: Lang }) {
   const t = dictionaries[lang].journey;
   const [step, setStep] = useState(0);
+  const [dragX, setDragX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const startX = useRef(0);
+  const cardRef = useRef<HTMLDivElement>(null);
+
   const stages = t.stages;
   const total = stages.length;
   const current = stages[step];
   const Icon = ICONS[step];
   const isLast = step === total - 1;
+  const isFirst = step === 0;
+
+  function goNext() {
+    setStep((s) => Math.min(s + 1, total - 1));
+  }
+  function goBack() {
+    setStep((s) => Math.max(s - 1, 0));
+  }
+
+  // Swipe is universal-direction (left = next, right = back) regardless
+  // of language, matching the gesture convention every story/reel app
+  // already trained people on — not tied to RTL/LTR reading direction.
+  function onPointerDown(e: React.PointerEvent) {
+    setIsDragging(true);
+    startX.current = e.clientX;
+    cardRef.current?.setPointerCapture(e.pointerId);
+  }
+  function onPointerMove(e: React.PointerEvent) {
+    if (!isDragging) return;
+    const delta = e.clientX - startX.current;
+    // Resist dragging past the first/last chapter instead of a hard stop
+    const clamped =
+      (isFirst && delta > 0) || (isLast && delta < 0) ? delta * 0.25 : delta;
+    setDragX(clamped);
+  }
+  function onPointerUp() {
+    if (!isDragging) return;
+    setIsDragging(false);
+    if (dragX <= -SWIPE_THRESHOLD && !isLast) goNext();
+    else if (dragX >= SWIPE_THRESHOLD && !isFirst) goBack();
+    setDragX(0);
+  }
 
   return (
     <div dir={lang === "ar" ? "rtl" : "ltr"}>
-      {/* Flight-path progress — every stop is directly clickable, this is
-          an exploration, not a gated form */}
-      <div className="relative">
-        <div className="h-1 rounded-full bg-nino-line">
-          <div
-            className="h-full rounded-full bg-nino-orange/40"
-            style={{ width: `${(step / (total - 1)) * 100}%`, transition: `width 500ms ${EASE}` }}
-          />
-        </div>
-        <div className="mt-4 flex justify-between">
-          {stages.map((s, i) => {
-            const StageIcon = ICONS[i];
-            const active = i === step;
-            const done = i < step;
-            return (
-              <button
-                key={s.title}
-                type="button"
-                onClick={() => setStep(i)}
-                aria-label={s.title}
-                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all sm:h-9 sm:w-9 ${
-                  active
-                    ? "scale-110 bg-nino-orange text-white shadow-md shadow-nino-orange/30"
-                    : done
-                      ? "bg-nino-orange/15 text-nino-orange"
-                      : "bg-nino-line/60 text-nino-ink/30 hover:bg-nino-line"
-                }`}
-              >
-                <StageIcon size={15} />
-              </button>
-            );
-          })}
-        </div>
+      {/* Story-style progress segments — tap any segment to jump directly */}
+      <div className="flex gap-1.5">
+        {stages.map((s, i) => (
+          <button
+            key={s.title}
+            type="button"
+            onClick={() => setStep(i)}
+            aria-label={s.title}
+            className="h-1.5 flex-1 overflow-hidden rounded-full bg-nino-line"
+          >
+            <span
+              className="block h-full rounded-full bg-nino-orange transition-all"
+              style={{ width: i <= step ? "100%" : "0%", transitionDuration: i === step ? "300ms" : "150ms" }}
+            />
+          </button>
+        ))}
       </div>
+      <p className="mt-3 text-center font-mono text-xs uppercase tracking-widest text-nino-orange">
+        {t.stepOf} {step + 1} {t.of9}
+      </p>
 
-      {/* Stage card */}
-      <div className="mt-10 overflow-hidden rounded-3xl border border-nino-line/60 bg-white p-7 shadow-[0_8px_40px_rgba(11,13,15,0.06)] sm:p-10">
+      {/* Swipeable card */}
+      <div
+        ref={cardRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        className="relative mt-4 cursor-grab touch-pan-y select-none overflow-hidden rounded-3xl border border-nino-line/60 bg-white p-7 shadow-[0_8px_40px_rgba(11,13,15,0.06)] active:cursor-grabbing sm:p-10"
+        style={{
+          transform: `translateX(${dragX}px) rotate(${dragX / 60}deg)`,
+          transition: isDragging ? "none" : `transform 400ms ${EASE}`,
+        }}
+      >
         <div className="flex items-center gap-3">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-nino-orange/10 text-nino-orange">
             <Icon size={22} />
           </div>
-          <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
-              {t.stepOf} {step + 1} {t.of9}
-            </p>
-            <h2 className="font-display text-2xl sm:text-3xl">{current.title}</h2>
-          </div>
+          <h2 className="font-display text-2xl sm:text-3xl">{current.title}</h2>
         </div>
 
         <p className="mt-6 text-base leading-relaxed text-nino-ink/80 sm:text-lg">
@@ -104,16 +133,6 @@ export function JourneyTimeline({ lang }: { lang: Lang }) {
             <div>
               <p className="text-sm font-medium text-amber-900">{t.importantNote}</p>
               <p className="mt-1 text-sm leading-relaxed text-amber-800">{current.important}</p>
-            </div>
-          </div>
-        )}
-
-        {current.behindScenes && (
-          <div className="mt-6 flex gap-3 rounded-2xl bg-nino-cream p-5">
-            <Sparkles size={18} className="mt-0.5 shrink-0 text-nino-orange" />
-            <div>
-              <p className="text-sm font-medium text-nino-ink">{t.behindScenes}</p>
-              <p className="mt-1 text-sm leading-relaxed text-nino-ink/70">{current.behindScenes}</p>
             </div>
           </div>
         )}
@@ -138,26 +157,13 @@ export function JourneyTimeline({ lang }: { lang: Lang }) {
         )}
       </div>
 
-      {/* Navigation */}
       {!isLast && (
-        <div className="mt-6 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => setStep((s) => Math.max(s - 1, 0))}
-            disabled={step === 0}
-            className="flex items-center gap-1.5 rounded-full border border-nino-ink/20 px-5 py-3 text-sm font-medium text-nino-ink transition-transform hover:border-nino-ink active:scale-95 disabled:opacity-0"
-          >
-            {lang === "ar" ? <ChevronRight size={15} /> : <ChevronLeft size={15} />}
-            {lang === "ar" ? "السابق" : "Back"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setStep((s) => Math.min(s + 1, total - 1))}
-            className="flex items-center gap-1.5 rounded-full bg-nino-ink px-6 py-3 text-sm font-medium text-white transition-transform hover:bg-nino-orange active:scale-95"
-          >
-            {lang === "ar" ? "التالي" : "Next"}
-            {lang === "ar" ? <ChevronLeft size={15} /> : <ChevronRight size={15} />}
-          </button>
+        <div className="mt-4 flex items-center justify-center gap-2 text-xs text-nino-ink/40">
+          <ChevronRight size={13} className="rtl:hidden" />
+          <ChevronLeft size={13} className="hidden rtl:block" />
+          <span>{t.swipeHint}</span>
+          <ChevronLeft size={13} className="rtl:hidden" />
+          <ChevronRight size={13} className="hidden rtl:block" />
         </div>
       )}
     </div>
