@@ -55,7 +55,7 @@ export function AccommodationTable({ listings }: { listings: NonNullable<Accommo
                 <td className="p-4">{a.nameAr}</td>
                 <td className="p-4">{a.city}</td>
                 <td dir="ltr" className="p-4 text-start">
-                  R{a.monthlyPriceZar.toLocaleString()}
+                  R{a.priceMinZar.toLocaleString()}–{a.priceMaxZar.toLocaleString()}
                 </td>
                 <td className="p-4">
                   <span

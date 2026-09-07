@@ -143,3 +143,15 @@ ALTER TABLE "applications" ADD COLUMN "education_status" text;
 -- Added: the language the applicant used on the apply form, so
 -- status-update emails match (nullable, safe on existing rows)
 ALTER TABLE "applications" ADD COLUMN "preferred_lang" text;
+
+-- Accommodation refinement: price range (min/max instead of a single
+-- monthly figure) + a photo gallery. Safe migration — backfills
+-- min=max=old value for any existing rows before dropping the old
+-- column, so nothing existing breaks.
+ALTER TABLE "accommodations" ADD COLUMN "price_min_zar" integer;
+ALTER TABLE "accommodations" ADD COLUMN "price_max_zar" integer;
+ALTER TABLE "accommodations" ADD COLUMN "image_urls" text;
+UPDATE "accommodations" SET "price_min_zar" = "monthly_price_zar", "price_max_zar" = "monthly_price_zar" WHERE "price_min_zar" IS NULL;
+ALTER TABLE "accommodations" ALTER COLUMN "price_min_zar" SET NOT NULL;
+ALTER TABLE "accommodations" ALTER COLUMN "price_max_zar" SET NOT NULL;
+ALTER TABLE "accommodations" DROP COLUMN "monthly_price_zar";

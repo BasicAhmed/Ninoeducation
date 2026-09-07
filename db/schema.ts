@@ -39,11 +39,13 @@ export const accommodations = pgTable("accommodations", {
   city: text("city").notNull(),
   province: text("province").notNull(),
   descriptionAr: text("description_ar").notNull(),
-  monthlyPriceZar: integer("monthly_price_zar").notNull(),
+  priceMinZar: integer("price_min_zar").notNull(),
+  priceMaxZar: integer("price_max_zar").notNull(),
   roomType: text("room_type").notNull(), // private | shared | studio
   furnished: boolean("furnished").notNull().default(true),
   distanceToAirport: text("distance_to_airport"),
   wifi: boolean("wifi").notNull().default(true),
+  imageUrls: text("image_urls"), // comma-separated gallery image URLs, first is the cover
   status: text("status").notNull().default("draft"),
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),

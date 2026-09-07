@@ -3,7 +3,7 @@ import Image from "next/image";
 import { ShieldCheck, ListChecks, Compass, PlaneTakeoff, Home as HomeIcon } from "lucide-react";
 import { getPublishedSchools, getPublishedAccommodations } from "@/lib/schools";
 import { WHATSAPP_NUMBER, SITE_URL } from "@/lib/constants";
-import { formatUsd } from "@/lib/currency";
+import { formatUsdRange } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SchoolCard } from "@/components/SchoolCard";
@@ -294,29 +294,41 @@ export default async function Home() {
                 </p>
               </Reveal>
               <div className="mt-10 grid gap-6 md:grid-cols-3">
-                {accommodation.map((a, i) => (
-                  <Reveal key={a.id} delay={i * 100}>
-                    <Link
-                      href={`/accommodation/${a.slug}`}
-                      className="flex flex-col rounded-2xl border border-nino-line bg-nino-white p-6 transition hover:border-nino-orange"
-                    >
-                      <span className="text-xs text-nino-ink/50">
-                        {a.city} · {a.province}
-                      </span>
-                      <h3 className="mt-3 font-display text-xl">{a.nameAr}</h3>
-                      <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
-                        <div dir="ltr" className="text-end text-sm font-medium">
-                          ${formatUsd(a.monthlyPriceZar)} {dict.accommodationSection.perMonth}
-                        </div>
-                        {a.distanceToAirport && (
-                          <span className="text-xs text-nino-ink/50">
-                            {a.distanceToAirport} {dict.accommodationSection.fromAirport}
-                          </span>
+                {accommodation.map((a, i) => {
+                  const cover = a.imageUrls?.split(",").filter(Boolean)[0];
+                  return (
+                    <Reveal key={a.id} delay={i * 100}>
+                      <Link
+                        href={`/accommodation/${a.slug}`}
+                        className="flex flex-col overflow-hidden rounded-2xl border border-nino-line bg-nino-white transition hover:border-nino-orange"
+                      >
+                        {cover ? (
+                          <div className="relative h-36 w-full">
+                            <Image src={cover} alt={a.nameAr} fill unoptimized className="object-cover" />
+                          </div>
+                        ) : (
+                          <div className="h-36 w-full bg-nino-cream" />
                         )}
-                      </div>
-                    </Link>
-                  </Reveal>
-                ))}
+                        <div className="flex flex-1 flex-col p-6">
+                          <span className="text-xs text-nino-ink/50">
+                            {a.city} · {a.province}
+                          </span>
+                          <h3 className="mt-3 font-display text-xl">{a.nameAr}</h3>
+                          <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
+                            <div dir="ltr" className="text-end text-sm font-medium">
+                              {formatUsdRange(a.priceMinZar, a.priceMaxZar)} {dict.accommodationSection.perMonth}
+                            </div>
+                            {a.distanceToAirport && (
+                              <span className="text-xs text-nino-ink/50">
+                                {a.distanceToAirport} {dict.accommodationSection.fromAirport}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </Link>
+                    </Reveal>
+                  );
+                })}
               </div>
               <div className="mt-10 text-center">
                 <Link

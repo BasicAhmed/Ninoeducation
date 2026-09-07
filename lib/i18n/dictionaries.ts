@@ -272,6 +272,7 @@ export const dictionaries = {
       perMonth: "شهريًا",
       fromAirport: "من المطار",
       details: "التفاصيل",
+      noPhoto: "لا توجد صورة بعد",
     },
     accommodationProfile: {
       monthlyPrice: "السعر الشهري",
@@ -729,6 +730,7 @@ export const dictionaries = {
       perMonth: "/ month",
       fromAirport: "from the airport",
       details: "Details",
+      noPhoto: "No photo yet",
     },
     accommodationProfile: {
       monthlyPrice: "Monthly Price",

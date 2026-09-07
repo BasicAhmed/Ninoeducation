@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAccommodationBySlug } from "@/lib/schools";
-import { formatUsd } from "@/lib/currency";
+import { formatUsd, formatUsdRange } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { AccommodationGallery } from "@/components/AccommodationGallery";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
 import { SITE_URL } from "@/lib/constants";
@@ -38,6 +39,7 @@ export default async function AccommodationProfilePage({
   const lang = await getLang();
   const dict = dictionaries[lang];
   const t = dict.accommodationProfile;
+  const images = a.imageUrls?.split(",").filter(Boolean) ?? [];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -50,7 +52,8 @@ export default async function AccommodationProfilePage({
       addressRegion: a.province,
       addressCountry: "ZA",
     },
-    priceRange: `$${formatUsd(a.monthlyPriceZar)}/mo`,
+    ...(images.length > 0 ? { image: images } : {}),
+    priceRange: `$${formatUsd(a.priceMinZar)}-$${formatUsd(a.priceMaxZar)}/mo`,
   };
 
   return (
@@ -70,6 +73,13 @@ export default async function AccommodationProfilePage({
             ]}
           />
         </div>
+
+        {images.length > 0 && (
+          <div className="mx-auto max-w-4xl px-6 pt-6">
+            <AccommodationGallery images={images} alt={a.nameAr} />
+          </div>
+        )}
+
         <section className="border-b border-nino-line bg-nino-cream">
           <div className="mx-auto max-w-4xl px-6 py-16">
             <p className="text-xs text-nino-ink/50">
@@ -84,7 +94,7 @@ export default async function AccommodationProfilePage({
             <div>
               <div className="text-xs text-nino-ink/50">{t.monthlyPrice}</div>
               <div dir="ltr" className="mt-1 text-end font-display text-2xl text-nino-orange">
-                ${formatUsd(a.monthlyPriceZar)}
+                {formatUsdRange(a.priceMinZar, a.priceMaxZar)}
               </div>
             </div>
             <div>

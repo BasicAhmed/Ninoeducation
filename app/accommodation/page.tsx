@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getPublishedAccommodations } from "@/lib/schools";
 import { SITE_URL } from "@/lib/constants";
-import { formatUsd } from "@/lib/currency";
+import { formatUsdRange } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getLang } from "@/lib/i18n/get-lang";
@@ -32,53 +33,67 @@ export default async function AccommodationPage() {
           </p>
 
           <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {listings.map((a) => (
-              <div
-                key={a.id}
-                className="flex flex-col rounded-2xl border border-nino-line bg-nino-white p-6"
-              >
-                <span className="text-xs text-nino-ink/50">
-                  {a.city} · {dict.provinces[a.province as keyof typeof dict.provinces] ?? a.province}
-                </span>
-                <h3 className="mt-3 font-display text-xl">{a.nameAr}</h3>
-                <p className="mt-2 text-sm text-nino-ink/70">
-                  {a.descriptionAr}
-                </p>
-                <div className="mt-4 flex flex-wrap gap-2 text-xs">
-                  <span className="rounded-full border border-nino-line px-2.5 py-1">
-                    {dict.roomTypes[a.roomType as keyof typeof dict.roomTypes] ?? a.roomType}
-                  </span>
-                  {a.furnished && (
-                    <span className="rounded-full border border-nino-line px-2.5 py-1">
-                      {t.furnished}
-                    </span>
-                  )}
-                  {a.wifi && (
-                    <span className="rounded-full border border-nino-line px-2.5 py-1">
-                      {t.wifi}
-                    </span>
-                  )}
-                </div>
-                <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
-                  <div dir="ltr" className="text-end text-sm">
-                    <div className="font-medium">
-                      ${formatUsd(a.monthlyPriceZar)} {t.perMonth}
+            {listings.map((a) => {
+              const cover = a.imageUrls?.split(",").filter(Boolean)[0];
+              return (
+                <div
+                  key={a.id}
+                  className="flex flex-col overflow-hidden rounded-2xl border border-nino-line bg-nino-white"
+                >
+                  {cover ? (
+                    <div className="relative h-40 w-full">
+                      <Image src={cover} alt={a.nameAr} fill unoptimized className="object-cover" />
                     </div>
-                    {a.distanceToAirport && (
-                      <div className="text-xs text-nino-ink/50">
-                        {a.distanceToAirport} {t.fromAirport}
+                  ) : (
+                    <div className="flex h-40 w-full items-center justify-center bg-nino-cream text-xs text-nino-ink/30">
+                      {t.noPhoto}
+                    </div>
+                  )}
+                  <div className="flex flex-1 flex-col p-6">
+                    <span className="text-xs text-nino-ink/50">
+                      {a.city} · {dict.provinces[a.province as keyof typeof dict.provinces] ?? a.province}
+                    </span>
+                    <h3 className="mt-3 font-display text-xl">{a.nameAr}</h3>
+                    <p className="mt-2 text-sm text-nino-ink/70">
+                      {a.descriptionAr}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2 text-xs">
+                      <span className="rounded-full border border-nino-line px-2.5 py-1">
+                        {dict.roomTypes[a.roomType as keyof typeof dict.roomTypes] ?? a.roomType}
+                      </span>
+                      {a.furnished && (
+                        <span className="rounded-full border border-nino-line px-2.5 py-1">
+                          {t.furnished}
+                        </span>
+                      )}
+                      {a.wifi && (
+                        <span className="rounded-full border border-nino-line px-2.5 py-1">
+                          {t.wifi}
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
+                      <div dir="ltr" className="text-end text-sm">
+                        <div className="font-medium">
+                          {formatUsdRange(a.priceMinZar, a.priceMaxZar)} {t.perMonth}
+                        </div>
+                        {a.distanceToAirport && (
+                          <div className="text-xs text-nino-ink/50">
+                            {a.distanceToAirport} {t.fromAirport}
+                          </div>
+                        )}
                       </div>
-                    )}
+                      <Link
+                        href={`/accommodation/${a.slug}`}
+                        className="rounded-full bg-nino-ink px-4 py-2 text-xs font-medium text-white hover:bg-nino-orange"
+                      >
+                        {t.details}
+                      </Link>
+                    </div>
                   </div>
-                  <Link
-                    href={`/accommodation/${a.slug}`}
-                    className="rounded-full bg-nino-ink px-4 py-2 text-xs font-medium text-white hover:bg-nino-orange"
-                  >
-                    {t.details}
-                  </Link>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </main>
