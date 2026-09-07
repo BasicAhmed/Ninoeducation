@@ -73,6 +73,7 @@ export const applications = pgTable("applications", {
   applicantType: text("applicant_type"), // student | parent — who is filling out the form
   ageGroup: text("age_group"), // under_18 | 18_24 | 25_34 | 35_plus
   educationStatus: text("education_status"), // high_school_student | high_school_grad | university_student | university_grad
+  preferredLang: text("preferred_lang"), // ar | en — the language they filled out the apply form in, so status-update emails match
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
 });

@@ -355,6 +355,7 @@ export function ApplyWizard({
       </div>
 
         <input type="hidden" name="schoolSlug" value={schoolSlug} />
+        <input type="hidden" name="lang" value={lang} />
         <input type="hidden" name="fullName" value={data.fullName} />
         <input type="hidden" name="nationality" value={COUNTRIES.find((c) => c.code === data.nationality)?.name || ""} />
         <input type="hidden" name="currentResidence" value={COUNTRIES.find((c) => c.code === data.currentResidence)?.name || ""} />

@@ -10,6 +10,8 @@
     "db:seed": "node db/seed.mjs"
   },
   "dependencies": {
+    "@react-email/components": "^1.0.12",
+    "@react-email/render": "^2.1.0",
     "@supabase/supabase-js": "^2.115.0",
     "d3-geo": "^3.1.1",
     "drizzle-orm": "^0.45.2",
@@ -19,6 +21,7 @@
     "postgres": "^3.4.9",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "resend": "^6.26.0",
     "topojson-client": "^3.1.0",
     "world-atlas": "^2.0.2"
   },

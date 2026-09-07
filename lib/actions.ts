@@ -5,6 +5,10 @@ import { applications, flightSchools, applicationEvents } from "@/db/schema";
 import { randomUUID } from "crypto";
 import { eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import { sendEmail } from "@/lib/email";
+import { ApplicationReceivedEmail, applicationReceivedSubject } from "@/emails/ApplicationReceived";
+import { NewApplicationAdminEmail } from "@/emails/NewApplicationAdmin";
+import { ADMIN_NOTIFICATION_EMAIL } from "@/lib/constants";
 
 function generateReferenceCode() {
   const year = new Date().getFullYear().toString().slice(-2);
@@ -15,7 +19,9 @@ function generateReferenceCode() {
 export async function submitApplication(formData: FormData) {
   const schoolSlug = String(formData.get("schoolSlug") || "");
   const email = String(formData.get("email") || "").trim();
+  const lang = String(formData.get("lang") || "") === "en" ? "en" : "ar";
   let flightSchoolId: string | null = null;
+  let schoolName: string | null = null;
 
   if (schoolSlug) {
     const rows = await db
@@ -24,6 +30,7 @@ export async function submitApplication(formData: FormData) {
       .where(eq(flightSchools.slug, schoolSlug))
       .limit(1);
     flightSchoolId = rows[0]?.id ?? null;
+    schoolName = rows[0]?.nameAr ?? null;
   }
 
   // Same email can't apply twice — send them straight to their
@@ -81,6 +88,7 @@ export async function submitApplication(formData: FormData) {
     applicantType: String(formData.get("applicantType") || "") || null,
     ageGroup: String(formData.get("ageGroup") || "") || null,
     educationStatus: String(formData.get("educationStatus") || "") || null,
+    preferredLang: lang,
     createdAt: now,
     updatedAt: now,
   };
@@ -110,5 +118,32 @@ export async function submitApplication(formData: FormData) {
   });
 
   const firstName = values.fullName.trim().split(/\s+/)[0] || "";
+
+  // Best-effort — sendEmail() never throws, so a Resend outage or a
+  // missing API key can never block a real application from
+  // completing. The application is already safely saved above either
+  // way.
+  await Promise.all([
+    sendEmail({
+      to: email,
+      subject: applicationReceivedSubject(lang, referenceCode),
+      react: ApplicationReceivedEmail({ lang, fullName: values.fullName, referenceCode }),
+    }),
+    sendEmail({
+      to: ADMIN_NOTIFICATION_EMAIL,
+      subject: `طلب جديد: ${values.fullName} (${referenceCode})`,
+      react: NewApplicationAdminEmail({
+        fullName: values.fullName,
+        referenceCode,
+        nationality: values.nationality,
+        email,
+        phone: values.phone,
+        desiredLicense: values.desiredLicense,
+        estimatedBudget: values.estimatedBudget,
+        schoolName,
+      }),
+    }),
+  ]);
+
   redirect(`/apply/thank-you?ref=${referenceCode}&name=${encodeURIComponent(firstName)}`);
 }

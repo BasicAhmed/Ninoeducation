@@ -139,3 +139,7 @@ ALTER TABLE "application_events" ADD CONSTRAINT "application_events_application_
 ALTER TABLE "applications" ADD COLUMN "applicant_type" text;
 ALTER TABLE "applications" ADD COLUMN "age_group" text;
 ALTER TABLE "applications" ADD COLUMN "education_status" text;
+
+-- Added: the language the applicant used on the apply form, so
+-- status-update emails match (nullable, safe on existing rows)
+ALTER TABLE "applications" ADD COLUMN "preferred_lang" text;

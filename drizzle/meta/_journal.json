@@ -50,6 +50,13 @@
       "when": 1788739420867,
       "tag": "0006_yellow_wind_dancer",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1788758886647,
+      "tag": "0007_chief_sir_ram",
+      "breakpoints": true
     }
   ]
 }

@@ -6,6 +6,8 @@ import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin-auth";
+import { sendEmail } from "@/lib/email";
+import { StatusUpdateEmail, statusUpdateSubject } from "@/emails/StatusUpdate";
 
 async function logEvent(applicationId: string, type: string, message: string) {
   await db.insert(applicationEvents).values({
@@ -146,6 +148,22 @@ export async function updateApplicationStatus(formData: FormData) {
       "status_change",
       `تغيّرت الحالة من "${STATUS_LABELS[previousStatus] ?? previousStatus}" إلى "${STATUS_LABELS[status] ?? status}"`
     );
+
+    const app = before[0];
+    if (app?.email) {
+      const lang = app.preferredLang === "en" ? "en" : "ar";
+      const statusLabel = STATUS_LABELS[status] ?? status;
+      await sendEmail({
+        to: app.email,
+        subject: statusUpdateSubject(lang, statusLabel),
+        react: StatusUpdateEmail({
+          lang,
+          fullName: app.fullName,
+          referenceCode: app.referenceCode || "",
+          statusLabel,
+        }),
+      });
+    }
   }
 
   redirect("/admin/applications");

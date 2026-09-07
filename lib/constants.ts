@@ -23,3 +23,18 @@ export const LICENSE_LABELS: Record<string, string> = {
 // domain (custom domain once bought, otherwise the *.vercel.app URL).
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL || "https://ninoeducation.vercel.app";
+
+// The address transactional emails are sent FROM. Requires the domain
+// to be verified in Resend first (SPF/DKIM/DMARC records added at
+// your DNS provider) — sending from an unverified domain gets
+// rejected or lands in spam. Until that's done, keep this on
+// Resend's shared onboarding domain for testing.
+// TODO(Ahmed): once ninoeducation.com is verified in Resend, change
+// this to something like "نينو إديوكيشن <hello@ninoeducation.com>".
+export const EMAIL_FROM =
+  process.env.RESEND_FROM_EMAIL || "Nino Education <onboarding@resend.dev>";
+
+// Where new-application and other internal notifications get sent.
+// TODO(Ahmed): replace with your real inbox.
+export const ADMIN_NOTIFICATION_EMAIL =
+  process.env.ADMIN_NOTIFICATION_EMAIL || "ahmed@example.com";
