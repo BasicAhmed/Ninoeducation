@@ -13,7 +13,7 @@ export const dictionaries = {
     footer: {
       brand: "نينو إديوكيشن",
       tagline:
-        "نساعد الطلاب العرب على الدراسة والتدرب ليصبحوا طيارين في جنوب أفريقيا، دون أي رسوم على الطالب.",
+        "نساعد الطلاب الدوليين على الدراسة والتدرب ليصبحوا طيارين في جنوب أفريقيا، دون أي رسوم على الطالب.",
       linksHeading: "روابط",
       track: "تتبّع طلبك",
       guide: "دليل الدراسة في جنوب أفريقيا",
@@ -26,7 +26,7 @@ export const dictionaries = {
       titleLine1: "كل طيار بدأ بحلم.",
       titleLine2: "ابدأ حلمك.",
       subtitle:
-        "نينو إديوكيشن تساعد الطلاب العرب على إيجاد ومقارنة والتقديم لأفضل مدارس الطيران في جنوب أفريقيا — دون أي تكلفة عليك.",
+        "نينو إديوكيشن تساعد الطلاب الدوليين على إيجاد ومقارنة والتقديم لأفضل مدارس الطيران في جنوب أفريقيا — دون أي تكلفة عليك.",
       ctaPrimary: "ابحث عن مدرستي",
       ctaSecondary: "لماذا جنوب أفريقيا؟",
     },
@@ -42,7 +42,7 @@ export const dictionaries = {
     },
     whySouthAfrica: {
       kicker: "لماذا جنوب أفريقيا",
-      title: "وجهة التدريب الأولى للطلاب العرب منذ سنوات",
+      title: "وجهة التدريب الأولى للطلاب الدوليين منذ سنوات",
       point1Title: "اعتماد دولي",
       point1Body:
         "هيئة الطيران المدني الجنوب أفريقية (SACAA) معتمدة من منظمة الطيران المدني الدولي (ICAO)، ورخصتك قابلة للتحويل عالميًا.",
@@ -150,7 +150,7 @@ export const dictionaries = {
         },
         {
           q: "ماذا لو لم تكن لغتي الإنجليزية ممتازة؟",
-          a: "التدريب والاختبارات النظرية بالكامل بالإنجليزية، لكن معظم الطلاب العرب يصلون بمستوى متوسط ويتحسنون بسرعة أثناء البرنامج. بعض المدارس تقدم دورة تأسيسية قصيرة قبل بدء التدريب الفعلي إن احتجت ذلك.",
+          a: "التدريب والاختبارات النظرية بالكامل بالإنجليزية، لكن معظم الطلاب الدوليين يصلون بمستوى متوسط ويتحسنون بسرعة أثناء البرنامج. بعض المدارس تقدم دورة تأسيسية قصيرة قبل بدء التدريب الفعلي إن احتجت ذلك.",
         },
         {
           q: "ما هي فرص العمل بعد الحصول على الرخصة؟",
@@ -470,7 +470,7 @@ export const dictionaries = {
     footer: {
       brand: "Nino Education",
       tagline:
-        "We help Arab students study and train to become pilots in South Africa, with no fees to the student.",
+        "We help international students study and train to become pilots in South Africa, with no fees to the student.",
       linksHeading: "Links",
       track: "Track Your Application",
       guide: "Study Guide: South Africa",
@@ -483,7 +483,7 @@ export const dictionaries = {
       titleLine1: "Every pilot started with a dream.",
       titleLine2: "Start yours.",
       subtitle:
-        "Nino Education helps Arab students find, compare, and apply to the best flight schools in South Africa — at no cost to you.",
+        "Nino Education helps international students find, compare, and apply to the best flight schools in South Africa — at no cost to you.",
       ctaPrimary: "Find My School",
       ctaSecondary: "Why South Africa?",
     },
@@ -499,7 +499,7 @@ export const dictionaries = {
     },
     whySouthAfrica: {
       kicker: "Why South Africa",
-      title: "The top training destination for Arab students for years",
+      title: "The top training destination for international students for years",
       point1Title: "Internationally Recognized",
       point1Body:
         "The South African Civil Aviation Authority (SACAA) is accredited by ICAO, so your license is transferable worldwide.",
@@ -607,7 +607,7 @@ export const dictionaries = {
         },
         {
           q: "What if my English isn't excellent?",
-          a: "Training and theory exams are entirely in English, but most Arab students arrive at an intermediate level and improve quickly during the program. Some schools offer a short foundational course before actual training begins if you need it.",
+          a: "Training and theory exams are entirely in English, but most international students arrive at an intermediate level and improve quickly during the program. Some schools offer a short foundational course before actual training begins if you need it.",
         },
         {
           q: "What are the job prospects after getting the license?",

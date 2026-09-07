@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ShieldCheck, ListChecks, Compass, PlaneTakeoff, Home as HomeIcon } from "lucide-react";
 import { getPublishedSchools, getPublishedAccommodations } from "@/lib/schools";
 import { WHATSAPP_NUMBER, SITE_URL } from "@/lib/constants";
@@ -70,7 +71,7 @@ export default async function Home() {
     alternateName: "Nino Education",
     url: SITE_URL,
     description:
-      "استشارات مجانية للطلاب العرب لإيجاد ومقارنة والتقديم لأفضل مدارس الطيران المعتمدة في جنوب أفريقيا.",
+      "استشارات مجانية للطلاب الدوليين لإيجاد ومقارنة والتقديم لأفضل مدارس الطيران المعتمدة في جنوب أفريقيا.",
     areaServed: "Arab world, India",
     knowsAbout: "Flight training enrollment, SACAA-licensed flight schools in South Africa",
   };
@@ -100,48 +101,55 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
       />
-      <SiteHeader transparent />
+      <SiteHeader />
       <main className="flex-1">
-        {/* 1. Hero — the dream */}
-        <section className="relative overflow-hidden bg-nino-white">
+        {/* 1. Hero — the dream, told through a real cockpit-lit moment instead of an abstract gradient */}
+        <section className="relative isolate flex min-h-[88vh] items-end overflow-hidden bg-nino-ink sm:min-h-[92vh]">
+          <div className="absolute inset-0">
+            <Image
+              src="/brand/hero-cessna.jpg"
+              alt=""
+              fill
+              priority
+              className="hero-kenburns object-cover"
+            />
+          </div>
+          {/* Scrim: clear near the top so the plane and golden light read
+              immediately, deepening toward the bottom where the text sits */}
+          <div className="absolute inset-0 bg-gradient-to-t from-nino-ink via-nino-ink/55 to-nino-ink/10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-nino-ink/30 via-transparent to-transparent" />
           <div
             aria-hidden
-            className="ambient-glow-a absolute -right-1/4 -top-1/3 h-80 w-80 rounded-full bg-nino-orange/45 blur-3xl sm:-top-1/2 sm:h-[36rem] sm:w-[36rem] lg:h-[720px] lg:w-[720px] lg:bg-nino-orange/40"
-          />
-          <div
-            aria-hidden
-            className="ambient-glow-b absolute -bottom-1/3 -left-1/4 h-72 w-72 rounded-full bg-nino-orange/35 blur-3xl sm:-bottom-1/2 sm:h-96 sm:w-96 lg:h-[600px] lg:w-[600px] lg:bg-nino-orange/30"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent to-nino-cream"
           />
 
-          <div className="relative mx-auto max-w-3xl px-6 pt-24 text-center md:pt-32">
+          <div className="relative mx-auto max-w-3xl px-6 pb-16 pt-40 text-center text-white sm:pb-24">
             <p dir="ltr" className="font-mono text-xs uppercase tracking-widest text-nino-orange">
               {t.coords}
             </p>
-            <h1 className="mt-6 font-display text-5xl leading-[1.25] text-nino-ink md:text-6xl">
+            <h1 className="mt-6 font-display text-5xl leading-[1.25] md:text-6xl">
               {t.titleLine1}
               <br />
               {t.titleLine2}
             </h1>
-            <p className="mx-auto mt-6 max-w-md text-lg text-nino-ink/70">
+            <p className="mx-auto mt-6 max-w-md text-lg text-white/80">
               {t.subtitle}
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/quiz"
-                className="rounded-full bg-nino-orange px-6 py-3 text-sm font-medium text-white transition-transform hover:bg-nino-ink active:scale-95"
+                className="rounded-full bg-nino-orange px-6 py-3 text-sm font-medium text-white transition-transform hover:bg-white hover:text-nino-ink active:scale-95"
               >
                 {t.ctaPrimary}
               </Link>
               <a
                 href="#why-south-africa"
-                className="rounded-full border border-nino-ink/20 px-6 py-3 text-sm font-medium text-nino-ink transition-transform hover:border-nino-ink active:scale-95"
+                className="rounded-full border border-white/40 px-6 py-3 text-sm font-medium text-white transition-transform hover:bg-white/10 active:scale-95"
               >
                 {t.ctaSecondary}
               </a>
             </div>
           </div>
-
-          <div className="h-24 md:h-32" />
         </section>
 
         {/* 1.5 Trust bar — immediate credibility right under the fold */}

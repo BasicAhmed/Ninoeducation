@@ -76,6 +76,22 @@ body {
   animation: ambient-drift-slow 16s ease-in-out infinite;
 }
 
+/* Slow, near-imperceptible zoom on the hero photo — gives the hero a
+   living, cinematic quality without being an obvious/distracting
+   effect. 28s and a small scale range keeps it subtle. */
+@keyframes hero-kenburns {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+.hero-kenburns {
+  animation: hero-kenburns 28s ease-in-out infinite alternate;
+}
+
 @keyframes flight-dash {
   to {
     stroke-dashoffset: -200;
@@ -123,6 +139,7 @@ body {
   .ambient-glow-b,
   .flight-path,
   .pulse-ring,
+  .hero-kenburns,
   .plane-float {
     animation: none !important;
   }
