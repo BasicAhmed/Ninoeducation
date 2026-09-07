@@ -6,7 +6,14 @@ import { WHATSAPP_NUMBER } from "@/lib/constants";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
 
-export const metadata = { title: "تم استلام طلبك | نينو إديوكيشن" };
+// noindex — this is a personalized, transient confirmation page tied
+// to one submission's query params (ref, name), not evergreen content
+// with any search value. Indexing it risks thin/duplicate pages and
+// could surface someone's name in search results.
+export const metadata = {
+  title: "تم استلام طلبك | نينو إديوكيشن",
+  robots: { index: false, follow: true },
+};
 
 export default async function ThankYouPage({
   searchParams,

@@ -4,12 +4,14 @@ import { SiteFooter } from "@/components/SiteFooter";
 import { ApplyWizard } from "@/components/ApplyWizard";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
+import { SITE_URL } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "قدّم الآن | نينو إديوكيشن",
   description: "قدّم طلبك للتدريب على الطيران في جنوب أفريقيا مجانًا عبر نينو إديوكيشن.",
+  alternates: { canonical: `${SITE_URL}/apply` },
 };
 
 export default async function ApplyPage({
