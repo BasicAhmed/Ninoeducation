@@ -133,3 +133,9 @@ CREATE TABLE "application_events" (
 );
 ALTER TABLE "applications" ADD COLUMN "accommodation_id" text;
 ALTER TABLE "application_events" ADD CONSTRAINT "application_events_application_id_applications_id_fk" FOREIGN KEY ("application_id") REFERENCES "public"."applications"("id") ON DELETE cascade ON UPDATE no action;
+
+-- Added: who's applying, age group, and current education status
+-- (all nullable, safe on existing rows)
+ALTER TABLE "applications" ADD COLUMN "applicant_type" text;
+ALTER TABLE "applications" ADD COLUMN "age_group" text;
+ALTER TABLE "applications" ADD COLUMN "education_status" text;

@@ -57,6 +57,25 @@ const MEDICAL_LABELS: Record<string, string> = {
   yes: "⚠ لديه استفسار طبي",
 };
 
+const APPLICANT_TYPE_LABELS: Record<string, string> = {
+  student: "الطالب نفسه",
+  parent: "ولي الأمر/قريب",
+};
+
+const AGE_GROUP_LABELS: Record<string, string> = {
+  under_18: "أقل من 18",
+  "18_24": "18–24",
+  "25_34": "25–34",
+  "35_plus": "35 فأكثر",
+};
+
+const EDUCATION_LABELS: Record<string, string> = {
+  high_school_student: "طالب ثانوية",
+  high_school_grad: "خريج ثانوية",
+  university_student: "طالب جامعي",
+  university_grad: "خريج جامعي / يعمل",
+};
+
 type Option = { id: string; nameAr: string };
 
 type Application = {
@@ -78,6 +97,9 @@ type Application = {
   fundingSource: string | null;
   accommodationBudgetOk: string | null;
   medicalConcern: string | null;
+  applicantType: string | null;
+  ageGroup: string | null;
+  educationStatus: string | null;
 };
 
 export function ApplicationsList({
@@ -148,7 +170,14 @@ export function ApplicationsList({
             <tbody className="[&>tr]:border-t [&>tr]:border-nino-line">
               {filtered.map((a) => (
                 <tr key={a.id} onClick={() => setSelected(a)} className="cursor-pointer hover:bg-nino-cream/60">
-                  <td className="p-4 font-medium">{a.fullName}</td>
+                  <td className="p-4 font-medium">
+                    {a.fullName}
+                    {a.applicantType === "parent" && (
+                      <span className="ms-2 rounded-full bg-amber-50 px-2 py-0.5 text-xs font-normal text-amber-700">
+                        ولي أمر
+                      </span>
+                    )}
+                  </td>
                   <td className="p-4 text-nino-ink/60">{a.nationality}</td>
                   <td className="p-4">
                     <span className={`rounded-full px-2.5 py-1 text-xs ${STATUS_COLORS[a.status] ?? "bg-nino-cream text-nino-ink/70"}`}>
@@ -227,6 +256,9 @@ function ApplicationDetail({
       <div className="grid grid-cols-2 gap-4">
         <Field label="الجنسية" value={a.nationality} />
         <Field label="مقيم حاليًا في" value={a.currentResidence} />
+        <Field label="من يقدّم الطلب" value={a.applicantType ? APPLICANT_TYPE_LABELS[a.applicantType] ?? a.applicantType : null} />
+        <Field label="الفئة العمرية" value={a.ageGroup ? AGE_GROUP_LABELS[a.ageGroup] ?? a.ageGroup : null} />
+        <Field label="الوضع التعليمي" value={a.educationStatus ? EDUCATION_LABELS[a.educationStatus] ?? a.educationStatus : null} />
         <Field label="البريد الإلكتروني" value={a.email} />
         <Field label="الهاتف" value={a.phone} />
         <Field label="الواتساب" value={a.whatsapp} />

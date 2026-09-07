@@ -70,6 +70,9 @@ export const applications = pgTable("applications", {
   fundingSource: text("funding_source"), // personal_savings | family_support | loan | undecided
   accommodationBudgetOk: text("accommodation_budget_ok"), // yes | no | unsure — does their budget also cover accommodation
   medicalConcern: text("medical_concern"), // no | unsure | yes — self-reported flag for aviation medical fitness, not details
+  applicantType: text("applicant_type"), // student | parent — who is filling out the form
+  ageGroup: text("age_group"), // under_18 | 18_24 | 25_34 | 35_plus
+  educationStatus: text("education_status"), // high_school_student | high_school_grad | university_student | university_grad
   createdAt: text("created_at").notNull(),
   updatedAt: text("updated_at").notNull(),
 });

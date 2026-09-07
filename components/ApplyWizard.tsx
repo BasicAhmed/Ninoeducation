@@ -17,6 +17,7 @@ import {
   PlaneTakeoff,
   Check,
   CheckCircle2,
+  Users,
 } from "lucide-react";
 import { submitApplication } from "@/lib/actions";
 import { CountrySelect } from "@/components/CountrySelect";
@@ -75,8 +76,28 @@ export function ApplyWizard({
     { value: "yes", label: t.medicalYes },
   ];
 
+  const APPLICANT_TYPE_OPTIONS = [
+    { value: "student", label: t.applicantStudent },
+    { value: "parent", label: t.applicantParent },
+  ];
+
+  const AGE_GROUP_OPTIONS = [
+    { value: "under_18", label: t.ageUnder18 },
+    { value: "18_24", label: t.age18to24 },
+    { value: "25_34", label: t.age25to34 },
+    { value: "35_plus", label: t.age35plus },
+  ];
+
+  const EDUCATION_OPTIONS = [
+    { value: "high_school_student", label: t.eduHighSchoolStudent },
+    { value: "high_school_grad", label: t.eduHighSchoolGrad },
+    { value: "university_student", label: t.eduUniversityStudent },
+    { value: "university_grad", label: t.eduUniversityGrad },
+  ];
+
   const STEPS = [
     { key: "who", title: t.stepWhoTitle, kicker: t.stepWhoKicker, icon: IdCard },
+    { key: "profile", title: t.stepProfileTitle, kicker: t.stepProfileKicker, icon: Users },
     { key: "contact", title: t.stepContactTitle, kicker: t.stepContactKicker, icon: TowerControl },
     { key: "money", title: t.stepMoneyTitle, kicker: t.stepMoneyKicker, icon: Wallet },
     { key: "readiness", title: t.stepReadinessTitle, kicker: t.stepReadinessKicker, icon: Languages },
@@ -100,6 +121,9 @@ export function ApplyWizard({
     fullName: "",
     nationality: "",
     currentResidence: "",
+    applicantType: "",
+    ageGroup: "",
+    educationStatus: "",
     phoneCountry: "",
     phoneNumber: "",
     whatsappCountry: "",
@@ -128,22 +152,27 @@ export function ApplyWizard({
       if (!data.currentResidence) e.currentResidence = t.errResidence;
     }
     if (i === 1) {
+      if (!data.applicantType) e.applicantType = t.errChoose;
+      if (!data.ageGroup) e.ageGroup = t.errChoose;
+      if (!data.educationStatus) e.educationStatus = t.errChoose;
+    }
+    if (i === 2) {
       if (!validatePhone(data.phoneCountry, data.phoneNumber)) e.phone = t.errPhone;
       if (data.whatsappNumber.trim() && !validatePhone(data.whatsappCountry, data.whatsappNumber)) {
         e.whatsapp = t.errWhatsapp;
       }
       if (!EMAIL_RE.test(data.email.trim())) e.email = t.errEmail;
     }
-    if (i === 2) {
+    if (i === 3) {
       if (!data.estimatedBudget) e.estimatedBudget = t.errChoose;
       if (!data.fundingSource) e.fundingSource = t.errChoose;
       if (!data.accommodationBudgetOk) e.accommodationBudgetOk = t.errChoose;
     }
-    if (i === 3) {
+    if (i === 4) {
       if (!data.englishLevel) e.englishLevel = t.errChoose;
       if (!data.medicalConcern) e.medicalConcern = t.errChoose;
     }
-    if (i === 4) {
+    if (i === 5) {
       if (!data.desiredLicense) e.desiredLicense = t.errLicense;
     }
     return e;
@@ -163,7 +192,7 @@ export function ApplyWizard({
     // step — the earliest point we have their email — instead of
     // waiting until final submission and wasting their time on the
     // rest of the form.
-    if (step === 1) {
+    if (step === 2) {
       setCheckingEmail(true);
       try {
         const res = await fetch("/api/check-email", {
@@ -329,6 +358,9 @@ export function ApplyWizard({
         <input type="hidden" name="fullName" value={data.fullName} />
         <input type="hidden" name="nationality" value={COUNTRIES.find((c) => c.code === data.nationality)?.name || ""} />
         <input type="hidden" name="currentResidence" value={COUNTRIES.find((c) => c.code === data.currentResidence)?.name || ""} />
+        <input type="hidden" name="applicantType" value={data.applicantType} />
+        <input type="hidden" name="ageGroup" value={data.ageGroup} />
+        <input type="hidden" name="educationStatus" value={data.educationStatus} />
         <input type="hidden" name="phone" value={formattedPhone} />
         <input type="hidden" name="whatsapp" value={formattedWhatsapp} />
         <input type="hidden" name="email" value={data.email} />
@@ -378,9 +410,39 @@ export function ApplyWizard({
               </div>
             </Panel>
 
-            {/* Step 2: Control tower / contact */}
+            {/* Step 2: Who's applying, age group, education status */}
             <Panel active={step === 1} lang={lang}>
               <StepHeading icon={STEPS[1].icon} kicker={STEPS[1].kicker} title={STEPS[1].title} />
+              <div className="space-y-6">
+                <ChoiceGroup
+                  label={t.applicantTypeLabel}
+                  options={APPLICANT_TYPE_OPTIONS}
+                  value={data.applicantType}
+                  onChange={(v) => set("applicantType", v)}
+                  columns={2}
+                  error={showErrors ? currentErrors.applicantType : undefined}
+                />
+                <ChoiceGroup
+                  label={t.ageGroupLabel}
+                  options={AGE_GROUP_OPTIONS}
+                  value={data.ageGroup}
+                  onChange={(v) => set("ageGroup", v)}
+                  columns={2}
+                  error={showErrors ? currentErrors.ageGroup : undefined}
+                />
+                <ChoiceGroup
+                  label={t.educationStatusLabel}
+                  options={EDUCATION_OPTIONS}
+                  value={data.educationStatus}
+                  onChange={(v) => set("educationStatus", v)}
+                  error={showErrors ? currentErrors.educationStatus : undefined}
+                />
+              </div>
+            </Panel>
+
+            {/* Step 3: Control tower / contact */}
+            <Panel active={step === 2} lang={lang}>
+              <StepHeading icon={STEPS[2].icon} kicker={STEPS[2].kicker} title={STEPS[2].title} />
               <p className="-mt-3 mb-6 text-sm text-nino-ink/60">
                 {t.contactSubtitle}
               </p>
@@ -416,9 +478,9 @@ export function ApplyWizard({
               </div>
             </Panel>
 
-            {/* Step 3: Financial readiness */}
-            <Panel active={step === 2} lang={lang}>
-              <StepHeading icon={STEPS[2].icon} kicker={STEPS[2].kicker} title={STEPS[2].title} />
+            {/* Step 4: Financial readiness */}
+            <Panel active={step === 3} lang={lang}>
+              <StepHeading icon={STEPS[3].icon} kicker={STEPS[3].kicker} title={STEPS[3].title} />
               <p className="-mt-3 mb-6 text-sm text-nino-ink/60">
                 {t.moneySubtitle}
               </p>
@@ -447,9 +509,9 @@ export function ApplyWizard({
               </div>
             </Panel>
 
-            {/* Step 4: English & readiness */}
-            <Panel active={step === 3} lang={lang}>
-              <StepHeading icon={STEPS[3].icon} kicker={STEPS[3].kicker} title={STEPS[3].title} />
+            {/* Step 5: English & readiness */}
+            <Panel active={step === 4} lang={lang}>
+              <StepHeading icon={STEPS[4].icon} kicker={STEPS[4].kicker} title={STEPS[4].title} />
               <div className="space-y-6">
                 <ChoiceGroup
                   label={t.englishLabel}
@@ -474,9 +536,9 @@ export function ApplyWizard({
               </div>
             </Panel>
 
-            {/* Step 5: The dream */}
-            <Panel active={step === 4} lang={lang}>
-              <StepHeading icon={STEPS[4].icon} kicker={STEPS[4].kicker} title={STEPS[4].title} />
+            {/* Step 6: The dream */}
+            <Panel active={step === 5} lang={lang}>
+              <StepHeading icon={STEPS[5].icon} kicker={STEPS[5].kicker} title={STEPS[5].title} />
               <div className="space-y-6">
                 <div>
                   <label htmlFor="currentLicenseSelect" className="block text-sm font-medium">{t.currentLicenseLabel}</label>
@@ -536,9 +598,9 @@ export function ApplyWizard({
               </div>
             </Panel>
 
-            {/* Step 6: Review (boarding pass) */}
-            <Panel active={step === 5} lang={lang}>
-              <StepHeading icon={STEPS[5].icon} kicker={STEPS[5].kicker} title={STEPS[5].title} />
+            {/* Step 7: Review (boarding pass) */}
+            <Panel active={step === 6} lang={lang}>
+              <StepHeading icon={STEPS[6].icon} kicker={STEPS[6].kicker} title={STEPS[6].title} />
               <div>
                 <label htmlFor="notes" className="block text-sm font-medium">{t.notesLabel}</label>
                 <textarea

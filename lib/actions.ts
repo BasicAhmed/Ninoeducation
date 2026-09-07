@@ -78,6 +78,9 @@ export async function submitApplication(formData: FormData) {
     fundingSource: String(formData.get("fundingSource") || "") || null,
     accommodationBudgetOk: String(formData.get("accommodationBudgetOk") || "") || null,
     medicalConcern: String(formData.get("medicalConcern") || "") || null,
+    applicantType: String(formData.get("applicantType") || "") || null,
+    ageGroup: String(formData.get("ageGroup") || "") || null,
+    educationStatus: String(formData.get("educationStatus") || "") || null,
     createdAt: now,
     updatedAt: now,
   };
