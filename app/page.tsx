@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ShieldCheck, ListChecks, Compass, PlaneTakeoff, Home as HomeIcon } from "lucide-react";
+import { ShieldCheck, ListChecks, Compass, Home as HomeIcon } from "lucide-react";
 import { getPublishedSchools, getPublishedAccommodations } from "@/lib/schools";
 import { WHATSAPP_NUMBER, SITE_URL } from "@/lib/constants";
 import { formatUsdRange } from "@/lib/currency";
@@ -11,6 +11,7 @@ import { WorldRouteMap } from "@/components/WorldRouteMap";
 import { WhySouthAfrica } from "@/components/WhySouthAfrica";
 import { InstagramGallery } from "@/components/InstagramGallery";
 import { HomeGuides } from "@/components/HomeGuides";
+import { JourneyTimeline } from "@/components/JourneyTimeline";
 import { TrustBar } from "@/components/TrustBar";
 import { FAQ } from "@/components/FAQ";
 import { Testimonials } from "@/components/Testimonials";
@@ -52,12 +53,6 @@ export default async function Home() {
     { icon: ListChecks, title: dict.whyUs.item2Title, body: dict.whyUs.item2Body },
     { icon: Compass, title: dict.whyUs.item3Title, body: dict.whyUs.item3Body },
     { icon: HomeIcon, title: dict.whyUs.item4Title, body: dict.whyUs.item4Body },
-  ];
-
-  const steps = [
-    { icon: Compass, n: dict.howItWorks.step1, body: dict.howItWorks.step1Body },
-    { icon: PlaneTakeoff, n: dict.howItWorks.step2, body: dict.howItWorks.step2Body },
-    { icon: HomeIcon, n: dict.howItWorks.step3, body: dict.howItWorks.step3Body },
   ];
 
   // Accurate to what Nino Education actually is — an enrollment
@@ -342,40 +337,16 @@ export default async function Home() {
           </section>
         )}
 
-        {/* 8. How it works — you've seen the schools, here's what happens next */}
+        {/* 8. How it works — the full interactive journey, right here */}
         <section className="bg-nino-white">
-          <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="mx-auto max-w-3xl px-6 py-20">
             <Reveal className="text-center">
-              <Kicker>{dict.howItWorks.kicker}</Kicker>
-              <h2 className="mt-3 font-display text-3xl md:text-4xl">{dict.howItWorks.title}</h2>
+              <Kicker>{dict.journey.kicker}</Kicker>
+              <h2 className="mt-3 font-display text-3xl md:text-4xl">{dict.journey.title}</h2>
+              <p className="mx-auto mt-2 max-w-xl text-nino-ink/70">{dict.journey.subtitle}</p>
             </Reveal>
-            <div className="mt-14 grid gap-px overflow-hidden rounded-2xl border border-nino-line bg-nino-line md:grid-cols-3">
-              {steps.map((s, i) => {
-                const Icon = s.icon;
-                return (
-                  <Reveal key={s.n} delay={i * 100} className="relative overflow-hidden bg-nino-white p-8">
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute -top-6 end-4 font-display text-9xl text-nino-orange/[0.06]"
-                    >
-                      {i + 1}
-                    </span>
-                    <div className="relative flex h-12 w-12 items-center justify-center rounded-full border-2 border-nino-orange text-nino-orange">
-                      <Icon size={20} />
-                    </div>
-                    <h3 className="relative mt-6 font-display text-xl">{s.n}</h3>
-                    <p className="relative mt-2 text-sm text-nino-ink/70">{s.body}</p>
-                  </Reveal>
-                );
-              })}
-            </div>
-            <div className="mt-8 text-center">
-              <Link
-                href="/journey"
-                className="text-sm font-medium text-nino-orange hover:underline"
-              >
-                {dict.howItWorks.seeFullJourney}
-              </Link>
+            <div className="mt-10">
+              <JourneyTimeline lang={lang} />
             </div>
           </div>
         </section>
