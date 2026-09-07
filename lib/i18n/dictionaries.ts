@@ -23,8 +23,8 @@ export const dictionaries = {
     },
     hero: {
       coords: "OR Tambo · FAJS · 26.13°S, 28.24°E",
-      titleLine1: "طريقك إلى قمرة القيادة",
-      titleLine2: "يبدأ من هنا.",
+      titleLine1: "كل طيار بدأ بحلم.",
+      titleLine2: "ابدأ حلمك.",
       subtitle:
         "نينو إديوكيشن تساعد الطلاب العرب على إيجاد ومقارنة والتقديم لأفضل مدارس الطيران في جنوب أفريقيا — دون أي تكلفة عليك.",
       ctaPrimary: "ابحث عن مدرستي",
@@ -480,8 +480,8 @@ export const dictionaries = {
     },
     hero: {
       coords: "OR Tambo · FAJS · 26.13°S, 28.24°E",
-      titleLine1: "Your path to the cockpit",
-      titleLine2: "starts here.",
+      titleLine1: "Every pilot started with a dream.",
+      titleLine2: "Start yours.",
       subtitle:
         "Nino Education helps Arab students find, compare, and apply to the best flight schools in South Africa — at no cost to you.",
       ctaPrimary: "Find My School",
