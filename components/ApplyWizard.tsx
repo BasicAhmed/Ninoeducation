@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect, forwardRef } from "react";
 import {
   Plane,
   Briefcase,
@@ -117,6 +117,8 @@ export function ApplyWizard({
     schoolName: string | null;
   } | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [carouselHeight, setCarouselHeight] = useState<number | undefined>(undefined);
   const formRef = useRef<HTMLFormElement>(null);
   const hasMounted = useRef(false);
   const [data, setData] = useState({
@@ -162,7 +164,7 @@ export function ApplyWizard({
     }
     if (i === 2) {
       if (!validatePhone(data.phoneCountry, data.phoneNumber)) e.phone = t.errPhone;
-      if (data.whatsappNumber.trim() && !validatePhone(data.whatsappCountry, data.whatsappNumber)) {
+      if (data.whatsappNumber.trim() && !validatePhone(data.whatsappCountry || data.phoneCountry, data.whatsappNumber)) {
         e.whatsapp = t.errWhatsapp;
       }
       if (!EMAIL_RE.test(data.email.trim())) e.email = t.errEmail;
@@ -241,11 +243,31 @@ export function ApplyWizard({
     rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, [step]);
 
+  // Carousel height tracks only the active panel's actual content,
+  // not the tallest step — otherwise every shorter step (e.g. the
+  // 2-field readiness step) shows a lot of empty space matching the
+  // height of the longest step (money, with 6+ budget options).
+  // ResizeObserver (not just a step-change effect) so this also stays
+  // correct when content within the SAME step changes height, like
+  // the school picker appearing or a validation error line showing up.
+  useLayoutEffect(() => {
+    const el = panelRefs.current[step];
+    if (!el) return;
+    setCarouselHeight(el.scrollHeight);
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (entry) setCarouselHeight(entry.target.scrollHeight);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [step]);
+
   const progressPct = (step / (STEPS.length - 1)) * 100;
   const StepIcon = STEPS[step].icon;
 
   const phoneDial = COUNTRIES.find((c) => c.code === data.phoneCountry)?.dialCode;
-  const whatsappDial = COUNTRIES.find((c) => c.code === data.whatsappCountry)?.dialCode;
+  const whatsappDial = COUNTRIES.find((c) => c.code === (data.whatsappCountry || data.phoneCountry))?.dialCode;
   const formattedPhone = phoneDial ? `+${phoneDial}${data.phoneNumber.replace(/\s/g, "")}` : "";
   const formattedWhatsapp =
     whatsappDial && data.whatsappNumber.trim() ? `+${whatsappDial}${data.whatsappNumber.replace(/\s/g, "")}` : "";
@@ -308,7 +330,7 @@ export function ApplyWizard({
   }
 
   return (
-    <div ref={rootRef} className="pb-24">
+    <div ref={rootRef}>
       <form ref={formRef} action={submitApplication} onKeyDown={(e) => {
         // Defense in depth: since every step's fields stay mounted
         // (just faded/translated off-screen) for reliable form
@@ -384,13 +406,17 @@ export function ApplyWizard({
         <input type="hidden" name="notes" value={data.notes} />
 
         {/* Carousel viewport — isolated to LTR so translateX math is predictable, each panel re-declares RTL/LTR for its content */}
-        <div dir="ltr" className="overflow-hidden">
+        <div
+          dir="ltr"
+          className="overflow-hidden"
+          style={{ height: carouselHeight, transition: `height 400ms ${EASE}` }}
+        >
           <div
-            className="flex motion-reduce:transition-none"
+            className="flex items-start motion-reduce:transition-none"
             style={{ transform: `translateX(-${step * 100}%)`, transition: `transform 500ms ${EASE}` }}
           >
             {/* Step 1: Captain's details */}
-            <Panel active={step === 0} lang={lang}>
+            <Panel ref={(el) => { panelRefs.current[0] = el; }} active={step === 0} lang={lang}>
               <StepHeading icon={STEPS[0].icon} kicker={STEPS[0].kicker} title={STEPS[0].title} />
               <div className="space-y-5">
                 <TextInput
@@ -421,7 +447,7 @@ export function ApplyWizard({
             </Panel>
 
             {/* Step 2: Who's applying, age group, education status */}
-            <Panel active={step === 1} lang={lang}>
+            <Panel ref={(el) => { panelRefs.current[1] = el; }} active={step === 1} lang={lang}>
               <StepHeading icon={STEPS[1].icon} kicker={STEPS[1].kicker} title={STEPS[1].title} />
               <div className="space-y-6">
                 <ChoiceGroup
@@ -451,7 +477,7 @@ export function ApplyWizard({
             </Panel>
 
             {/* Step 3: Control tower / contact */}
-            <Panel active={step === 2} lang={lang}>
+            <Panel ref={(el) => { panelRefs.current[2] = el; }} active={step === 2} lang={lang}>
               <StepHeading icon={STEPS[2].icon} kicker={STEPS[2].kicker} title={STEPS[2].title} />
               <p className="-mt-3 mb-6 text-sm text-nino-ink/60">
                 {t.contactSubtitle}
@@ -489,7 +515,7 @@ export function ApplyWizard({
             </Panel>
 
             {/* Step 4: Financial readiness */}
-            <Panel active={step === 3} lang={lang}>
+            <Panel ref={(el) => { panelRefs.current[3] = el; }} active={step === 3} lang={lang}>
               <StepHeading icon={STEPS[3].icon} kicker={STEPS[3].kicker} title={STEPS[3].title} />
               <p className="-mt-3 mb-6 text-sm text-nino-ink/60">
                 {t.moneySubtitle}
@@ -520,7 +546,7 @@ export function ApplyWizard({
             </Panel>
 
             {/* Step 5: English & readiness */}
-            <Panel active={step === 4} lang={lang}>
+            <Panel ref={(el) => { panelRefs.current[4] = el; }} active={step === 4} lang={lang}>
               <StepHeading icon={STEPS[4].icon} kicker={STEPS[4].kicker} title={STEPS[4].title} />
               <div className="space-y-6">
                 <ChoiceGroup
@@ -547,7 +573,7 @@ export function ApplyWizard({
             </Panel>
 
             {/* Step 6: The dream */}
-            <Panel active={step === 5} lang={lang}>
+            <Panel ref={(el) => { panelRefs.current[5] = el; }} active={step === 5} lang={lang}>
               <StepHeading icon={STEPS[5].icon} kicker={STEPS[5].kicker} title={STEPS[5].title} />
               <div className="space-y-6">
                 <div>
@@ -647,7 +673,7 @@ export function ApplyWizard({
             </Panel>
 
             {/* Step 7: Review (boarding pass) */}
-            <Panel active={step === 6} lang={lang}>
+            <Panel ref={(el) => { panelRefs.current[6] = el; }} active={step === 6} lang={lang}>
               <StepHeading icon={STEPS[6].icon} kicker={STEPS[6].kicker} title={STEPS[6].title} />
               <div>
                 <label htmlFor="notes" className="block text-sm font-medium">{t.notesLabel}</label>
@@ -677,11 +703,10 @@ export function ApplyWizard({
             </Panel>
           </div>
         </div>
-      </div>
 
-        {/* Sticky navigation — always reachable, never buried at the bottom of a long step */}
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-nino-line/70 bg-white/90 px-6 py-4 shadow-[0_-8px_30px_rgba(11,13,15,0.06)] backdrop-blur-md">
-          <div className="mx-auto flex max-w-2xl items-center justify-between gap-4">
+        {/* Navigation — lives inside the card as its natural footer, not floating over the page */}
+        <div className="mt-8 border-t border-nino-line/70 pt-6">
+          <div className="flex items-center justify-between gap-4">
             {step > 0 ? (
               <button
                 type="button"
@@ -720,23 +745,27 @@ export function ApplyWizard({
             )}
           </div>
         </div>
+      </div>
       </form>
     </div>
   );
 }
 
-function Panel({ active, lang, children }: { active: boolean; lang: Lang; children: React.ReactNode }) {
-  return (
-    <div
-      dir={lang === "ar" ? "rtl" : "ltr"}
-      className="w-full shrink-0 px-1"
-      style={{ opacity: active ? 1 : 0.35, transition: `opacity 500ms ${EASE}` }}
-      aria-hidden={!active}
-    >
-      {children}
-    </div>
-  );
-}
+const Panel = forwardRef<HTMLDivElement, { active: boolean; lang: Lang; children: React.ReactNode }>(
+  function Panel({ active, lang, children }, ref) {
+    return (
+      <div
+        ref={ref}
+        dir={lang === "ar" ? "rtl" : "ltr"}
+        className="w-full shrink-0 px-1"
+        style={{ opacity: active ? 1 : 0.35, transition: `opacity 500ms ${EASE}` }}
+        aria-hidden={!active}
+      >
+        {children}
+      </div>
+    );
+  }
+);
 
 function StepHeading({
   icon: Icon,
