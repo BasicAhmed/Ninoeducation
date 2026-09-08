@@ -1,26 +1,31 @@
-import { Button, Section, Text } from "@react-email/components";
+import { Button, Hr, Link, Section, Text } from "@react-email/components";
 import { EmailLayout, COLORS } from "./EmailLayout";
 import { SITE_URL } from "@/lib/constants";
+import { GUIDE_LINKS } from "./guideSuggestions";
 
 const COPY = {
   ar: {
-    subject: (ref: string) => `تم استلام طلبك — رقم رحلتك ${ref}`,
+    subject: (name: string) => `وصلنا طلبك يا ${name} 🎉`,
     preview: "وصلنا طلبك! هذا رقم رحلتك للمتابعة.",
     greeting: (name: string) => `يلا يا ${name}، بدأنا! 🎉`,
     body: "استلمنا طلبك بنجاح. خلال 24–48 ساعة، بيتواصل معك أحد مستشارينا لفهم وضعك أكثر ونرشح لك أفضل المدارس المناسبة.",
     refLabel: "رقم رحلتك",
     keepIt: "خلّه عندك — فيك تتابع طلبك به في أي وقت",
     trackCta: "تابع طلبي",
+    whileYouWait: "وانت تنتظر ردنا",
+    whileYouWaitBody: "خلي وقت الانتظار مفيد. جهزنا لك شوي قراءة تفيدك:",
     footer: "استلمت هذا الإيميل لأنك قدّمت طلبًا عبر نينو إديوكيشن.",
   },
   en: {
-    subject: (ref: string) => `We got your application — flight number ${ref}`,
+    subject: (name: string) => `We got your application, ${name} 🎉`,
     preview: "We got your application! Here's your flight number.",
     greeting: (name: string) => `Let's go, ${name}, we're off! 🎉`,
     body: "We've received your application. Within 24-48 hours, one of our advisors will reach out to understand your situation better and recommend the best-fit schools.",
     refLabel: "Your Flight Number",
     keepIt: "Keep this — you can track your application with it anytime",
     trackCta: "Track My Application",
+    whileYouWait: "While You Wait to Hear From Us",
+    whileYouWaitBody: "Might as well make the wait useful. Here's a couple of things worth a read:",
     footer: "You received this email because you submitted an application through Nino Education.",
   },
 };
@@ -36,6 +41,7 @@ export function ApplicationReceivedEmail({
 }) {
   const t = COPY[lang];
   const firstName = fullName.trim().split(/\s+/)[0] || fullName;
+  const guides = [GUIDE_LINKS.chooseSchool, GUIDE_LINKS.pplVsCpl];
 
   return (
     <EmailLayout lang={lang} previewText={t.preview} footerNote={t.footer}>
@@ -91,10 +97,27 @@ export function ApplicationReceivedEmail({
           {t.trackCta}
         </Button>
       </Section>
+
+      <Hr style={{ borderColor: "rgba(11,13,15,0.1)", margin: "28px 0 20px" }} />
+
+      <Text style={{ fontSize: "13px", fontWeight: 600, color: COLORS.ink, margin: "0 0 4px" }}>
+        {t.whileYouWait}
+      </Text>
+      <Text style={{ fontSize: "13px", color: "rgba(11,13,15,0.6)", margin: "0 0 10px" }}>
+        {t.whileYouWaitBody}
+      </Text>
+      {guides.map((g) => (
+        <Text key={g.href} style={{ fontSize: "13px", margin: "0 0 6px" }}>
+          <Link href={`${SITE_URL}${g.href}`} style={{ color: COLORS.orange }}>
+            {lang === "ar" ? g.ar : g.en} ←
+          </Link>
+        </Text>
+      ))}
     </EmailLayout>
   );
 }
 
-export function applicationReceivedSubject(lang: "ar" | "en", referenceCode: string) {
-  return COPY[lang].subject(referenceCode);
+export function applicationReceivedSubject(lang: "ar" | "en", fullName: string) {
+  const firstName = fullName.trim().split(/\s+/)[0] || fullName;
+  return COPY[lang].subject(firstName);
 }

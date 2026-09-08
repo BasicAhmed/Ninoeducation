@@ -126,7 +126,7 @@ export async function submitApplication(formData: FormData) {
   await Promise.all([
     sendEmail({
       to: email,
-      subject: applicationReceivedSubject(lang, referenceCode),
+      subject: applicationReceivedSubject(lang, values.fullName),
       react: ApplicationReceivedEmail({ lang, fullName: values.fullName, referenceCode }),
     }),
     sendEmail({
@@ -135,11 +135,23 @@ export async function submitApplication(formData: FormData) {
       react: NewApplicationAdminEmail({
         fullName: values.fullName,
         referenceCode,
+        applicantType: values.applicantType,
+        ageGroup: values.ageGroup,
+        educationStatus: values.educationStatus,
         nationality: values.nationality,
+        currentResidence: values.currentResidence,
         email,
         phone: values.phone,
+        whatsapp: values.whatsapp,
         desiredLicense: values.desiredLicense,
+        currentLicense: values.currentLicense,
         estimatedBudget: values.estimatedBudget,
+        fundingSource: values.fundingSource,
+        accommodationBudgetOk: values.accommodationBudgetOk,
+        englishLevel: values.englishLevel,
+        medicalConcern: values.medicalConcern,
+        preferredStart: values.preferredStart,
+        notes: values.notes,
         schoolName,
       }),
     }),

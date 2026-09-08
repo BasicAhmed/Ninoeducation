@@ -157,11 +157,12 @@ export async function updateApplicationStatus(formData: FormData) {
       const statusLabel = STATUS_LABELS[status] ?? status;
       await sendEmail({
         to: app.email,
-        subject: statusUpdateSubject(lang, statusLabel),
+        subject: statusUpdateSubject(lang, status, app.fullName),
         react: StatusUpdateEmail({
           lang,
           fullName: app.fullName,
           referenceCode: app.referenceCode || "",
+          status,
           statusLabel,
         }),
       });
