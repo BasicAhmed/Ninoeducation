@@ -5,7 +5,7 @@ import { GUIDE_LINKS } from "./guideSuggestions";
 
 const COPY = {
   ar: {
-    subject: (name: string) => `وصلنا طلبك يا ${name} 🎉`,
+    subject: (name: string) => `طلبك لتصير طيار وصلنا يا ${name} ✈️`,
     preview: "وصلنا طلبك! هذا رقم رحلتك للمتابعة.",
     greeting: (name: string) => `يلا يا ${name}، بدأنا! 🎉`,
     body: "استلمنا طلبك بنجاح. خلال 24–48 ساعة، بيتواصل معك أحد مستشارينا لفهم وضعك أكثر ونرشح لك أفضل المدارس المناسبة.",
@@ -17,7 +17,7 @@ const COPY = {
     footer: "استلمت هذا الإيميل لأنك قدّمت طلبًا عبر نينو إديوكيشن.",
   },
   en: {
-    subject: (name: string) => `We got your application, ${name} 🎉`,
+    subject: (name: string) => `Your pilot application just landed, ${name} ✈️`,
     preview: "We got your application! Here's your flight number.",
     greeting: (name: string) => `Let's go, ${name}, we're off! 🎉`,
     body: "We've received your application. Within 24-48 hours, one of our advisors will reach out to understand your situation better and recommend the best-fit schools.",

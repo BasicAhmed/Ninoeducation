@@ -11,6 +11,7 @@ export function CountrySelect({
   onChange,
   error,
   lang = "ar",
+  restrictTo,
 }: {
   id: string;
   label: string;
@@ -18,7 +19,14 @@ export function CountrySelect({
   onChange: (v: string) => void;
   error?: string;
   lang?: Lang;
+  restrictTo?: string[];
 }) {
+  const options = restrictTo
+    ? restrictTo
+        .map((code) => COUNTRIES.find((c) => c.code === code))
+        .filter((c): c is (typeof COUNTRIES)[number] => !!c)
+    : COUNTRIES;
+
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium">{label}</label>
@@ -29,7 +37,7 @@ export function CountrySelect({
         className={`mt-1.5 w-full ${inputClass(!!error)}`}
       >
         <option value="">{dictionaries[lang].apply.chooseCountry}</option>
-        {COUNTRIES.map((c) => (
+        {options.map((c) => (
           <option key={c.code} value={c.code}>
             {lang === "ar" ? c.name : c.nameEn}
           </option>

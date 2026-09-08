@@ -11,11 +11,11 @@ export const PROVINCES = [
 export const WHATSAPP_NUMBER = "000000000000";
 
 export const LICENSE_LABELS: Record<string, string> = {
-  PPL: "رخصة طيار خاص",
-  CPL: "رخصة طيار تجاري",
-  IR: "تصنيف آلي",
-  ME: "متعدد المحركات",
-  ATPL_THEORY: "نظري رخصة النقل الجوي",
+  PPL: "رخصة طيار خاص (PPL)",
+  CPL: "رخصة طيار تجاري (CPL)",
+  IR: "تصنيف آلي (IR)",
+  ME: "متعدد المحركات (ME)",
+  ATPL_THEORY: "نظري رخصة النقل الجوي (ATPL)",
 };
 
 // Canonical site URL, used for sitemap.xml, robots.txt, and structured

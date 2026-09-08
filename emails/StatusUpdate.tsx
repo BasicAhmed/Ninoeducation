@@ -13,61 +13,61 @@ type StatusCopy = {
 const STATUS_COPY: Record<string, Record<"ar" | "en", StatusCopy>> = {
   contacted: {
     ar: {
-      subject: (n) => `${n}، تواصلنا معك اليوم 📞`,
+      subject: (n) => `${n}، تكلمنا عن رحلتك للطيران اليوم 📞`,
       greeting: (n) => `هلا ${n}، كلمناك اليوم!`,
       guides: [GUIDE_LINKS.chooseSchool],
     },
     en: {
-      subject: (n) => `${n}, we reached out to you today 📞`,
+      subject: (n) => `${n}, we talked about your pilot journey today 📞`,
       greeting: (n) => `Hey ${n}, we called you today!`,
       guides: [GUIDE_LINKS.chooseSchool],
     },
   },
   documents_required: {
     ar: {
-      subject: (n) => `${n}، نحتاج منك شي بسيط 📋`,
+      subject: (n) => `${n}، خطوة وثائق قبل ما تطير ✈️📋`,
       greeting: (n) => `${n}، احتجنا شوي مستندات منك`,
       guides: [GUIDE_LINKS.visa],
     },
     en: {
-      subject: (n) => `${n}, we need something small from you 📋`,
+      subject: (n) => `${n}, one document step before you fly ✈️📋`,
       greeting: (n) => `${n}, we need a few documents from you`,
       guides: [GUIDE_LINKS.visa],
     },
   },
   submitted_to_school: {
     ar: {
-      subject: (n) => `طلبك عند المدرسة الآن يا ${n} ✈️`,
+      subject: (n) => `طلبك للطيران وصل المدرسة يا ${n} ✈️`,
       greeting: (n) => `${n}، طلبك وصل المدرسة!`,
       guides: [GUIDE_LINKS.timeline],
     },
     en: {
-      subject: (n) => `Your application is with the school now, ${n} ✈️`,
+      subject: (n) => `Your pilot application is with the school now, ${n} ✈️`,
       greeting: (n) => `${n}, your application reached the school!`,
       guides: [GUIDE_LINKS.timeline],
     },
   },
   accepted: {
     ar: {
-      subject: (n) => `مبروك يا ${n}! تم قبولك 🎉`,
+      subject: (n) => `مبروك يا ${n}! صرت أقرب للطيران 🎉✈️`,
       greeting: (n) => `مبروووك يا ${n}! 🎉`,
       guides: [GUIDE_LINKS.visa, GUIDE_LINKS.accommodation],
     },
     en: {
-      subject: (n) => `Congrats, ${n}! You're accepted 🎉`,
+      subject: (n) => `Congrats, ${n}! You're one step closer to flying 🎉✈️`,
       greeting: (n) => `Congratulations, ${n}! 🎉`,
       guides: [GUIDE_LINKS.visa, GUIDE_LINKS.accommodation],
     },
   },
   rejected: {
     ar: {
-      subject: (n) => `تحديث على طلبك يا ${n}`,
+      subject: (n) => `تحديث على طلبك للطيران يا ${n}`,
       greeting: (n) => `${n}، عندنا تحديث نبي نقوله لك بصراحة`,
       guides: [],
       note: "هذا مو نهاية الطريق. عندنا مدارس ثانية ممكن تناسبك أكثر — كلمنا وخلنا نشوف الخيار الأفضل لك.",
     },
     en: {
-      subject: (n) => `An update on your application, ${n}`,
+      subject: (n) => `An update on your pilot application, ${n}`,
       greeting: (n) => `${n}, we have an update we want to be honest about`,
       guides: [],
       note: "This isn't the end of the road. We have other schools that might be a better fit — talk to us and let's find the right option for you.",
@@ -75,24 +75,24 @@ const STATUS_COPY: Record<string, Record<"ar" | "en", StatusCopy>> = {
   },
   enrolled: {
     ar: {
-      subject: (n) => `بدأت رحلتك يا ${n}! ✈️🎓`,
+      subject: (n) => `بدأت تدريبك لتصير طيار يا ${n}! ✈️🎓`,
       greeting: (n) => `${n}، رسميًا صرت مسجّل! 🎓`,
       guides: [GUIDE_LINKS.tips, GUIDE_LINKS.challenges],
     },
     en: {
-      subject: (n) => `Your journey has started, ${n}! ✈️🎓`,
+      subject: (n) => `Your pilot training has started, ${n}! ✈️🎓`,
       greeting: (n) => `${n}, you're officially enrolled! 🎓`,
       guides: [GUIDE_LINKS.tips, GUIDE_LINKS.challenges],
     },
   },
   new: {
     ar: {
-      subject: (n) => `تحديث على طلبك يا ${n}`,
+      subject: (n) => `تحديث على طلبك للطيران يا ${n}`,
       greeting: (n) => `${n}، عندك تحديث جديد`,
       guides: [GUIDE_LINKS.chooseSchool],
     },
     en: {
-      subject: (n) => `An update on your application, ${n}`,
+      subject: (n) => `An update on your pilot application, ${n}`,
       greeting: (n) => `${n}, you have a new update`,
       guides: [GUIDE_LINKS.chooseSchool],
     },
@@ -101,12 +101,12 @@ const STATUS_COPY: Record<string, Record<"ar" | "en", StatusCopy>> = {
 
 const FALLBACK: Record<"ar" | "en", StatusCopy> = {
   ar: {
-    subject: (n) => `تحديث على طلبك يا ${n}`,
+    subject: (n) => `تحديث على طلبك للطيران يا ${n}`,
     greeting: (n) => `${n}، عندك تحديث جديد`,
     guides: [GUIDE_LINKS.chooseSchool],
   },
   en: {
-    subject: (n) => `An update on your application, ${n}`,
+    subject: (n) => `An update on your pilot application, ${n}`,
     greeting: (n) => `${n}, you have a new update`,
     guides: [GUIDE_LINKS.chooseSchool],
   },

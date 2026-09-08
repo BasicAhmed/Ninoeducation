@@ -22,7 +22,7 @@ import {
 import { submitApplication } from "@/lib/actions";
 import { CountrySelect } from "@/components/CountrySelect";
 import { PhoneField, validatePhone } from "@/components/PhoneField";
-import { COUNTRIES } from "@/lib/countries";
+import { COUNTRIES, PRIORITY_COUNTRY_CODES } from "@/lib/countries";
 import { inputClass } from "@/lib/form-styles";
 import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 
@@ -32,10 +32,12 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export function ApplyWizard({
   schoolSlug,
   schoolName,
+  schools,
   lang,
 }: {
   schoolSlug: string;
   schoolName?: string;
+  schools: { slug: string; nameAr: string }[];
   lang: Lang;
 }) {
   const t = dictionaries[lang].apply;
@@ -136,6 +138,8 @@ export function ApplyWizard({
     medicalConcern: "",
     currentLicense: "",
     desiredLicense: "PPL",
+    schoolChoice: "",
+    selectedSchool: "",
     preferredStart: "",
     notes: "",
   });
@@ -174,6 +178,10 @@ export function ApplyWizard({
     }
     if (i === 5) {
       if (!data.desiredLicense) e.desiredLicense = t.errLicense;
+      if (!schoolSlug) {
+        if (!data.schoolChoice) e.schoolChoice = t.errChoose;
+        if (data.schoolChoice === "specific" && !data.selectedSchool) e.selectedSchool = t.errChoose;
+      }
     }
     return e;
   }
@@ -354,7 +362,7 @@ export function ApplyWizard({
         </div>
       </div>
 
-        <input type="hidden" name="schoolSlug" value={schoolSlug} />
+        <input type="hidden" name="schoolSlug" value={schoolSlug || (data.schoolChoice === "specific" ? data.selectedSchool : "")} />
         <input type="hidden" name="lang" value={lang} />
         <input type="hidden" name="fullName" value={data.fullName} />
         <input type="hidden" name="nationality" value={COUNTRIES.find((c) => c.code === data.nationality)?.name || ""} />
@@ -399,6 +407,7 @@ export function ApplyWizard({
                   value={data.nationality}
                   onChange={(v) => set("nationality", v)}
                   error={showErrors ? currentErrors.nationality : undefined}
+                  restrictTo={PRIORITY_COUNTRY_CODES}
                 />
                 <CountrySelect
                   lang={lang}
@@ -595,6 +604,44 @@ export function ApplyWizard({
                     })}
                   </div>
                 </div>
+                {!schoolSlug && (
+                  <>
+                    <ChoiceGroup
+                      label={t.schoolChoiceLabel}
+                      options={[
+                        { value: "specific", label: t.schoolChoiceSpecific },
+                        { value: "help", label: t.schoolChoiceHelp },
+                      ]}
+                      value={data.schoolChoice}
+                      onChange={(v) => set("schoolChoice", v)}
+                      columns={2}
+                      error={showErrors ? currentErrors.schoolChoice : undefined}
+                    />
+                    {data.schoolChoice === "specific" && (
+                      <div>
+                        <label htmlFor="selectedSchoolInput" className="block text-sm font-medium">
+                          {t.selectedSchoolLabel}
+                        </label>
+                        <select
+                          id="selectedSchoolInput"
+                          value={data.selectedSchool}
+                          onChange={(e) => set("selectedSchool", e.target.value)}
+                          className={`mt-1.5 w-full ${inputClass(!!(showErrors && currentErrors.selectedSchool))}`}
+                        >
+                          <option value="">{t.selectedSchoolPlaceholder}</option>
+                          {schools.map((s) => (
+                            <option key={s.slug} value={s.slug}>
+                              {s.nameAr}
+                            </option>
+                          ))}
+                        </select>
+                        {showErrors && currentErrors.selectedSchool && (
+                          <p className="mt-1 text-xs text-red-500">{currentErrors.selectedSchool}</p>
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
                 <TextInput id="preferredStart" label={t.preferredStartLabel} placeholder={t.preferredStartPlaceholder} value={data.preferredStart} onChange={(v) => set("preferredStart", v)} />
               </div>
             </Panel>

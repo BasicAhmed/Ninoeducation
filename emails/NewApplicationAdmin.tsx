@@ -44,23 +44,31 @@ const MEDICAL_LABELS: Record<string, string> = {
   yes: "⚠ لديه استفسار طبي",
 };
 const LICENSE_LABELS: Record<string, string> = {
-  PPL: "رخصة طيار خاص",
-  CPL: "رخصة طيار تجاري",
-  IR: "تصنيف آلي",
-  ME: "متعدد المحركات",
-  ATPL_THEORY: "نظري رخصة النقل الجوي",
+  PPL: "رخصة طيار خاص (PPL)",
+  CPL: "رخصة طيار تجاري (CPL)",
+  IR: "تصنيف آلي (IR)",
+  ME: "متعدد المحركات (ME)",
+  ATPL_THEORY: "نظري رخصة النقل الجوي (ATPL)",
 };
 
-function Field({ label, value }: { label: string; value: string | null }) {
-  if (!value) return null;
+type FieldDef = { label: string; value: string | null };
+
+// Renders up to two fields side by side in one row — halves the
+// email's length compared to one field per line, which is the whole
+// point given how many fields this form collects.
+function FieldPair({ fields }: { fields: FieldDef[] }) {
+  const visible = fields.filter((f) => f.value);
+  if (visible.length === 0) return null;
   return (
-    <Row style={{ marginBottom: "10px" }}>
-      <Column>
-        <Text style={{ fontSize: "11px", color: "rgba(11,13,15,0.45)", margin: "0 0 2px" }}>
-          {label}
-        </Text>
-        <Text style={{ fontSize: "14px", color: COLORS.ink, margin: 0 }}>{value}</Text>
-      </Column>
+    <Row style={{ marginBottom: "12px" }}>
+      {visible.map((f, i) => (
+        <Column key={f.label} style={{ width: "50%", paddingInlineEnd: i === 0 ? "10px" : 0 }}>
+          <Text style={{ fontSize: "11px", color: "rgba(11,13,15,0.45)", margin: "0 0 2px" }}>
+            {f.label}
+          </Text>
+          <Text style={{ fontSize: "14px", color: COLORS.ink, margin: 0 }}>{f.value}</Text>
+        </Column>
+      ))}
     </Row>
   );
 }
@@ -165,30 +173,68 @@ export function NewApplicationAdminEmail({
       <Hr style={{ borderColor: "rgba(11,13,15,0.08)", margin: "16px 0" }} />
 
       <SectionLabel>الهوية</SectionLabel>
-      <Field label="الاسم" value={fullName} />
-      <Field label="من يقدّم الطلب" value={applicantType ? APPLICANT_TYPE_LABELS[applicantType] ?? applicantType : null} />
-      <Field label="الفئة العمرية" value={ageGroup ? AGE_GROUP_LABELS[ageGroup] ?? ageGroup : null} />
-      <Field label="الوضع التعليمي" value={educationStatus ? EDUCATION_LABELS[educationStatus] ?? educationStatus : null} />
-      <Field label="الجنسية" value={nationality} />
-      <Field label="مقيم حاليًا في" value={currentResidence} />
+      <FieldPair
+        fields={[
+          { label: "الاسم", value: fullName },
+          { label: "من يقدّم الطلب", value: applicantType ? APPLICANT_TYPE_LABELS[applicantType] ?? applicantType : null },
+        ]}
+      />
+      <FieldPair
+        fields={[
+          { label: "الفئة العمرية", value: ageGroup ? AGE_GROUP_LABELS[ageGroup] ?? ageGroup : null },
+          { label: "الوضع التعليمي", value: educationStatus ? EDUCATION_LABELS[educationStatus] ?? educationStatus : null },
+        ]}
+      />
+      <FieldPair
+        fields={[
+          { label: "الجنسية", value: nationality },
+          { label: "مقيم حاليًا في", value: currentResidence },
+        ]}
+      />
 
       <SectionLabel>التواصل</SectionLabel>
-      <Field label="البريد الإلكتروني" value={email} />
-      <Field label="الهاتف" value={phone} />
-      <Field label="الواتساب" value={whatsapp} />
+      <FieldPair
+        fields={[
+          { label: "البريد الإلكتروني", value: email },
+          { label: "الهاتف", value: phone },
+        ]}
+      />
+      {whatsapp && (
+        <FieldPair fields={[{ label: "الواتساب", value: whatsapp }]} />
+      )}
 
       <SectionLabel>الرخصة والمدرسة</SectionLabel>
-      <Field label="الرخصة المطلوبة" value={LICENSE_LABELS[desiredLicense] ?? desiredLicense} />
-      <Field label="الرخصة الحالية" value={currentLicense ? LICENSE_LABELS[currentLicense] ?? currentLicense : null} />
-      <Field label="المدرسة المطلوبة" value={schoolName} />
-      <Field label="الموعد المفضل للبدء" value={preferredStart} />
+      <FieldPair
+        fields={[
+          { label: "الرخصة المطلوبة", value: LICENSE_LABELS[desiredLicense] ?? desiredLicense },
+          { label: "الرخصة الحالية", value: currentLicense ? LICENSE_LABELS[currentLicense] ?? currentLicense : null },
+        ]}
+      />
+      <FieldPair
+        fields={[
+          { label: "المدرسة المطلوبة", value: schoolName },
+          { label: "الموعد المفضل للبدء", value: preferredStart },
+        ]}
+      />
 
       <SectionLabel>الجاهزية المالية والتعليمية</SectionLabel>
-      <Field label="الميزانية" value={estimatedBudget} />
-      <Field label="مصدر التمويل" value={fundingSource ? FUNDING_LABELS[fundingSource] ?? fundingSource : null} />
-      <Field label="الميزانية تشمل السكن؟" value={accommodationBudgetOk ? ACCOMMODATION_BUDGET_LABELS[accommodationBudgetOk] ?? accommodationBudgetOk : null} />
-      <Field label="مستوى الإنجليزي" value={englishLevel ? ENGLISH_LABELS[englishLevel] ?? englishLevel : null} />
-      <Field label="استفسار طبي" value={medicalConcern ? MEDICAL_LABELS[medicalConcern] ?? medicalConcern : null} />
+      <FieldPair
+        fields={[
+          { label: "الميزانية", value: estimatedBudget },
+          { label: "مصدر التمويل", value: fundingSource ? FUNDING_LABELS[fundingSource] ?? fundingSource : null },
+        ]}
+      />
+      <FieldPair
+        fields={[
+          { label: "الميزانية تشمل السكن؟", value: accommodationBudgetOk ? ACCOMMODATION_BUDGET_LABELS[accommodationBudgetOk] ?? accommodationBudgetOk : null },
+          { label: "مستوى الإنجليزي", value: englishLevel ? ENGLISH_LABELS[englishLevel] ?? englishLevel : null },
+        ]}
+      />
+      {medicalConcern && (
+        <FieldPair
+          fields={[{ label: "استفسار طبي", value: MEDICAL_LABELS[medicalConcern] ?? medicalConcern }]}
+        />
+      )}
 
       {notes && (
         <>

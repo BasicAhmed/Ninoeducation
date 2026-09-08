@@ -1,4 +1,4 @@
-import { getSchoolBySlug } from "@/lib/schools";
+import { getSchoolBySlug, getPublishedSchools } from "@/lib/schools";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ApplyWizard } from "@/components/ApplyWizard";
@@ -23,6 +23,7 @@ export default async function ApplyPage({
   const t = dictionaries[lang].applyPage;
   const sp = await searchParams;
   const school = sp.school ? await getSchoolBySlug(sp.school) : null;
+  const schools = await getPublishedSchools();
 
   return (
     <>
@@ -40,7 +41,7 @@ export default async function ApplyPage({
           </p>
 
           <div className="mt-10">
-            <ApplyWizard schoolSlug={sp.school || ""} schoolName={school?.nameAr} lang={lang} />
+            <ApplyWizard schoolSlug={sp.school || ""} schoolName={school?.nameAr} schools={schools} lang={lang} />
           </div>
         </div>
       </main>

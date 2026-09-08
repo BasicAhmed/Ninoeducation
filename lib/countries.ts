@@ -3,6 +3,15 @@
 // ships the phone validation library, not the full locale dataset.
 export type Country = { code: string; name: string; nameEn: string; dialCode: string };
 
+// Nino's actual target markets — the Arab world and India. Used to
+// restrict the nationality dropdown so students don't scroll through
+// 240+ countries to find their own, per Ahmed: "we are just targeting
+// middle east students and Indian."
+export const PRIORITY_COUNTRY_CODES = [
+  "SA", "AE", "EG", "KW", "QA", "BH", "OM", "JO", "IQ", "SY",
+  "LB", "PS", "YE", "MA", "DZ", "TN", "LY", "SD", "IN",
+];
+
 export const COUNTRIES: Country[] = [
   { code: "SA", name: "السعودية", nameEn: "Saudi Arabia", dialCode: "966" },
   { code: "AE", name: "الإمارات العربية المتحدة", nameEn: "United Arab Emirates", dialCode: "971" },
