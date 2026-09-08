@@ -75,7 +75,7 @@ export default async function AccommodationPage() {
                     <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
                       <div dir="ltr" className="text-end text-sm">
                         <div className="font-medium">
-                          {formatUsdRange(a.priceMinZar, a.priceMaxZar)} {t.perMonth}
+                          {formatUsdRange(a.priceMinUsd, a.priceMaxUsd)} {t.perMonth}
                         </div>
                         {a.distanceToAirport && (
                           <div className="text-xs text-nino-ink/50">

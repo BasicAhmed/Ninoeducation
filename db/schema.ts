@@ -13,8 +13,8 @@ export const flightSchools = pgTable("flight_schools", {
   shortDescriptionAr: text("short_description_ar").notNull(),
   licenses: text("licenses").notNull(), // comma-separated: PPL,CPL,IR,ME,ATPL_THEORY
   trainingType: text("training_type").notNull(), // integrated | modular | both
-  priceMinZar: integer("price_min_zar").notNull(),
-  priceMaxZar: integer("price_max_zar").notNull(),
+  priceMinUsd: integer("price_min_usd").notNull(),
+  priceMaxUsd: integer("price_max_usd").notNull(),
   durationMonthsMin: integer("duration_months_min").notNull(),
   durationMonthsMax: integer("duration_months_max").notNull(),
   acceptsInternational: boolean("accepts_international").notNull().default(true),
@@ -39,8 +39,8 @@ export const accommodations = pgTable("accommodations", {
   city: text("city").notNull(),
   province: text("province").notNull(),
   descriptionAr: text("description_ar").notNull(),
-  priceMinZar: integer("price_min_zar").notNull(),
-  priceMaxZar: integer("price_max_zar").notNull(),
+  priceMinUsd: integer("price_min_usd").notNull(),
+  priceMaxUsd: integer("price_max_usd").notNull(),
   roomType: text("room_type").notNull(), // private | shared | studio
   furnished: boolean("furnished").notNull().default(true),
   distanceToAirport: text("distance_to_airport"),

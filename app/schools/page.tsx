@@ -105,10 +105,10 @@ export default async function SchoolsPage({
               className="rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm"
             >
               <option value="">{t.anyBudget}</option>
-              <option value="250000">{lang === "ar" ? "حتى $13,500" : "Up to $13,500"}</option>
-              <option value="400000">{lang === "ar" ? "حتى $21,600" : "Up to $21,600"}</option>
-              <option value="600000">{lang === "ar" ? "حتى $32,400" : "Up to $32,400"}</option>
-              <option value="900000">{lang === "ar" ? "حتى $48,600" : "Up to $48,600"}</option>
+              <option value="13500">{lang === "ar" ? "حتى $13,500" : "Up to $13,500"}</option>
+              <option value="21600">{lang === "ar" ? "حتى $21,600" : "Up to $21,600"}</option>
+              <option value="32400">{lang === "ar" ? "حتى $32,400" : "Up to $32,400"}</option>
+              <option value="48600">{lang === "ar" ? "حتى $48,600" : "Up to $48,600"}</option>
             </select>
 
             <label className="flex items-center gap-2 rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm">

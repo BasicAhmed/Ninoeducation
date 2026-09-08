@@ -1,18 +1,14 @@
-// All prices are stored in South African Rand (ZAR) in the database, since
-// that's the currency actual tuition/rent is paid in. We display USD on
-// the site because it's the reference currency most of our Gulf/Arab
-// students think in. This is an approximate, editable conversion rate —
-// update ZAR_TO_USD periodically to keep displayed estimates realistic.
-export const ZAR_TO_USD = 0.054; // ~ 1 ZAR = $0.054 (≈ R18.5 per $1)
-
-export function zarToUsd(zar: number) {
-  return Math.round(zar * ZAR_TO_USD);
+// Prices are stored directly in USD in the database — schools and
+// accommodation used to be stored in ZAR with a conversion applied at
+// display time, but since neither the admin panel nor the public site
+// ever showed ZAR to anyone, that conversion layer was pure overhead
+// and a source of staleness risk (displayed prices would silently
+// drift if the rate constant changed). These are now plain formatters,
+// not currency converters.
+export function formatUsd(usd: number) {
+  return new Intl.NumberFormat("en-US").format(Math.round(usd));
 }
 
-export function formatUsd(zar: number) {
-  return new Intl.NumberFormat("en-US").format(zarToUsd(zar));
-}
-
-export function formatUsdRange(minZar: number, maxZar: number) {
-  return `$${formatUsd(minZar)}–${formatUsd(maxZar)}`;
+export function formatUsdRange(minUsd: number, maxUsd: number) {
+  return `$${formatUsd(minUsd)}–${formatUsd(maxUsd)}`;
 }

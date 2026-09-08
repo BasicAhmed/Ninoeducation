@@ -13,8 +13,8 @@ type Accommodation = {
   city: string;
   province: string;
   descriptionAr: string;
-  priceMinZar: number;
-  priceMaxZar: number;
+  priceMinUsd: number;
+  priceMaxUsd: number;
   roomType: string;
   furnished: boolean;
   distanceToAirport: string | null;
@@ -150,21 +150,21 @@ export function AccommodationForm({ item }: { item?: Accommodation }) {
 
       <div className="grid gap-5 md:grid-cols-3">
         <div>
-          <label className="block text-sm font-medium">أقل سعر شهري (راند)</label>
+          <label className="block text-sm font-medium">أقل سعر شهري (دولار)</label>
           <input
             type="number"
-            name="priceMinZar"
-            defaultValue={item?.priceMinZar}
+            name="priceMinUsd"
+            defaultValue={item?.priceMinUsd}
             required
             className="mt-1.5 w-full rounded-lg border border-nino-line bg-nino-cream px-3 py-2.5 text-sm"
           />
         </div>
         <div>
-          <label className="block text-sm font-medium">أعلى سعر شهري (راند)</label>
+          <label className="block text-sm font-medium">أعلى سعر شهري (دولار)</label>
           <input
             type="number"
-            name="priceMaxZar"
-            defaultValue={item?.priceMaxZar}
+            name="priceMaxUsd"
+            defaultValue={item?.priceMaxUsd}
             required
             className="mt-1.5 w-full rounded-lg border border-nino-line bg-nino-cream px-3 py-2.5 text-sm"
           />

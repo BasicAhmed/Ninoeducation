@@ -53,7 +53,7 @@ export default async function AccommodationProfilePage({
       addressCountry: "ZA",
     },
     ...(images.length > 0 ? { image: images } : {}),
-    priceRange: `$${formatUsd(a.priceMinZar)}-$${formatUsd(a.priceMaxZar)}/mo`,
+    priceRange: `$${formatUsd(a.priceMinUsd)}-$${formatUsd(a.priceMaxUsd)}/mo`,
   };
 
   return (
@@ -94,7 +94,7 @@ export default async function AccommodationProfilePage({
             <div>
               <div className="text-xs text-nino-ink/50">{t.monthlyPrice}</div>
               <div dir="ltr" className="mt-1 text-end font-display text-2xl text-nino-orange">
-                {formatUsdRange(a.priceMinZar, a.priceMaxZar)}
+                {formatUsdRange(a.priceMinUsd, a.priceMaxUsd)}
               </div>
             </div>
             <div>

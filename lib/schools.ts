@@ -25,7 +25,7 @@ export async function getPublishedSchools(filters: SchoolFilters = {}) {
       if (filters.province && s.province !== filters.province) return false;
       if (filters.license && !s.licenses.split(",").includes(filters.license))
         return false;
-      if (filters.maxBudget && s.priceMinZar > filters.maxBudget) return false;
+      if (filters.maxBudget && s.priceMinUsd > filters.maxBudget) return false;
       if (filters.trainingType && s.trainingType !== filters.trainingType)
         return false;
       if (filters.accommodation && !s.hasAccommodation) return false;

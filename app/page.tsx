@@ -311,7 +311,7 @@ export default async function Home() {
                           <h3 className="mt-3 font-display text-xl">{a.nameAr}</h3>
                           <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
                             <div dir="ltr" className="text-end text-sm font-medium">
-                              {formatUsdRange(a.priceMinZar, a.priceMaxZar)} {dict.accommodationSection.perMonth}
+                              {formatUsdRange(a.priceMinUsd, a.priceMaxUsd)} {dict.accommodationSection.perMonth}
                             </div>
                             {a.distanceToAirport && (
                               <span className="text-xs text-nino-ink/50">

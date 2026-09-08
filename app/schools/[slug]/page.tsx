@@ -202,7 +202,7 @@ export default async function SchoolProfilePage({
           <aside className="h-fit rounded-2xl border border-nino-line bg-nino-white p-6">
             <div dir="ltr" className="text-end">
               <div className="font-display text-3xl text-nino-orange">
-                {formatUsdRange(school.priceMinZar, school.priceMaxZar)}
+                {formatUsdRange(school.priceMinUsd, school.priceMaxUsd)}
               </div>
             </div>
             <p className="mt-1 text-xs text-nino-ink/50">

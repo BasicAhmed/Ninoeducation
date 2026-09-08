@@ -74,7 +74,7 @@ export function SchoolsTable({ schools }: { schools: NonNullable<School>[] }) {
                   </span>
                 </td>
                 <td dir="ltr" className="p-4 text-start">
-                  R{s.priceMinZar.toLocaleString()}–{s.priceMaxZar.toLocaleString()}
+                  ${s.priceMinUsd.toLocaleString()}–{s.priceMaxUsd.toLocaleString()}
                 </td>
                 <td className="p-4 text-end" onClick={(e) => e.stopPropagation()}>
                   <form action={deleteSchool} className="inline-block">

@@ -10,8 +10,8 @@ type School = {
   province: string;
   shortDescriptionAr: string;
   licenses: string;
-  priceMinZar: number;
-  priceMaxZar: number;
+  priceMinUsd: number;
+  priceMaxUsd: number;
   rating: number;
   hasAccommodation: boolean;
   heroImageUrl?: string | null;
@@ -94,7 +94,7 @@ export function SchoolCard({
       <div className="mt-5 flex items-end justify-between border-t border-nino-line pt-4">
         <div dir="ltr" className="text-end text-sm">
           <div className="font-medium">
-            {formatUsdRange(school.priceMinZar, school.priceMaxZar)}
+            {formatUsdRange(school.priceMinUsd, school.priceMaxUsd)}
           </div>
           <div className="text-xs text-nino-ink/50">{t.schoolCard.estimatedUsd}</div>
         </div>

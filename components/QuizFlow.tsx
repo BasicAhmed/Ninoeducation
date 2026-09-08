@@ -12,8 +12,8 @@ type School = {
   province: string;
   shortDescriptionAr: string;
   licenses: string;
-  priceMinZar: number;
-  priceMaxZar: number;
+  priceMinUsd: number;
+  priceMaxUsd: number;
   rating: number;
   hasAccommodation: boolean;
   trainingType: string;
@@ -35,9 +35,9 @@ export function QuizFlow({ schools, lang }: { schools: School[]; lang: Lang }) {
   ];
 
   const BUDGETS = [
-    { key: 250000, label: t.budget1 },
-    { key: 450000, label: t.budget2 },
-    { key: 700000, label: t.budget3 },
+    { key: 13500, label: t.budget1 },
+    { key: 24000, label: t.budget2 },
+    { key: 38000, label: t.budget3 },
     { key: 999999999, label: t.budget4 },
   ];
 
@@ -46,7 +46,7 @@ export function QuizFlow({ schools, lang }: { schools: School[]; lang: Lang }) {
   const matches = done
     ? schools
         .filter((s) => (goal ? s.licenses.split(",").includes(goal) : true))
-        .filter((s) => (budget ? s.priceMinZar <= budget : true))
+        .filter((s) => (budget ? s.priceMinUsd <= budget : true))
         .filter((s) => (needsAccommodation ? s.hasAccommodation : true))
         .sort((a, b) => b.rating - a.rating)
         .slice(0, 3)

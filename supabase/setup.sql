@@ -155,3 +155,23 @@ UPDATE "accommodations" SET "price_min_zar" = "monthly_price_zar", "price_max_za
 ALTER TABLE "accommodations" ALTER COLUMN "price_min_zar" SET NOT NULL;
 ALTER TABLE "accommodations" ALTER COLUMN "price_max_zar" SET NOT NULL;
 ALTER TABLE "accommodations" DROP COLUMN "monthly_price_zar";
+
+-- Migrate school and accommodation prices from ZAR to USD (admin now
+-- enters/sees USD directly, matching how prices are already shown on
+-- the public site — no more mental conversion). Safe migration:
+-- backfills the USD columns from the existing ZAR values at the
+-- current conversion rate before dropping the old ZAR columns.
+ALTER TABLE "accommodations" ADD COLUMN "price_min_usd" integer;
+ALTER TABLE "accommodations" ADD COLUMN "price_max_usd" integer;
+ALTER TABLE "flight_schools" ADD COLUMN "price_min_usd" integer;
+ALTER TABLE "flight_schools" ADD COLUMN "price_max_usd" integer;
+UPDATE "accommodations" SET "price_min_usd" = ROUND("price_min_zar" * 0.054), "price_max_usd" = ROUND("price_max_zar" * 0.054) WHERE "price_min_usd" IS NULL;
+UPDATE "flight_schools" SET "price_min_usd" = ROUND("price_min_zar" * 0.054), "price_max_usd" = ROUND("price_max_zar" * 0.054) WHERE "price_min_usd" IS NULL;
+ALTER TABLE "accommodations" ALTER COLUMN "price_min_usd" SET NOT NULL;
+ALTER TABLE "accommodations" ALTER COLUMN "price_max_usd" SET NOT NULL;
+ALTER TABLE "flight_schools" ALTER COLUMN "price_min_usd" SET NOT NULL;
+ALTER TABLE "flight_schools" ALTER COLUMN "price_max_usd" SET NOT NULL;
+ALTER TABLE "accommodations" DROP COLUMN "price_min_zar";
+ALTER TABLE "accommodations" DROP COLUMN "price_max_zar";
+ALTER TABLE "flight_schools" DROP COLUMN "price_min_zar";
+ALTER TABLE "flight_schools" DROP COLUMN "price_max_zar";

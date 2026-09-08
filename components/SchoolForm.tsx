@@ -18,8 +18,8 @@ type School = {
   shortDescriptionAr: string;
   licenses: string;
   trainingType: string;
-  priceMinZar: number;
-  priceMaxZar: number;
+  priceMinUsd: number;
+  priceMaxUsd: number;
   durationMonthsMin: number;
   durationMonthsMax: number;
   acceptsInternational: boolean;
@@ -46,8 +46,8 @@ const emptyForm = {
   descriptionAr: "",
   licenses: "",
   trainingType: "integrated",
-  priceMinZar: "",
-  priceMaxZar: "",
+  priceMinUsd: "",
+  priceMaxUsd: "",
   durationMonthsMin: "",
   durationMonthsMax: "",
   aircraftFleet: "",
@@ -78,8 +78,8 @@ function schoolToForm(school?: School): FormState {
     descriptionAr: school.descriptionAr,
     licenses: school.licenses,
     trainingType: school.trainingType,
-    priceMinZar: String(school.priceMinZar ?? ""),
-    priceMaxZar: String(school.priceMaxZar ?? ""),
+    priceMinUsd: String(school.priceMinUsd ?? ""),
+    priceMaxUsd: String(school.priceMaxUsd ?? ""),
     durationMonthsMin: String(school.durationMonthsMin ?? ""),
     durationMonthsMax: String(school.durationMonthsMax ?? ""),
     aircraftFleet: school.aircraftFleet,
@@ -249,8 +249,8 @@ export function SchoolForm({ school }: { school?: School }) {
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">
-        <TextField label="السعر الأدنى (راند)" name="priceMinZar" type="number" value={data.priceMinZar} onChange={(v) => set("priceMinZar", v)} required />
-        <TextField label="السعر الأعلى (راند)" name="priceMaxZar" type="number" value={data.priceMaxZar} onChange={(v) => set("priceMaxZar", v)} required />
+        <TextField label="السعر الأدنى (دولار)" name="priceMinUsd" type="number" value={data.priceMinUsd} onChange={(v) => set("priceMinUsd", v)} required />
+        <TextField label="السعر الأعلى (دولار)" name="priceMaxUsd" type="number" value={data.priceMaxUsd} onChange={(v) => set("priceMaxUsd", v)} required />
       </div>
 
       <div className="grid gap-5 md:grid-cols-2">

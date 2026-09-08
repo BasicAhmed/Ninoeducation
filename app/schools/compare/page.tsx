@@ -74,7 +74,7 @@ export default async function ComparePage({
                     <td className="p-4 text-nino-ink/50">{t.estimatedPrice}</td>
                     {schools.map((s) => (
                       <td key={s.id} dir="ltr" className="p-4 text-start">
-                        {formatUsdRange(s.priceMinZar, s.priceMaxZar)}
+                        {formatUsdRange(s.priceMinUsd, s.priceMaxUsd)}
                       </td>
                     ))}
                   </tr>
