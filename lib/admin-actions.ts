@@ -2,7 +2,7 @@
 
 import { db } from "@/db/client";
 import { flightSchools, accommodations, applications, socialPosts, applicationEvents } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/admin-auth";
@@ -82,6 +82,15 @@ export async function deleteSchool(formData: FormData) {
   redirect("/admin/schools");
 }
 
+export async function deleteSchools(formData: FormData) {
+  await requireAdmin();
+  const ids = formData.getAll("ids").map(String).filter(Boolean);
+  if (ids.length > 0) {
+    await db.delete(flightSchools).where(inArray(flightSchools.id, ids));
+  }
+  redirect("/admin/schools");
+}
+
 export async function saveAccommodation(formData: FormData) {
   await requireAdmin();
   const id = String(formData.get("id") || "");
@@ -118,6 +127,15 @@ export async function deleteAccommodation(formData: FormData) {
   await requireAdmin();
   const id = String(formData.get("id") || "");
   await db.delete(accommodations).where(eq(accommodations.id, id));
+  redirect("/admin/accommodation");
+}
+
+export async function deleteAccommodations(formData: FormData) {
+  await requireAdmin();
+  const ids = formData.getAll("ids").map(String).filter(Boolean);
+  if (ids.length > 0) {
+    await db.delete(accommodations).where(inArray(accommodations.id, ids));
+  }
   redirect("/admin/accommodation");
 }
 
