@@ -1,0 +1,53 @@
+Formal tone for the apply flow, new cost-and-payment-methods guide, header made genuinely transparent
+
+1. Rewrote every casual/slang string in the apply wizard and thank-you
+   page (both Arabic and English) to a formal, professional register.
+   The apply flow had been deliberately built in casual Gulf Arabic
+   slang throughout ('shu', 'wain', 'yalla', 'khalna', etc., plus the
+   English equivalents like "Let's launch it! 🚀") which read as
+   unprofessional for what is, functionally, an official application
+   form. Rewrote roughly 70 strings across apply, applyPage, and
+   thankYou namespaces in both languages to proper MSA / professional
+   English while keeping the aviation-themed language that IS
+   appropriate branding (boarding pass, captain, destination) — the
+   fix targets the casual grammar and slang, not the aviation
+   metaphor itself.
+
+2. New guide at /guides/why-is-flight-training-expensive answering
+   exactly what was asked: why training costs what it does (real
+   operational cost drivers — fuel, maintenance, insurance,
+   instructor certification, regulatory compliance — not arbitrary
+   pricing), whether full payment upfront is required (no), and a
+   full explanation of both payment methods flight schools actually
+   use: pay-as-you-go (lower upfront commitment, pay only for hours
+   used, needs ongoing budget discipline) versus fixed packages
+   (predictable total cost, usually discounted, needs more certainty
+   before committing). Added to lib/guides.ts, the sitemap, and
+   cross-linked both directions with the existing detailed cost guide
+   so they read as complementary rather than redundant.
+
+3. Fixed header transparency for real — the previous frosted style
+   (white/70 + blur) was technically alpha-transparent in code, but
+   perceptually indistinguishable from a solid header on the many
+   inner pages with flat cream/white backgrounds, since there's
+   nothing visually different behind it to reveal. Reduced to white/25
+   with a lighter blur — confirmed via screenshot that the photo
+   hero's wing detail is now genuinely visible through the header
+   while text stays legible, and confirmed inner pages now blend
+   seamlessly with no visible header-shaped box sitting on top.
+
+Verified via Playwright, and this surfaced a real lesson worth
+recording: an early test run appeared to show the apply wizard
+completely broken (Next button not advancing steps at all, ghosted
+overlapping panel content). Rather than assume the formal-tone rewrite
+had broken something and start reverting, traced it down properly —
+checked element bounding boxes, found the button's calculated Y
+position was negative (off-screen), checked window.scrollY, and
+confirmed with a direct DOM click() (bypassing Playwright's
+coordinate-based synthetic mouse click) that the wizard actually
+advances steps correctly and every rewritten string displays exactly
+as intended. The failure was an artifact of Playwright's
+auto-scroll-before-click interacting with this page's smooth-scroll
+CSS in this sandboxed environment, not a real application bug —
+confirmed by reproducing correct behavior through multiple wizard
+steps via direct clicks before concluding the rewrite was safe to ship.

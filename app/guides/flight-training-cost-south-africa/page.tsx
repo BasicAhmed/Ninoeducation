@@ -41,9 +41,9 @@ export default function CostGuidePage() {
       intro="هذا هو السؤال الذي يحدد قرار معظم الطلاب. إليك تفصيل حقيقي لكل بند من بنود التكلفة — بدون أرقام تسويقية مبهمة."
       faqItems={FAQ_ITEMS}
       related={[
+        { title: "هل تعلّم الطيران غالي فعلاً؟ ولماذا؟", href: "/guides/why-is-flight-training-expensive" },
         { title: "الفرق بين PPL و CPL", href: "/guides/ppl-vs-cpl" },
         { title: "التأشيرة الدراسية لجنوب أفريقيا", href: "/guides/south-africa-study-visa" },
-        { title: "دراسة الطيران في جنوب أفريقيا: الدليل الشامل", href: "/guides/study-aviation-in-south-africa" },
       ]}
     >
       <section id="breakdown">
