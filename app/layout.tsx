@@ -43,6 +43,13 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(SITE_URL),
     title: t.title,
     description: t.description,
+    // Set GOOGLE_SITE_VERIFICATION in Vercel once you add the property
+    // in Google Search Console (Settings > Ownership verification >
+    // HTML tag method) — paste just the content value, not the full
+    // meta tag.
+    verification: process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : undefined,
     openGraph: {
       title: t.title,
       description: t.description,
