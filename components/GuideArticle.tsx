@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SITE_URL } from "@/lib/constants";
@@ -52,17 +51,7 @@ export function GuideArticle({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <SiteHeader />
       <main className="flex-1 bg-nino-white">
-        <div className="mx-auto max-w-3xl px-6 pt-6">
-          <Breadcrumbs
-            items={[
-              { label: "الرئيسية", href: "/" },
-              { label: "أدلة الطيران", href: "/guides" },
-              { label: title },
-            ]}
-          />
-        </div>
-
-        <article className="mx-auto max-w-3xl px-6 py-10">
+        <article className="mx-auto max-w-3xl px-6 pb-10 pt-28">
           <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">{kicker}</p>
           <h1 className="mt-3 font-display text-4xl leading-tight md:text-5xl">{title}</h1>
           <p className="mt-4 text-lg text-nino-ink/70">{intro}</p>

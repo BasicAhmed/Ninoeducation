@@ -19,6 +19,10 @@ export function AccommodationGallery({ images, alt }: { images: string[]; alt: s
           priority
           className="object-cover"
         />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/45 to-transparent"
+        />
       </div>
       {images.length > 1 && (
         <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none]">

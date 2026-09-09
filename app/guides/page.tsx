@@ -1,6 +1,5 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { GuidesSearch } from "@/components/GuidesSearch";
 import { GUIDES } from "@/lib/guides";
 import { SITE_URL } from "@/lib/constants";
@@ -17,10 +16,7 @@ export default function GuidesIndexPage() {
     <>
       <SiteHeader />
       <main className="flex-1 bg-nino-cream">
-        <div className="mx-auto max-w-4xl px-6 pt-6">
-          <Breadcrumbs items={[{ label: "الرئيسية", href: "/" }, { label: "أدلة الطيران" }]} />
-        </div>
-        <div className="mx-auto max-w-4xl px-6 py-10">
+        <div className="mx-auto max-w-4xl px-6 pb-10 pt-28">
           <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
             كل أسئلتك، في مكان واحد
           </p>

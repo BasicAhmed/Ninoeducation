@@ -6,7 +6,6 @@ import { WHATSAPP_NUMBER, SITE_URL } from "@/lib/constants";
 import { formatUsdRange } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
 
@@ -87,20 +86,15 @@ export default async function SchoolProfilePage({
       />
       <SiteHeader />
       <main className="flex-1">
-        <div className="mx-auto max-w-5xl px-6 pt-6">
-          <Breadcrumbs
-            items={[
-              { label: dict.nav.home, href: "/" },
-              { label: dict.nav.schools, href: "/schools" },
-              { label: school.nameAr },
-            ]}
-          />
-        </div>
         {/* Hero */}
-        <section className="border-b border-nino-line bg-nino-cream">
+        <section className={`border-b border-nino-line bg-nino-cream ${!school.heroImageUrl ? "pt-24" : ""}`}>
           {school.heroImageUrl && (
             <div className="relative h-56 w-full md:h-72">
               <Image src={school.heroImageUrl} alt={school.nameAr} fill unoptimized className="object-cover" />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/50 to-transparent"
+              />
             </div>
           )}
           <div className="mx-auto max-w-5xl px-6 py-16">

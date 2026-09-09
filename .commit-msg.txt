@@ -1,0 +1,38 @@
+Remove breadcrumbs everywhere, transparent header site-wide, bottom fade on profile gallery images
+
+1. Removed breadcrumbs from every page that had them (school profile,
+   accommodation profile, journey, guides index, the pillar guide page,
+   and the shared GuideArticle component used by ~10 other guide
+   pages). Deleted components/Breadcrumbs.tsx entirely since nothing
+   referenced it anymore after this.
+
+2. Header is now transparent on every page, not just the homepage.
+   Rather than fully see-through with no backdrop (which would make
+   the dark logo/nav text illegible over darker content, like the
+   homepage's photo hero), used a frosted-glass treatment instead —
+   semi-transparent white with a blur, so it stays legible over any
+   background while still reading as transparent rather than a solid
+   bar. This meant a real structural change, not just a class swap:
+   the header now floats via position:absolute on every page instead
+   of pushing content down in normal flow, which required auditing
+   all 14 pages that render SiteHeader and adding compensating top
+   padding so page content doesn't render underneath it. Removed the
+   old transparent prop entirely since the component only has one
+   mode now.
+
+3. Added a bottom gradient fade to the two places with real gallery/
+   profile imagery: the school profile page's hero image and the
+   accommodation gallery's main photo. Deliberately left the small
+   listing-card thumbnails alone (schools directory, homepage cards,
+   accommodation directory) since a fade on a 140px-tall thumbnail
+   would look cluttered rather than polished — scoped this to the
+   larger detail-view images where the effect actually reads well.
+
+Verified via Playwright across three different visual contexts, not
+just one: the homepage's photo hero (confirmed the frosted header is
+visibly translucent — the photo's warm tones show through it — while
+the nav text stays fully legible), the schools directory (confirmed
+no breadcrumb and correct content spacing against a plain background),
+and a guide page using the shared GuideArticle component (confirmed
+the same for a page that previously showed a breadcrumb). Full
+type-check and lint pass clean across all 17 changed files.

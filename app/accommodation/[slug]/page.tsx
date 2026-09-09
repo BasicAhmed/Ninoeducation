@@ -4,7 +4,6 @@ import { getAccommodationBySlug } from "@/lib/schools";
 import { formatUsd, formatUsdRange } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { AccommodationGallery } from "@/components/AccommodationGallery";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
@@ -64,23 +63,13 @@ export default async function AccommodationProfilePage({
       />
       <SiteHeader />
       <main className="flex-1">
-        <div className="mx-auto max-w-4xl px-6 pt-6">
-          <Breadcrumbs
-            items={[
-              { label: dict.nav.home, href: "/" },
-              { label: dict.nav.accommodation, href: "/accommodation" },
-              { label: a.nameAr },
-            ]}
-          />
-        </div>
-
         {images.length > 0 && (
-          <div className="mx-auto max-w-4xl px-6 pt-6">
+          <div className="mx-auto max-w-4xl px-6 pb-6 pt-28">
             <AccommodationGallery images={images} alt={a.nameAr} />
           </div>
         )}
 
-        <section className="border-b border-nino-line bg-nino-cream">
+        <section className={`border-b border-nino-line bg-nino-cream ${images.length === 0 ? "pt-24" : ""}`}>
           <div className="mx-auto max-w-4xl px-6 py-16">
             <p className="text-xs text-nino-ink/50">
               {a.city} · {dict.provinces[a.province as keyof typeof dict.provinces] ?? a.province}

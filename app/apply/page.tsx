@@ -29,7 +29,7 @@ export default async function ApplyPage({
     <>
       <SiteHeader />
       <main className="flex-1 bg-nino-cream">
-        <div className="mx-auto max-w-2xl px-6 py-14">
+        <div className="mx-auto max-w-2xl px-6 pb-14 pt-28">
           <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
             {t.kicker}
           </p>

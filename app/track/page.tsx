@@ -15,7 +15,7 @@ export default async function TrackPage() {
   return (
     <>
       <SiteHeader />
-      <main className="flex-1 bg-nino-cream px-6 py-16">
+      <main className="flex-1 bg-nino-cream px-6 pb-16 pt-28">
         <TrackForm lang={lang} />
       </main>
       <SiteFooter />

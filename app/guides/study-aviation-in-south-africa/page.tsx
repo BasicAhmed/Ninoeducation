@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { SITE_URL } from "@/lib/constants";
 import { GUIDES } from "@/lib/guides";
 
@@ -63,17 +62,7 @@ export default function StudyAviationGuidePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <SiteHeader />
       <main className="flex-1 bg-nino-white">
-        <div className="mx-auto max-w-3xl px-6 pt-6">
-          <Breadcrumbs
-            items={[
-              { label: "الرئيسية", href: "/" },
-              { label: "أدلة الطيران", href: "/guides" },
-              { label: "دراسة الطيران في جنوب أفريقيا" },
-            ]}
-          />
-        </div>
-
-        <article className="mx-auto max-w-3xl px-6 py-10">
+        <article className="mx-auto max-w-3xl px-6 pb-10 pt-28">
           <p className="font-mono text-xs uppercase tracking-widest text-nino-orange">
             الدليل الشامل · محدّث لعام 2026
           </p>

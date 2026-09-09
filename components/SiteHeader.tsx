@@ -5,18 +5,12 @@ import { LanguageToggle } from "@/components/LanguageToggle";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
 
-export async function SiteHeader({ transparent = false }: { transparent?: boolean }) {
+export async function SiteHeader() {
   const lang = await getLang();
   const t = dictionaries[lang].nav;
 
   return (
-    <header
-      className={
-        transparent
-          ? "absolute inset-x-0 top-0 z-20 bg-transparent"
-          : "relative border-b border-nino-line bg-nino-cream"
-      }
-    >
+    <header className="absolute inset-x-0 top-0 z-20 bg-white/70 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <Link href="/">
           <Image

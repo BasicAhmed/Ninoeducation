@@ -35,7 +35,7 @@ export default async function ComparePage({
     <>
       <SiteHeader />
       <main className="flex-1 bg-nino-cream">
-        <div className="mx-auto max-w-6xl px-6 py-14">
+        <div className="mx-auto max-w-6xl px-6 pb-14 pt-28">
           <h1 className="font-display text-4xl">{t.title}</h1>
 
           {schools.length < 2 ? (

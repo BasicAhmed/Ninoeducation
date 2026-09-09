@@ -23,7 +23,7 @@ export default async function QuizPage() {
     <>
       <SiteHeader />
       <main className="flex-1 bg-nino-cream">
-        <div className="mx-auto max-w-2xl px-6 py-14">
+        <div className="mx-auto max-w-2xl px-6 pb-14 pt-28">
           <h1 className="font-display text-4xl">{t.title}</h1>
           <p className="mt-2 text-nino-ink/70">
             {t.subtitle}

@@ -37,7 +37,7 @@ export default async function ThankYouPage({
   return (
     <>
       <SiteHeader />
-      <main className="flex-1 bg-nino-cream px-6 py-20">
+      <main className="flex-1 bg-nino-cream px-6 pb-20 pt-28">
         <div className="mx-auto max-w-lg text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-nino-orange text-white shadow-lg shadow-nino-orange/30">
             <CheckCircle2 size={28} />
