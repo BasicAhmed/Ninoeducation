@@ -21,30 +21,45 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
-const title = "نينو إديوكيشن — ادرس الطيران في جنوب أفريقيا";
-const description =
-  "نينو إديوكيشن تساعد الطلاب الدوليين على إيجاد ومقارنة والتقديم لأفضل مدارس الطيران في جنوب أفريقيا، دون أي تكلفة على الطالب.";
-
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title,
-  description,
-  openGraph: {
-    title,
-    description,
-    url: SITE_URL,
-    siteName: "نينو إديوكيشن",
+const COPY = {
+  ar: {
+    title: "نينو إديوكيشن | كيف تصبح طيارًا في جنوب أفريقيا",
+    description:
+      "نينو إديوكيشن تساعد الطلاب الدوليين على أن يصبحوا طيارين معتمدين في جنوب أفريقيا — إيجاد ومقارنة والتقديم لأفضل مدارس الطيران، دون أي تكلفة على الطالب.",
     locale: "ar_AR",
-    type: "website",
-    images: [{ url: "/brand/hero-cessna.jpg", width: 2400, height: 1600 }],
   },
-  twitter: {
-    card: "summary_large_image",
-    title,
-    description,
-    images: ["/brand/hero-cessna.jpg"],
+  en: {
+    title: "Nino Education | How to Become a Pilot in South Africa",
+    description:
+      "Nino Education helps international students become certified pilots in South Africa — find, compare, and apply to the best flight schools, at no cost to the student.",
+    locale: "en_US",
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getLang();
+  const t = COPY[lang];
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: t.title,
+    description: t.description,
+    openGraph: {
+      title: t.title,
+      description: t.description,
+      url: SITE_URL,
+      siteName: "نينو إديوكيشن",
+      locale: t.locale,
+      type: "website",
+      images: [{ url: "/brand/hero-cessna.jpg", width: 2400, height: 1600 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t.title,
+      description: t.description,
+      images: ["/brand/hero-cessna.jpg"],
+    },
+  };
+}
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const lang = await getLang();

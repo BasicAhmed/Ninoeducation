@@ -66,7 +66,7 @@ export default async function Home() {
     alternateName: "Nino Education",
     url: SITE_URL,
     description:
-      "استشارات مجانية للطلاب الدوليين لإيجاد ومقارنة والتقديم لأفضل مدارس الطيران المعتمدة في جنوب أفريقيا.",
+      "استشارات مجانية تساعد الطلاب الدوليين على أن يصبحوا طيارين معتمدين، من خلال إيجاد ومقارنة والتقديم لأفضل مدارس الطيران المعتمدة في جنوب أفريقيا.",
     areaServed: "Arab world, India",
     knowsAbout: "Flight training enrollment, SACAA-licensed flight schools in South Africa",
   };
