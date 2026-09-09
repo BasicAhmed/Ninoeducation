@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { ExternalLink } from "lucide-react";
 import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 import { formatUsdRange } from "@/lib/currency";
 
@@ -17,6 +18,7 @@ type School = {
   heroImageUrl?: string | null;
   nextIntakeDate?: string | null;
   seatsAvailable?: number | null;
+  websiteUrl?: string | null;
 };
 
 export function SchoolCard({
@@ -105,6 +107,17 @@ export function SchoolCard({
           {t.schoolCard.viewDetails}
         </Link>
       </div>
+      {school.websiteUrl && (
+        <a
+          href={school.websiteUrl}
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          className="mt-2 flex items-center justify-center gap-1.5 text-xs text-nino-ink/50 hover:text-nino-orange"
+        >
+          {t.schoolCard.officialWebsite}
+          <ExternalLink size={12} />
+        </a>
+      )}
       </div>
     </div>
   );

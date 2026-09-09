@@ -1,0 +1,32 @@
+Header fully transparent (no color at all), add school website link on card and profile page
+
+1. Header clarification from Ahmed: the frosted white/25 + blur from
+   last commit wasn't what he meant by transparent — he wants zero
+   color, nothing but the logo and nav floating directly over
+   whatever's behind them. Removed the background and blur entirely
+   (bg-transparent, no backdrop-filter). Verified via screenshot on
+   the homepage's photo hero that the plane image now shows through
+   completely unmodified, with text staying legible since it sits
+   over the brighter part of the photo by design.
+
+2. Added a 'visit official website' link wherever a school has one on
+   file (websiteUrl was already a schema field but was never actually
+   surfaced anywhere on the site): a subtle text link with an
+   external-link icon under the existing button on each school card
+   in the /schools directory, and a full labeled button alongside
+   Apply/WhatsApp on the individual school profile page. Both use
+   rel="noopener noreferrer nofollow" since these are outbound links
+   to third-party sites — nofollow deliberately avoids passing SEO
+   weight to them.
+
+Real bug caught and fixed during verification, not just visually
+inspected: the first version added an onClick={stopPropagation}
+handler to the card's website link, but SchoolCard is a Server
+Component, and React does not allow event-handler functions as props
+on Server Components — it broke the entire /schools page with a hard
+render error. Caught by checking the dev server log rather than
+trusting a screenshot alone, traced to the exact line, and removed
+the handler since it was unnecessary in the first place (the card has
+no parent click handler for it to have been stopping propagation
+from). Verified both placements render correctly afterward on a
+clean rebuild.

@@ -210,6 +210,7 @@ export const dictionaries = {
       seatsLeft: "مقاعد متبقية",
       estimatedUsd: "تقديري بالدولار",
       viewDetails: "عرض التفاصيل",
+      officialWebsite: "الموقع الرسمي للمدرسة",
     },
     schoolsPage: {
       title: "مدارس الطيران",
@@ -231,6 +232,7 @@ export const dictionaries = {
       metaTitleSuffix: "التدريب والأسعار والتفاصيل",
       applyTo: "قدّم إلى",
       askViaWhatsapp: "اسأل عن هذه المدرسة عبر واتساب",
+      visitWebsite: "زيارة الموقع الرسمي للمدرسة",
       whatsappTemplate: "مرحبًا، أريد الاستفسار عن",
       overview: "نظرة عامة",
       programs: "برامج التدريب",
@@ -736,6 +738,7 @@ export const dictionaries = {
       seatsLeft: "seats left",
       estimatedUsd: "Estimated in USD",
       viewDetails: "View Details",
+      officialWebsite: "School's Official Website",
     },
     schoolsPage: {
       title: "Flight Schools",
@@ -757,6 +760,7 @@ export const dictionaries = {
       metaTitleSuffix: "Training, Prices, and Details",
       applyTo: "Apply to",
       askViaWhatsapp: "Ask About This School on WhatsApp",
+      visitWebsite: "Visit the School's Official Website",
       whatsappTemplate: "Hi, I'd like to ask about",
       overview: "Overview",
       programs: "Training Programs",

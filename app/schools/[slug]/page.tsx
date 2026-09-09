@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { ExternalLink } from "lucide-react";
 import { getSchoolBySlug } from "@/lib/schools";
 import { WHATSAPP_NUMBER, SITE_URL } from "@/lib/constants";
 import { formatUsdRange } from "@/lib/currency";
@@ -137,6 +138,17 @@ export default async function SchoolProfilePage({
               >
                 {t.askViaWhatsapp}
               </a>
+              {school.websiteUrl && (
+                <a
+                  href={school.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer nofollow"
+                  className="flex items-center gap-1.5 rounded-full border border-nino-ink/20 px-6 py-3 text-sm font-medium text-nino-ink hover:border-nino-ink"
+                >
+                  {t.visitWebsite}
+                  <ExternalLink size={14} />
+                </a>
+              )}
             </div>
           </div>
         </section>
