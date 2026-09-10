@@ -3,6 +3,7 @@ import { SITE_URL } from "@/lib/constants";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SchoolCard } from "@/components/SchoolCard";
+import { ChevronDown } from "lucide-react";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
 
@@ -53,83 +54,94 @@ export default async function SchoolsPage({
           {/* Filters */}
           <form
             method="get"
-            className="mt-8 grid gap-4 rounded-2xl border border-nino-line bg-nino-white p-6 md:grid-cols-5"
+            className="mt-8 rounded-2xl border border-nino-line bg-nino-white p-6"
           >
             <input
               type="text"
               name="q"
               defaultValue={sp.q || ""}
               placeholder={t.searchPlaceholder}
-              className="rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm md:col-span-5"
+              className="w-full rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm"
             />
-            <select
-              name="province"
-              defaultValue={sp.province || ""}
-              className="rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm"
+
+            <details
+              className="mt-4 [&_summary::-webkit-details-marker]:hidden"
+              open={!!(sp.province || sp.license || sp.trainingType || sp.maxBudget || sp.accommodation)}
             >
-              <option value="">{t.allProvinces}</option>
-              {PROVINCES.map((p) => (
-                <option key={p} value={p}>
-                  {dict.provinces[p as keyof typeof dict.provinces] ?? p}
-                </option>
-              ))}
-            </select>
+              <summary className="flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-nino-ink">
+                {t.moreFilters}
+                <ChevronDown size={15} className="transition-transform [details[open]_&]:rotate-180" />
+              </summary>
 
-            <select
-              name="license"
-              defaultValue={sp.license || ""}
-              className="rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm"
+              <div className="mt-4 grid gap-4 md:grid-cols-4">
+                <select
+                  name="province"
+                  defaultValue={sp.province || ""}
+                  className="rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm"
+                >
+                  <option value="">{t.allProvinces}</option>
+                  {PROVINCES.map((p) => (
+                    <option key={p} value={p}>
+                      {dict.provinces[p as keyof typeof dict.provinces] ?? p}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  name="license"
+                  defaultValue={sp.license || ""}
+                  className="rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm"
+                >
+                  <option value="">{t.allLicenses}</option>
+                  {Object.entries(dict.licenses).map(([k, v]) => (
+                    <option key={k} value={k}>
+                      {v}
+                    </option>
+                  ))}
+                </select>
+
+                <select
+                  name="trainingType"
+                  defaultValue={sp.trainingType || ""}
+                  className="rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm"
+                >
+                  <option value="">{t.integratedOrModular}</option>
+                  <option value="integrated">{t.integrated}</option>
+                  <option value="modular">{t.modular}</option>
+                  <option value="both">{t.both}</option>
+                </select>
+
+                <select
+                  name="maxBudget"
+                  defaultValue={sp.maxBudget || ""}
+                  className="rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm"
+                >
+                  <option value="">{t.anyBudget}</option>
+                  <option value="13500">{lang === "ar" ? "حتى $13,500" : "Up to $13,500"}</option>
+                  <option value="21600">{lang === "ar" ? "حتى $21,600" : "Up to $21,600"}</option>
+                  <option value="32400">{lang === "ar" ? "حتى $32,400" : "Up to $32,400"}</option>
+                  <option value="48600">{lang === "ar" ? "حتى $48,600" : "Up to $48,600"}</option>
+                </select>
+
+                <label className="flex items-center gap-2 rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm">
+                  <input
+                    type="checkbox"
+                    name="accommodation"
+                    value="1"
+                    defaultChecked={sp.accommodation === "1"}
+                    className="h-4 w-4 accent-orange-600"
+                  />
+                  {t.includesAccommodation}
+                </label>
+              </div>
+            </details>
+
+            <button
+              type="submit"
+              className="mt-4 rounded-full bg-nino-ink px-6 py-2.5 text-sm font-medium text-white hover:bg-nino-orange"
             >
-              <option value="">{t.allLicenses}</option>
-              {Object.entries(dict.licenses).map(([k, v]) => (
-                <option key={k} value={k}>
-                  {v}
-                </option>
-              ))}
-            </select>
-
-            <select
-              name="trainingType"
-              defaultValue={sp.trainingType || ""}
-              className="rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm"
-            >
-              <option value="">{t.integratedOrModular}</option>
-              <option value="integrated">{t.integrated}</option>
-              <option value="modular">{t.modular}</option>
-              <option value="both">{t.both}</option>
-            </select>
-
-            <select
-              name="maxBudget"
-              defaultValue={sp.maxBudget || ""}
-              className="rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm"
-            >
-              <option value="">{t.anyBudget}</option>
-              <option value="13500">{lang === "ar" ? "حتى $13,500" : "Up to $13,500"}</option>
-              <option value="21600">{lang === "ar" ? "حتى $21,600" : "Up to $21,600"}</option>
-              <option value="32400">{lang === "ar" ? "حتى $32,400" : "Up to $32,400"}</option>
-              <option value="48600">{lang === "ar" ? "حتى $48,600" : "Up to $48,600"}</option>
-            </select>
-
-            <label className="flex items-center gap-2 rounded-lg border border-nino-line bg-nino-cream px-3 py-2 text-sm">
-              <input
-                type="checkbox"
-                name="accommodation"
-                value="1"
-                defaultChecked={sp.accommodation === "1"}
-                className="h-4 w-4 accent-orange-600"
-              />
-              {t.includesAccommodation}
-            </label>
-
-            <div className="md:col-span-5">
-              <button
-                type="submit"
-                className="rounded-full bg-nino-ink px-6 py-2.5 text-sm font-medium text-white hover:bg-nino-orange"
-              >
-                {t.applyFilters}
-              </button>
-            </div>
+              {t.applyFilters}
+            </button>
           </form>
 
           {/* Compare + results */}
