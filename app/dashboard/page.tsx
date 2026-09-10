@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { CheckCircle2, Clock } from "lucide-react";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { applications } from "@/db/schema";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -49,7 +49,7 @@ export default async function DashboardPage() {
     rows = await db
       .select()
       .from(applications)
-      .where(eq(applications.email, email))
+      .where(sql`lower(${applications.email}) = ${email}`)
       .orderBy(desc(applications.createdAt));
   } catch (err) {
     console.error("dashboard applications lookup failed:", err);

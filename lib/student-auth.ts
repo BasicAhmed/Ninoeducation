@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { randomUUID, createHmac, timingSafeEqual } from "crypto";
-import { eq, and, gt, isNull } from "drizzle-orm";
+import { eq, and, gt, isNull, sql } from "drizzle-orm";
 import { db } from "@/db/client";
 import { loginTokens, applications } from "@/db/schema";
 import { sendEmail } from "@/lib/email";
@@ -70,7 +70,7 @@ export async function requestLoginLink(formData: FormData) {
     const hasApplication = await db
       .select({ id: applications.id, preferredLang: applications.preferredLang })
       .from(applications)
-      .where(eq(applications.email, email))
+      .where(sql`lower(${applications.email}) = ${email}`)
       .limit(1);
 
     if (hasApplication.length > 0) {
