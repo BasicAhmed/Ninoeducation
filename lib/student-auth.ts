@@ -76,7 +76,7 @@ export async function requestLoginLink(formData: FormData) {
     if (hasApplication.length > 0) {
       const now = new Date();
       const existing = await db
-        .select({ id: loginTokens.id })
+        .select({ token: loginTokens.token })
         .from(loginTokens)
         .where(
           and(
@@ -87,8 +87,17 @@ export async function requestLoginLink(formData: FormData) {
         )
         .limit(1);
 
-      if (existing.length === 0) {
-        const token = randomUUID().replace(/-/g, "");
+      // Reuse a still-valid token rather than creating a new one each
+      // time — but always actually attempt the send below, regardless.
+      // The earlier version skipped sending entirely whenever any
+      // unexpired token existed, on the assumption a previous email
+      // was still "in flight" — but if that previous send genuinely
+      // failed (Resend rejection, transient error, etc.), that logic
+      // silently blocked every retry for the rest of the token's
+      // 30-minute lifetime, with no record of an attempt anywhere.
+      let token = existing[0]?.token;
+      if (!token) {
+        token = randomUUID().replace(/-/g, "");
         const expiresAt = new Date(now.getTime() + TOKEN_TTL_MINUTES * 60_000).toISOString();
         await db.insert(loginTokens).values({
           id: randomUUID(),
@@ -97,15 +106,15 @@ export async function requestLoginLink(formData: FormData) {
           expiresAt,
           createdAt: now.toISOString(),
         });
-
-        const lang = hasApplication[0].preferredLang === "en" ? "en" : "ar";
-        const link = `${SITE_URL}/dashboard/verify?token=${token}`;
-        await sendEmail({
-          to: email,
-          subject: loginLinkSubject(lang),
-          react: LoginLinkEmail({ lang, link }),
-        });
       }
+
+      const lang = hasApplication[0].preferredLang === "en" ? "en" : "ar";
+      const link = `${SITE_URL}/dashboard/verify?token=${token}`;
+      await sendEmail({
+        to: email,
+        subject: loginLinkSubject(lang),
+        react: LoginLinkEmail({ lang, link }),
+      });
     }
   } catch (err) {
     console.error("requestLoginLink failed:", err);
