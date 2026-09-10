@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ShieldCheck, ListChecks, Compass, Home as HomeIcon } from "lucide-react";
+import { ShieldCheck, ListChecks, Compass, Home as HomeIcon, X, Check } from "lucide-react";
 import { getPublishedSchools, getPublishedAccommodations } from "@/lib/schools";
 import { WHATSAPP_NUMBER, SITE_URL } from "@/lib/constants";
 import { formatUsdRange } from "@/lib/currency";
@@ -348,6 +348,57 @@ export default async function Home() {
             <div className="mt-10">
               <JourneyTimeline lang={lang} />
             </div>
+          </div>
+        </section>
+
+        {/* 8.5 Why not apply alone — the real, ongoing cost of going direct */}
+        <section className="bg-nino-ink py-20">
+          <div className="mx-auto max-w-4xl px-6">
+            <Reveal className="text-center">
+              <Kicker>{dict.whyNotAlone.kicker}</Kicker>
+              <h2 className="mt-3 font-display text-3xl text-white md:text-4xl">
+                {dict.whyNotAlone.title}
+              </h2>
+              <p className="mx-auto mt-2 max-w-xl text-white/60">{dict.whyNotAlone.subtitle}</p>
+            </Reveal>
+
+            <Reveal delay={100} className="mt-12 overflow-hidden rounded-3xl border border-white/10">
+              <div className="grid grid-cols-2 divide-x divide-white/10 rtl:divide-x-reverse">
+                <div className="bg-white/[0.03] p-5 text-center text-sm font-medium text-white/50 sm:p-6">
+                  {dict.whyNotAlone.aloneLabel}
+                </div>
+                <div className="bg-nino-orange/10 p-5 text-center text-sm font-medium text-nino-orange sm:p-6">
+                  {dict.whyNotAlone.withUsLabel}
+                </div>
+              </div>
+              {[
+                [dict.whyNotAlone.row1Alone, dict.whyNotAlone.row1WithUs],
+                [dict.whyNotAlone.row2Alone, dict.whyNotAlone.row2WithUs],
+                [dict.whyNotAlone.row3Alone, dict.whyNotAlone.row3WithUs],
+                [dict.whyNotAlone.row4Alone, dict.whyNotAlone.row4WithUs],
+                [dict.whyNotAlone.row5Alone, dict.whyNotAlone.row5WithUs],
+              ].map(([alone, withUs], i) => (
+                <div
+                  key={i}
+                  className="grid grid-cols-2 divide-x divide-white/10 border-t border-white/10 rtl:divide-x-reverse"
+                >
+                  <div className="flex items-start gap-2.5 p-5 text-sm text-white/70 sm:p-6">
+                    <X size={16} className="mt-0.5 shrink-0 text-white/30" />
+                    <span>{alone}</span>
+                  </div>
+                  <div className="flex items-start gap-2.5 bg-white/[0.02] p-5 text-sm text-white sm:p-6">
+                    <Check size={16} className="mt-0.5 shrink-0 text-nino-orange" />
+                    <span>{withUs}</span>
+                  </div>
+                </div>
+              ))}
+            </Reveal>
+
+            <Reveal delay={200}>
+              <p className="mt-8 text-center font-display text-xl text-white/90 md:text-2xl">
+                {dict.whyNotAlone.closingNote}
+              </p>
+            </Reveal>
           </div>
         </section>
 
