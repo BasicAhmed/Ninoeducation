@@ -101,9 +101,9 @@ export function ApplyWizard({
     { key: "who", title: t.stepWhoTitle, kicker: t.stepWhoKicker, icon: IdCard },
     { key: "profile", title: t.stepProfileTitle, kicker: t.stepProfileKicker, icon: Users },
     { key: "contact", title: t.stepContactTitle, kicker: t.stepContactKicker, icon: TowerControl },
+    { key: "dream", title: t.stepDreamTitle, kicker: t.stepDreamKicker, icon: Plane },
     { key: "money", title: t.stepMoneyTitle, kicker: t.stepMoneyKicker, icon: Wallet },
     { key: "readiness", title: t.stepReadinessTitle, kicker: t.stepReadinessKicker, icon: Languages },
-    { key: "dream", title: t.stepDreamTitle, kicker: t.stepDreamKicker, icon: Plane },
     { key: "review", title: t.stepReviewTitle, kicker: t.stepReviewKicker, icon: Ticket },
   ];
 
@@ -170,20 +170,20 @@ export function ApplyWizard({
       if (!EMAIL_RE.test(data.email.trim())) e.email = t.errEmail;
     }
     if (i === 3) {
-      if (!data.estimatedBudget) e.estimatedBudget = t.errChoose;
-      if (!data.fundingSource) e.fundingSource = t.errChoose;
-      if (!data.accommodationBudgetOk) e.accommodationBudgetOk = t.errChoose;
-    }
-    if (i === 4) {
-      if (!data.englishLevel) e.englishLevel = t.errChoose;
-      if (!data.medicalConcern) e.medicalConcern = t.errChoose;
-    }
-    if (i === 5) {
       if (!data.desiredLicense) e.desiredLicense = t.errLicense;
       if (!schoolSlug) {
         if (!data.schoolChoice) e.schoolChoice = t.errChoose;
         if (data.schoolChoice === "specific" && !data.selectedSchool) e.selectedSchool = t.errChoose;
       }
+    }
+    if (i === 4) {
+      if (!data.estimatedBudget) e.estimatedBudget = t.errChoose;
+      if (!data.fundingSource) e.fundingSource = t.errChoose;
+      if (!data.accommodationBudgetOk) e.accommodationBudgetOk = t.errChoose;
+    }
+    if (i === 5) {
+      if (!data.englishLevel) e.englishLevel = t.errChoose;
+      if (!data.medicalConcern) e.medicalConcern = t.errChoose;
     }
     return e;
   }
@@ -530,67 +530,9 @@ export function ApplyWizard({
               </div>
             </Panel>
 
-            {/* Step 4: Financial readiness */}
+            {/* Step 4: The dream */}
             <Panel ref={(el) => { panelRefs.current[3] = el; }} active={step === 3} lang={lang}>
               <StepHeading icon={STEPS[3].icon} kicker={STEPS[3].kicker} title={STEPS[3].title} />
-              <p className="-mt-3 mb-6 text-sm text-nino-ink/60">
-                {t.moneySubtitle}
-              </p>
-              <div className="space-y-6">
-                <ChoiceGroup
-                  label={t.budgetLabel}
-                  options={BUDGET_OPTIONS.map((b) => ({ value: b, label: b }))}
-                  value={data.estimatedBudget}
-                  onChange={(v) => set("estimatedBudget", v)}
-                  error={showErrors ? currentErrors.estimatedBudget : undefined}
-                />
-                <ChoiceGroup
-                  label={t.fundingLabel}
-                  options={FUNDING_OPTIONS}
-                  value={data.fundingSource}
-                  onChange={(v) => set("fundingSource", v)}
-                  error={showErrors ? currentErrors.fundingSource : undefined}
-                />
-                <ChoiceGroup
-                  label={t.accBudgetLabel}
-                  options={ACCOMMODATION_BUDGET_OPTIONS}
-                  value={data.accommodationBudgetOk}
-                  onChange={(v) => set("accommodationBudgetOk", v)}
-                  error={showErrors ? currentErrors.accommodationBudgetOk : undefined}
-                />
-              </div>
-            </Panel>
-
-            {/* Step 5: English & readiness */}
-            <Panel ref={(el) => { panelRefs.current[4] = el; }} active={step === 4} lang={lang}>
-              <StepHeading icon={STEPS[4].icon} kicker={STEPS[4].kicker} title={STEPS[4].title} />
-              <div className="space-y-6">
-                <ChoiceGroup
-                  label={t.englishLabel}
-                  options={ENGLISH_OPTIONS}
-                  value={data.englishLevel}
-                  onChange={(v) => set("englishLevel", v)}
-                  columns={2}
-                  error={showErrors ? currentErrors.englishLevel : undefined}
-                />
-                <div>
-                  <ChoiceGroup
-                    label={t.medicalLabel}
-                    options={MEDICAL_OPTIONS}
-                    value={data.medicalConcern}
-                    onChange={(v) => set("medicalConcern", v)}
-                    error={showErrors ? currentErrors.medicalConcern : undefined}
-                  />
-                  <p className="mt-2 text-xs text-nino-ink/45">
-                    {t.medicalNote}
-                  </p>
-                </div>
-              </div>
-            </Panel>
-
-            {/* Step 6: The dream */}
-            <Panel ref={(el) => { panelRefs.current[5] = el; }} active={step === 5} lang={lang}>
-              <StepHeading icon={STEPS[5].icon} kicker={STEPS[5].kicker} title={STEPS[5].title} />
               <div className="space-y-6">
                 <div>
                   <label htmlFor="currentLicenseSelect" className="block text-sm font-medium">{t.currentLicenseLabel}</label>
@@ -685,6 +627,64 @@ export function ApplyWizard({
                   </>
                 )}
                 <TextInput id="preferredStart" label={t.preferredStartLabel} placeholder={t.preferredStartPlaceholder} value={data.preferredStart} onChange={(v) => set("preferredStart", v)} />
+              </div>
+            </Panel>
+
+            {/* Step 5: Financial readiness */}
+            <Panel ref={(el) => { panelRefs.current[4] = el; }} active={step === 4} lang={lang}>
+              <StepHeading icon={STEPS[4].icon} kicker={STEPS[4].kicker} title={STEPS[4].title} />
+              <p className="-mt-3 mb-6 text-sm text-nino-ink/60">
+                {t.moneySubtitle}
+              </p>
+              <div className="space-y-6">
+                <ChoiceGroup
+                  label={t.budgetLabel}
+                  options={BUDGET_OPTIONS.map((b) => ({ value: b, label: b }))}
+                  value={data.estimatedBudget}
+                  onChange={(v) => set("estimatedBudget", v)}
+                  error={showErrors ? currentErrors.estimatedBudget : undefined}
+                />
+                <ChoiceGroup
+                  label={t.fundingLabel}
+                  options={FUNDING_OPTIONS}
+                  value={data.fundingSource}
+                  onChange={(v) => set("fundingSource", v)}
+                  error={showErrors ? currentErrors.fundingSource : undefined}
+                />
+                <ChoiceGroup
+                  label={t.accBudgetLabel}
+                  options={ACCOMMODATION_BUDGET_OPTIONS}
+                  value={data.accommodationBudgetOk}
+                  onChange={(v) => set("accommodationBudgetOk", v)}
+                  error={showErrors ? currentErrors.accommodationBudgetOk : undefined}
+                />
+              </div>
+            </Panel>
+
+            {/* Step 6: English & readiness */}
+            <Panel ref={(el) => { panelRefs.current[5] = el; }} active={step === 5} lang={lang}>
+              <StepHeading icon={STEPS[5].icon} kicker={STEPS[5].kicker} title={STEPS[5].title} />
+              <div className="space-y-6">
+                <ChoiceGroup
+                  label={t.englishLabel}
+                  options={ENGLISH_OPTIONS}
+                  value={data.englishLevel}
+                  onChange={(v) => set("englishLevel", v)}
+                  columns={2}
+                  error={showErrors ? currentErrors.englishLevel : undefined}
+                />
+                <div>
+                  <ChoiceGroup
+                    label={t.medicalLabel}
+                    options={MEDICAL_OPTIONS}
+                    value={data.medicalConcern}
+                    onChange={(v) => set("medicalConcern", v)}
+                    error={showErrors ? currentErrors.medicalConcern : undefined}
+                  />
+                  <p className="mt-2 text-xs text-nino-ink/45">
+                    {t.medicalNote}
+                  </p>
+                </div>
               </div>
             </Panel>
 

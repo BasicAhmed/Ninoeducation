@@ -18,7 +18,7 @@ export async function SiteFooter() {
           </div>
           <div>
             <p className="font-medium text-nino-ink">{t.linksHeading}</p>
-            <ul className="mt-2 space-y-2">
+            <ul className="mt-2 grid grid-cols-2 gap-x-6 gap-y-2">
               <li>
                 <Link href="/schools" className="hover:text-nino-orange">
                   {nav.schools}
@@ -54,6 +54,11 @@ export async function SiteFooter() {
                   {t.aboutLink}
                 </Link>
               </li>
+              <li>
+                <Link href="/dashboard" className="hover:text-nino-orange">
+                  {t.dashboardLink}
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
@@ -64,9 +69,6 @@ export async function SiteFooter() {
             >
               {t.whatsapp}
             </a>
-            <Link href="/dashboard" className="mt-2 block hover:text-nino-orange">
-              {t.dashboardLink}
-            </Link>
           </div>
         </div>
         <p className="mt-10 border-t border-nino-line pt-6 text-xs text-nino-ink/40">

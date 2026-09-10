@@ -1,0 +1,40 @@
+Footer reorganized into a 2-column link grid, and a real psychology-informed fix to the apply wizard's step order
+
+1. Footer links were stacked one-per-line, 7 deep, making the footer
+   noticeably tall. Changed the links list to a 2-column grid and
+   moved the dashboard sign-in link into it (it's navigation, not a
+   contact method) — same content, roughly half the vertical height.
+
+2. The apply wizard asked about budget and how the student plans to
+   fund their training BEFORE asking what license or school they
+   actually want. Psychologically, that's backwards for a decision
+   this significant: leading with a financial-screening question
+   before someone has even stated their goal reads as gatekeeping,
+   not service — and it's exactly the kind of moment likely to cause
+   drop-off (which matters concretely now that abandoned applications
+   are being tracked and followed up on). Reordered the wizard so the
+   'what's your goal / which license / which school' step comes
+   directly after contact info, with the money step moving after it —
+   so by the time someone's asked about budget, they've already
+   stated what they're funding, and the existing money-step copy
+   ('we want to recommend schools that fit your actual budget') now
+   reads as being in service of the goal they just named, not a
+   screening gate before it.
+
+This required renumbering three things in lockstep — the STEPS array,
+the per-step validation function's index checks, and the JSX panels
+themselves (each panel's active/ref index literally matches its
+position in the array) — a real risk of a silent step/validation
+mismatch if any one of the three drifted from the others.
+
+Verified with a full, corrected end-to-end walkthrough of the
+reordered wizard (not just the type-checker): confirmed the step
+immediately after contact info is now the goal/license/school step,
+confirmed money correctly follows it, confirmed readiness follows
+that, and confirmed the final review screen shows all the same data
+correctly captured through the new order. Caught and fixed two of my
+own test-script mistakes during this — first selecting the empty
+placeholder option in a school dropdown, then using stale pre-
+formal-tone button text — rather than mistaking either for a real
+bug, by checking what was actually rendered before concluding
+anything was broken.
