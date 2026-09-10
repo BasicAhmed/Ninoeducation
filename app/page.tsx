@@ -377,6 +377,10 @@ export default async function Home() {
                 [dict.whyNotAlone.row3Alone, dict.whyNotAlone.row3WithUs],
                 [dict.whyNotAlone.row4Alone, dict.whyNotAlone.row4WithUs],
                 [dict.whyNotAlone.row5Alone, dict.whyNotAlone.row5WithUs],
+                [dict.whyNotAlone.row6Alone, dict.whyNotAlone.row6WithUs],
+                [dict.whyNotAlone.row7Alone, dict.whyNotAlone.row7WithUs],
+                [dict.whyNotAlone.row8Alone, dict.whyNotAlone.row8WithUs],
+                [dict.whyNotAlone.row9Alone, dict.whyNotAlone.row9WithUs],
               ].map(([alone, withUs], i) => (
                 <div
                   key={i}
