@@ -199,11 +199,11 @@ export const dictionaries = {
       "مبومالانغا": "مبومالانغا",
     },
     licenses: {
-      PPL: "رخصة طيار خاص",
-      CPL: "رخصة طيار تجاري",
-      IR: "تصنيف آلي",
-      ME: "متعدد المحركات",
-      ATPL_THEORY: "نظري رخصة النقل الجوي",
+      PPL: "رخصة طيار خاص (PPL)",
+      CPL: "رخصة طيار تجاري (CPL)",
+      IR: "تصنيف آلي (IR)",
+      ME: "متعدد المحركات (ME)",
+      ATPL_THEORY: "نظري رخصة النقل الجوي (ATPL)",
     },
     schoolCard: {
       nextIntake: "الدفعة القادمة",
@@ -727,11 +727,11 @@ export const dictionaries = {
       "مبومالانغا": "Mpumalanga",
     },
     licenses: {
-      PPL: "Private Pilot License",
-      CPL: "Commercial Pilot License",
-      IR: "Instrument Rating",
-      ME: "Multi-Engine",
-      ATPL_THEORY: "Airline Transport Pilot Theory",
+      PPL: "Private Pilot License (PPL)",
+      CPL: "Commercial Pilot License (CPL)",
+      IR: "Instrument Rating (IR)",
+      ME: "Multi-Engine (ME)",
+      ATPL_THEORY: "Airline Transport Pilot Theory (ATPL)",
     },
     schoolCard: {
       nextIntake: "Next Intake",

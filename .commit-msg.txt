@@ -1,0 +1,43 @@
+Pre-launch audit: fix redundant price range display, fix missed license abbreviations in a third dictionary copy
+
+Full-site audit ahead of launch. Ran type-check and lint clean across
+the whole project, then walked through every major page and flow with
+real browser testing rather than just reading code: full homepage
+scroll, the complete apply wizard end to end (including re-verifying
+the phone/WhatsApp same-number fix and school-selection still work
+together correctly), school directory + profile + compare, accommodation
+directory + profile with gallery, quiz, calculator, admin login, and
+a mobile viewport pass.
+
+Two real, user-visible bugs found and fixed:
+
+1. Any listing where min and max price are equal (e.g. a studio with
+   one fixed monthly rent) displayed as "$281-281" — an obviously
+   broken-looking range. formatUsdRange now collapses to a single
+   "$281" when both values match.
+
+2. When license abbreviations (PPL, CPL, etc.) were added sitewide
+   earlier, one of three separate places license names are defined
+   was missed — the school profile page's badges, its Course schema,
+   and the compare page all pull from a dict.licenses object that's
+   distinct from lib/constants.ts's LICENSE_LABELS and the apply
+   wizard's own license labels. Found this by looking at an actual
+   screenshot of the school profile page and noticing the badges
+   still read "رخصة طيار خاص" without "(PPL)", not by assuming the
+   earlier fix covered every copy. Fixed the dictionary in both
+   languages.
+
+One thing that looked like a bug during testing but wasn't: the admin
+dashboard threw an error in this sandbox — traced to the exact SQL
+query failing to connect to the real database, which this environment
+has no network access to. Confirmed via the dev server log, not
+assumed. Won't affect the live site.
+
+Also caught my own test-script error rather than misreporting it as a
+bug: an initial compare-page test used a comma-separated query param
+(?slugs=a,b) and found nothing, which looked like a broken feature.
+Traced the actual form/checkbox implementation, confirmed it correctly
+submits multi-value params (?slugs=a&slugs=b), and re-tested through
+the real UI flow (checking two school checkboxes and submitting the
+form) to confirm the compare page works correctly — including that
+both bug fixes above render correctly there too.

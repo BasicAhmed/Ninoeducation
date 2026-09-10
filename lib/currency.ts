@@ -10,5 +10,11 @@ export function formatUsd(usd: number) {
 }
 
 export function formatUsdRange(minUsd: number, maxUsd: number) {
+  // Collapse to a single figure when min and max are the same (e.g. a
+  // studio with one fixed monthly rent) — showing "$281–281" reads as
+  // a bug, not a range.
+  if (Math.round(minUsd) === Math.round(maxUsd)) {
+    return `$${formatUsd(minUsd)}`;
+  }
   return `$${formatUsd(minUsd)}–${formatUsd(maxUsd)}`;
 }
