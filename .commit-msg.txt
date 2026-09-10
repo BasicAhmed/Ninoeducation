@@ -1,0 +1,58 @@
+Feature: student dashboard with passwordless magic-link login
+
+New login_tokens table + lib/student-auth.ts, mirroring the cookie
+conventions already established in lib/admin-auth.ts (httpOnly,
+sameSite lax) but adapted for a session tied to a specific student's
+email rather than one shared password: the cookie holds the email plus
+an HMAC-SHA256 signature (SESSION_SECRET env var, with a dev-only
+fallback and a TODO for Ahmed to set a real value before launch),
+verified with a timing-safe comparison so it can't be trivially forged
+or tampered with.
+
+Flow: /dashboard/login (email entry) -> only sends a link if that
+email actually has an application on file, but shows the identical
+"check your email" confirmation regardless, so the response never
+reveals whether an email is registered -> emailed magic link
+(emails/LoginLink.tsx, reusing the existing Resend/EmailLayout
+infrastructure) -> /dashboard/verify consumes the single-use,
+30-minute-lived token and sets the session -> /dashboard shows their
+application(s): reference code, live status with a progress bar
+(reusing the same visual pattern already on the public /track page),
+license, applied date, and a one-click WhatsApp button. Added a
+discoverable "Sign In to My Account" link in the site footer. Every
+dashboard route is set noindex, robots-wise, since these are
+authenticated pages with no reason to be crawled.
+
+Two real robustness bugs found and fixed during testing, not before:
+requestLoginLink and verifyLoginToken both had unguarded database
+calls that threw uncaught on a connection failure, returning a raw
+500 instead of degrading gracefully — inconsistent with the
+fail-open pattern already used correctly elsewhere in this project
+(e.g. saveApplicationDraft). Restructured both so redirect() (which
+works by throwing, so it has to stay outside any catch-all try block)
+always runs at the end regardless of outcome, with the actual error
+still logged server-side for visibility. Applied the same protection
+to the dashboard page's own application lookup.
+
+Verified thoroughly given this touches authentication, not just
+visually: confirmed unauthenticated access to /dashboard correctly
+redirects to /dashboard/login; confirmed /dashboard/verify with a
+missing or invalid token correctly redirects to a real error state
+rather than crashing (this required the robustness fix above to pass,
+and caught it via a 500 in the dev server log before assuming success);
+confirmed the login form now degrades gracefully to the same
+confirmation screen even when the database is unreachable, and that
+the underlying error is still logged server-side. Most importantly,
+ran a genuine security test rather than trusting the code by
+inspection: replicated the exact HMAC signing algorithm in a
+standalone script to construct both a validly-signed session cookie
+and a tampered one with a corrupted signature, injected each directly
+via browser context cookies, and confirmed the valid cookie
+authenticates successfully while the tampered one is rejected and
+redirected to login — proving the signature verification is actually
+enforced, not just present in the code. Finally verified the
+dashboard's rendered output directly with representative mock
+application data (correct progress-bar fill position for the given
+status, license abbreviation, localized date, name-derived greeting)
+before restoring the real database query and confirming the restored
+file is byte-for-byte identical to before the stub via diff.

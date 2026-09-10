@@ -122,6 +122,20 @@ export const applicationDrafts = pgTable("application_drafts", {
   updatedAt: text("updated_at").notNull(),
 });
 
+// Magic-link tokens for the student dashboard's passwordless login.
+// A token is single-use (usedAt gets set on consumption) and
+// short-lived (expiresAt) — the dashboard itself only ever trusts the
+// signed session cookie set after a token is verified, never the
+// token itself past that point.
+export const loginTokens = pgTable("login_tokens", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull(),
+  token: text("token").notNull().unique(),
+  expiresAt: text("expires_at").notNull(),
+  usedAt: text("used_at"),
+  createdAt: text("created_at").notNull(),
+});
+
 export const socialPosts = pgTable("social_posts", {
   id: text("id").primaryKey(),
   imageUrl: text("image_url").notNull(),

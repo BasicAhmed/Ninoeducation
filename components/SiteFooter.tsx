@@ -64,6 +64,9 @@ export async function SiteFooter() {
             >
               {t.whatsapp}
             </a>
+            <Link href="/dashboard" className="mt-2 block hover:text-nino-orange">
+              {t.dashboardLink}
+            </Link>
           </div>
         </div>
         <p className="mt-10 border-t border-nino-line pt-6 text-xs text-nino-ink/40">
