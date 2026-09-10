@@ -24,10 +24,15 @@ function timeAgo(iso: string) {
 }
 
 export default async function AbandonedApplicationsPage() {
-  const drafts = await db
-    .select()
-    .from(applicationDrafts)
-    .orderBy(desc(applicationDrafts.updatedAt));
+  let drafts: (typeof applicationDrafts.$inferSelect)[] = [];
+  try {
+    drafts = await db
+      .select()
+      .from(applicationDrafts)
+      .orderBy(desc(applicationDrafts.updatedAt));
+  } catch (err) {
+    console.error("AbandonedApplicationsPage lookup failed:", err);
+  }
 
   return (
     <div>
