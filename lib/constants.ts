@@ -5,10 +5,9 @@ export const PROVINCES = [
   "مبومالانغا",
 ];
 
-// TODO(Ahmed): replace with the real WhatsApp number, in international
-// format with no + or spaces (e.g. "966501234567"). Every wa.me link
-// on the site pulls from this single constant.
-export const WHATSAPP_NUMBER = "000000000000";
+// Every wa.me link on the site pulls from this single constant, in
+// international format with no + or spaces.
+export const WHATSAPP_NUMBER = "27763102159";
 
 export const LICENSE_LABELS: Record<string, string> = {
   PPL: "رخصة طيار خاص (PPL)",
