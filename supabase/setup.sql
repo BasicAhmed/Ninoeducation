@@ -175,3 +175,22 @@ ALTER TABLE "accommodations" DROP COLUMN "price_min_zar";
 ALTER TABLE "accommodations" DROP COLUMN "price_max_zar";
 ALTER TABLE "flight_schools" DROP COLUMN "price_min_zar";
 ALTER TABLE "flight_schools" DROP COLUMN "price_max_zar";
+
+-- Abandoned application recovery: captures an in-progress apply-wizard
+-- session once the visitor has given contact info, so incomplete
+-- applications can be followed up on instead of silently vanishing.
+CREATE TABLE "application_drafts" (
+	"id" text PRIMARY KEY NOT NULL,
+	"email" text NOT NULL,
+	"full_name" text,
+	"nationality" text,
+	"phone" text,
+	"whatsapp" text,
+	"desired_license" text,
+	"estimated_budget" text,
+	"last_step" integer NOT NULL,
+	"preferred_lang" text,
+	"created_at" text NOT NULL,
+	"updated_at" text NOT NULL,
+	CONSTRAINT "application_drafts_email_unique" UNIQUE("email")
+);

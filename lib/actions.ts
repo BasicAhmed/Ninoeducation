@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/client";
-import { applications, flightSchools, applicationEvents } from "@/db/schema";
+import { applications, flightSchools, applicationEvents, applicationDrafts } from "@/db/schema";
 import { randomUUID } from "crypto";
 import { eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
@@ -14,6 +14,64 @@ function generateReferenceCode() {
   const year = new Date().getFullYear().toString().slice(-2);
   const digits = Math.floor(1000 + Math.random() * 9000); // 4 digits, never starts with 0
   return `NE${year}-${digits}`;
+}
+
+// Called from the apply wizard as the visitor progresses past the
+// contact step (and again on later steps, to enrich the draft with
+// more context) — not on every keystroke, just on step transitions.
+// Upserted by email so restarting or reloading the wizard updates the
+// same draft rather than creating duplicates. Silently no-ops on
+// failure (e.g. malformed email) since this is a best-effort recovery
+// signal, not a step the visitor's own flow should ever be blocked by.
+export async function saveApplicationDraft(data: {
+  email: string;
+  fullName: string;
+  nationality: string;
+  phone: string;
+  whatsapp: string;
+  desiredLicense: string;
+  estimatedBudget: string;
+  lastStep: number;
+  preferredLang: string;
+}) {
+  const email = data.email.trim().toLowerCase();
+  if (!email || !email.includes("@")) return;
+
+  try {
+    const now = new Date().toISOString();
+    await db
+      .insert(applicationDrafts)
+      .values({
+        id: randomUUID(),
+        email,
+        fullName: data.fullName || null,
+        nationality: data.nationality || null,
+        phone: data.phone || null,
+        whatsapp: data.whatsapp || null,
+        desiredLicense: data.desiredLicense || null,
+        estimatedBudget: data.estimatedBudget || null,
+        lastStep: data.lastStep,
+        preferredLang: data.preferredLang || null,
+        createdAt: now,
+        updatedAt: now,
+      })
+      .onConflictDoUpdate({
+        target: applicationDrafts.email,
+        set: {
+          fullName: data.fullName || null,
+          nationality: data.nationality || null,
+          phone: data.phone || null,
+          whatsapp: data.whatsapp || null,
+          desiredLicense: data.desiredLicense || null,
+          estimatedBudget: data.estimatedBudget || null,
+          lastStep: data.lastStep,
+          preferredLang: data.preferredLang || null,
+          updatedAt: now,
+        },
+      });
+  } catch (err) {
+    console.error("saveApplicationDraft failed:", err);
+  }
 }
 
 export async function submitApplication(formData: FormData) {
@@ -107,6 +165,14 @@ export async function submitApplication(formData: FormData) {
         typeof err === "object" && err !== null && "code" in err && err.code === "23505";
       if (!isUniqueViolation || attempt === 5) throw err;
     }
+  }
+
+  // Clean up the draft now that it's a real application — best-effort,
+  // never blocks submission if it fails.
+  try {
+    await db.delete(applicationDrafts).where(eq(applicationDrafts.email, email));
+  } catch (err) {
+    console.error("draft cleanup after submitApplication failed:", err);
   }
 
   await db.insert(applicationEvents).values({

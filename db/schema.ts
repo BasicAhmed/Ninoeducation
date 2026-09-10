@@ -96,6 +96,32 @@ export const applicationEvents = pgTable("application_events", {
   createdAt: text("created_at").notNull(),
 });
 
+// Captures an in-progress apply-wizard session once the visitor has
+// given us enough to act on (contact info), before they necessarily
+// finish. This is deliberately a separate table from `applications`
+// rather than relaxing that table's NOT NULL constraints — a draft
+// is a fundamentally different kind of record (transient, partial,
+// pre-conversion) and shouldn't weaken the integrity guarantees the
+// admin panel relies on for real submitted applications. One row per
+// email (upserted as the wizard progresses); deleted the moment the
+// visitor actually completes submitApplication, so this table always
+// represents "currently abandoned, not yet submitted" — no separate
+// converted/abandoned flag needed.
+export const applicationDrafts = pgTable("application_drafts", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  fullName: text("full_name"),
+  nationality: text("nationality"),
+  phone: text("phone"),
+  whatsapp: text("whatsapp"),
+  desiredLicense: text("desired_license"),
+  estimatedBudget: text("estimated_budget"),
+  lastStep: integer("last_step").notNull(), // wizard step index reached, for admin context ("got to step 4 of 7")
+  preferredLang: text("preferred_lang"),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
 export const socialPosts = pgTable("social_posts", {
   id: text("id").primaryKey(),
   imageUrl: text("image_url").notNull(),

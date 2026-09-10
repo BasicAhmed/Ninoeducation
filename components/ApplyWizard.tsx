@@ -19,7 +19,7 @@ import {
   CheckCircle2,
   Users,
 } from "lucide-react";
-import { submitApplication } from "@/lib/actions";
+import { submitApplication, saveApplicationDraft } from "@/lib/actions";
 import { CountrySelect } from "@/components/CountrySelect";
 import { PhoneField, validatePhone } from "@/components/PhoneField";
 import { COUNTRIES, PRIORITY_COUNTRY_CODES } from "@/lib/countries";
@@ -226,6 +226,22 @@ export function ApplyWizard({
         // should never trap someone on this step.
       }
       setCheckingEmail(false);
+    }
+
+    // Fire-and-forget: capture this as a recoverable lead the moment
+    // we have contact info, without making the visitor wait on it.
+    if (step >= 2 && data.email) {
+      saveApplicationDraft({
+        email: data.email,
+        fullName: data.fullName,
+        nationality: data.nationality,
+        phone: formattedPhone,
+        whatsapp: formattedWhatsapp,
+        desiredLicense: data.desiredLicense,
+        estimatedBudget: data.estimatedBudget,
+        lastStep: step + 1,
+        preferredLang: lang,
+      }).catch(() => {});
     }
 
     setStep((s) => Math.min(s + 1, STEPS.length - 1));

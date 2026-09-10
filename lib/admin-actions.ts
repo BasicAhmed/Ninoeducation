@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/client";
-import { flightSchools, accommodations, applications, socialPosts, applicationEvents } from "@/db/schema";
+import { flightSchools, accommodations, applications, socialPosts, applicationEvents, applicationDrafts } from "@/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { redirect } from "next/navigation";
@@ -89,6 +89,13 @@ export async function deleteSchools(formData: FormData) {
     await db.delete(flightSchools).where(inArray(flightSchools.id, ids));
   }
   redirect("/admin/schools");
+}
+
+export async function dismissApplicationDraft(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  await db.delete(applicationDrafts).where(eq(applicationDrafts.id, id));
+  redirect("/admin/abandoned");
 }
 
 export async function saveAccommodation(formData: FormData) {
