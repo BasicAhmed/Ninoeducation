@@ -8,11 +8,17 @@ import { SITE_URL } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "قدّم الآن | نينو إديوكيشن",
-  description: "قدّم طلبك للتدريب على الطيران في جنوب أفريقيا مجانًا عبر نينو إديوكيشن.",
-  alternates: { canonical: `${SITE_URL}/apply` },
-};
+export async function generateMetadata() {
+  const lang = await getLang();
+  return {
+    title: lang === "ar" ? "قدّم الآن | نينو إديوكيشن" : "Apply Now | Nino Education",
+    description:
+      lang === "ar"
+        ? "قدّم طلبك للتدريب على الطيران في جنوب أفريقيا مجانًا عبر نينو إديوكيشن."
+        : "Submit your free application for flight training in South Africa through Nino Education.",
+    alternates: { canonical: `${SITE_URL}/apply` },
+  };
+}
 
 export default async function ApplyPage({
   searchParams,

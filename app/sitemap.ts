@@ -5,6 +5,19 @@ import { SITE_URL } from "@/lib/constants";
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Pages confirmed fully bilingual — no hardcoded Arabic left in
+  // either their metadata or their actual rendered content, verified
+  // directly rather than assumed. Everything else (every individual
+  // guide, the guides index, the cost calculator, school and
+  // accommodation listings/profiles) still has real Arabic-only prose
+  // baked in even though their surrounding chrome now renders in
+  // English at /en/* — submitting those specific URLs to Google under
+  // an English sitemap entry would be handing it a mismatched,
+  // thin-content page, which is worse than not submitting it at all.
+  // This list should grow as that content actually gets translated,
+  // not before.
+  const bilingualPaths = ["", "/apply", "/about", "/journey", "/scholarships", "/quiz", "/track"];
+
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: "weekly", priority: 1 },
     { url: `${SITE_URL}/schools`, changeFrequency: "weekly", priority: 0.9 },
@@ -29,6 +42,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/guides/tips-to-succeed-in-south-africa`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/guides/pilot-salary-and-jobs`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/guides/why-is-flight-training-expensive`, changeFrequency: "monthly", priority: 0.8 },
+    ...bilingualPaths.map((p) => ({
+      url: `${SITE_URL}/en${p}`,
+      changeFrequency: "weekly" as const,
+      priority: p === "" ? 0.9 : 0.7,
+    })),
   ];
 
   // A failed DB connection here should never take down the sitemap

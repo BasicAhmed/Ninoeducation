@@ -43,6 +43,17 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(SITE_URL),
     title: t.title,
     description: t.description,
+    // Tells Google these two URLs are the same page in different
+    // languages, rather than two separate/duplicate pages — this only
+    // covers the homepage (every other page sets its own canonical via
+    // its own generateMetadata, and this is the one Next.js falls back
+    // to for routes that don't). x-default points search engines
+    // unsure of the visitor's language to the Arabic version, since
+    // that's the site's actual primary audience and existing indexed
+    // URL.
+    alternates: {
+      languages: { ar: SITE_URL, en: `${SITE_URL}/en`, "x-default": SITE_URL },
+    },
     // Set GOOGLE_SITE_VERIFICATION in Vercel once you add the property
     // in Google Search Console (Settings > Ownership verification >
     // HTML tag method) — paste just the content value, not the full
