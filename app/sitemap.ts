@@ -15,6 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/apply`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/journey`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/about`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/scholarships`, changeFrequency: "weekly", priority: 0.85 },
     { url: `${SITE_URL}/guides`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/guides/study-aviation-in-south-africa`, changeFrequency: "monthly", priority: 0.9 },
     { url: `${SITE_URL}/guides/south-africa-study-visa`, changeFrequency: "monthly", priority: 0.8 },

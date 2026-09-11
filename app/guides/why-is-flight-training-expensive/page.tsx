@@ -37,6 +37,7 @@ export default function WhyExpensiveGuidePage() {
       intro="رقم كبير يظهر أمامك أول مرة تبحث عن تكلفة تدريب الطيران، ويثير سؤالًا منطقيًا: هل هذا السعر مبرر؟ وهل يجب دفعه كاملاً من أول يوم؟"
       faqItems={FAQ_ITEMS}
       related={[
+        { title: "منح وخصومات لتعلم الطيران", href: "/scholarships" },
         { title: "كم تكلفة تعلم الطيران في جنوب أفريقيا؟", href: "/guides/flight-training-cost-south-africa" },
         { title: "كيف تختار أفضل مدرسة طيران؟", href: "/guides/how-to-choose-a-flight-school" },
         { title: "الفرق بين PPL و CPL", href: "/guides/ppl-vs-cpl" },
@@ -132,6 +133,19 @@ export default function WhyExpensiveGuidePage() {
             قدّم طلبك المجاني
           </Link>{" "}
           لنرشح لك مدارس تقدم طريقة الدفع المناسبة لوضعك تحديدًا.
+        </p>
+      </section>
+
+      <section id="limited-budget" className="rounded-3xl bg-nino-cream p-8">
+        <h2 className="font-display text-2xl text-nino-ink">وإذا كانت ميزانيتك محدودة فعلاً؟</h2>
+        <p className="mt-3">
+          إذا كان الرقم لسه يبدو بعيد عن وضعك الحالي، هذا ما يعني إن الحلم
+          مستحيل. فيه منح دراسية، خصومات من المدارس، وطرق تبدأ فيها
+          بخطوة أصغر بكثير من البرنامج الكامل.{" "}
+          <Link href="/scholarships" className="font-medium text-nino-orange hover:underline">
+            شوف الطرق المتاحة لك
+          </Link>
+          .
         </p>
       </section>
     </GuideArticle>

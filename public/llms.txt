@@ -13,6 +13,7 @@ Nino Education operates ninoeducation.com, a bilingual site (Arabic primary, Eng
 - [Cost calculator](https://ninoeducation.com/calculator): Estimates total training cost by license type.
 - [Find My School quiz](https://ninoeducation.com/quiz): A short quiz matching students to suitable schools and license paths.
 - [Your journey, step by step](https://ninoeducation.com/journey): An interactive walkthrough of the full process from application to becoming a pilot.
+- [Scholarships & discounts](https://ninoeducation.com/scholarships): For aspiring pilots who assume aviation training is unaffordable — explains real paths (scholarships, school discounts, starting with a smaller step, introductory workshops) and a way to register interest for when an opportunity matches their situation.
 
 ## Guides
 
