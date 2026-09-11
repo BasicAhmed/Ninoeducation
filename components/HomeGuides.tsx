@@ -26,11 +26,13 @@ export function HomeGuides({ lang }: { lang: Lang }) {
           {GUIDES.map((g, i) => (
             <Reveal key={g.href} delay={Math.min(i, 5) * 80}>
               <Link
-                href={g.href}
+                href={lang === "en" ? `/en${g.href}` : g.href}
                 className="flex h-full flex-col rounded-2xl border border-nino-line bg-nino-white p-6 transition hover:border-nino-orange"
               >
-                <h3 className="font-display text-base">{g.title}</h3>
-                <p className="mt-2 text-sm text-nino-ink/60">{g.description}</p>
+                <h3 className="font-display text-base">{lang === "ar" ? g.titleAr : g.titleEn}</h3>
+                <p className="mt-2 text-sm text-nino-ink/60">
+                  {lang === "ar" ? g.descriptionAr : g.descriptionEn}
+                </p>
               </Link>
             </Reveal>
           ))}

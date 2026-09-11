@@ -2,12 +2,33 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SITE_URL } from "@/lib/constants";
+import type { Lang } from "@/lib/i18n/dictionaries";
 
 export type FaqItem = { q: string; a: string };
 export type RelatedGuide = { title: string; href: string };
 
+const CHROME = {
+  ar: {
+    faqHeading: "أسئلة شائعة",
+    relatedHeading: "أدلة ذات صلة",
+    ctaTitle: "جاهز تبدأ ملفك؟",
+    ctaBody: "قدّم طلبك مجانًا اليوم، ونرشح لك أفضل المدارس المناسبة لميزانيتك وأهدافك.",
+    applyNow: "قدّم الآن",
+    browseSchools: "تصفح المدارس",
+  },
+  en: {
+    faqHeading: "Frequently Asked Questions",
+    relatedHeading: "Related Guides",
+    ctaTitle: "Ready to Start Your File?",
+    ctaBody: "Submit your free application today, and we'll recommend the best schools for your budget and goals.",
+    applyNow: "Apply Now",
+    browseSchools: "Browse Schools",
+  },
+};
+
 export function GuideArticle({
   path,
+  lang,
   kicker,
   title,
   intro,
@@ -16,6 +37,7 @@ export function GuideArticle({
   children,
 }: {
   path: string;
+  lang: Lang;
   kicker: string;
   title: string;
   intro: string;
@@ -23,7 +45,8 @@ export function GuideArticle({
   related?: RelatedGuide[];
   children: React.ReactNode;
 }) {
-  const url = `${SITE_URL}${path}`;
+  const t = CHROME[lang];
+  const url = `${SITE_URL}${lang === "en" ? "/en" : ""}${path}`;
 
   const articleJsonLd = {
     "@context": "https://schema.org",
@@ -60,7 +83,7 @@ export function GuideArticle({
 
           {/* FAQ */}
           <section className="mt-16 border-t border-nino-line pt-10">
-            <h2 className="font-display text-2xl">أسئلة شائعة</h2>
+            <h2 className="font-display text-2xl">{t.faqHeading}</h2>
             <div className="mt-6 divide-y divide-nino-line">
               {faqItems.map((item) => (
                 <details key={item.q} className="group py-4">
@@ -79,11 +102,11 @@ export function GuideArticle({
           {/* Related guides — the internal linking backbone of the cluster */}
           {related && related.length > 0 && (
             <section className="mt-12 border-t border-nino-line pt-10">
-              <h2 className="font-display text-xl">أدلة ذات صلة</h2>
+              <h2 className="font-display text-xl">{t.relatedHeading}</h2>
               <ul className="mt-4 space-y-2">
                 {related.map((r) => (
                   <li key={r.href}>
-                    <Link href={r.href} className="text-nino-orange hover:underline">
+                    <Link href={lang === "en" ? `/en${r.href}` : r.href} className="text-nino-orange hover:underline">
                       {r.title} ←
                     </Link>
                   </li>
@@ -94,22 +117,20 @@ export function GuideArticle({
 
           {/* Final CTA */}
           <div className="mt-16 rounded-2xl bg-nino-ink px-8 py-10 text-center text-white">
-            <h2 className="font-display text-2xl">جاهز تبدأ ملفك؟</h2>
-            <p className="mt-2 text-white/70">
-              قدّم طلبك مجانًا اليوم، ونرشح لك أفضل المدارس المناسبة لميزانيتك وأهدافك.
-            </p>
+            <h2 className="font-display text-2xl">{t.ctaTitle}</h2>
+            <p className="mt-2 text-white/70">{t.ctaBody}</p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Link
-                href="/apply"
+                href={lang === "en" ? "/en/apply" : "/apply"}
                 className="rounded-full bg-nino-orange px-6 py-3 text-sm font-medium hover:bg-white hover:text-nino-ink"
               >
-                قدّم الآن
+                {t.applyNow}
               </Link>
               <Link
-                href="/schools"
+                href={lang === "en" ? "/en/schools" : "/schools"}
                 className="rounded-full border border-white/40 px-6 py-3 text-sm font-medium hover:bg-white/10"
               >
-                تصفح المدارس
+                {t.browseSchools}
               </Link>
             </div>
           </div>

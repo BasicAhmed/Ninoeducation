@@ -7,16 +7,34 @@ export const dynamic = "force-dynamic";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Pages confirmed fully bilingual — no hardcoded Arabic left in
   // either their metadata or their actual rendered content, verified
-  // directly rather than assumed. Everything else (every individual
-  // guide, the guides index, the cost calculator, school and
-  // accommodation listings/profiles) still has real Arabic-only prose
-  // baked in even though their surrounding chrome now renders in
-  // English at /en/* — submitting those specific URLs to Google under
-  // an English sitemap entry would be handing it a mismatched,
-  // thin-content page, which is worse than not submitting it at all.
-  // This list should grow as that content actually gets translated,
-  // not before.
-  const bilingualPaths = ["", "/apply", "/about", "/journey", "/scholarships", "/quiz", "/track"];
+  // directly (not assumed) by loading each one at its /en/* URL and
+  // checking the actual rendered text. School and accommodation
+  // listings/profiles still have Arabic-only descriptions in the
+  // database (only the name field is bilingual), so those stay
+  // excluded until that content gets translated too.
+  const bilingualPaths = [
+    "",
+    "/apply",
+    "/about",
+    "/journey",
+    "/scholarships",
+    "/quiz",
+    "/track",
+    "/calculator",
+    "/guides",
+    "/guides/study-aviation-in-south-africa",
+    "/guides/south-africa-study-visa",
+    "/guides/ppl-vs-cpl",
+    "/guides/flight-training-cost-south-africa",
+    "/guides/sacaa-medical-requirements",
+    "/guides/how-long-to-become-a-pilot",
+    "/guides/student-accommodation-south-africa",
+    "/guides/how-to-choose-a-flight-school",
+    "/guides/common-challenges-flight-training",
+    "/guides/tips-to-succeed-in-south-africa",
+    "/guides/pilot-salary-and-jobs",
+    "/guides/why-is-flight-training-expensive",
+  ];
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: "weekly", priority: 1 },
