@@ -141,9 +141,9 @@ export const dictionaries = {
       seeFullJourney: "شوف رحلتك كاملة، خطوة بخطوة ←",
     },
     community: {
-      kicker: "مجتمعنا على واتساب",
-      title: "ننبني أكبر مجتمع لطلاب الطيران العرب والهنود",
-      body: "انضم لمجموعتنا على واتساب — أسئلة حقيقية، تجارب طلاب فعليين، وأخبار الفرص والمنح أول بأول. لا تفوّت الفرصة وتكون من أول المنضمين.",
+      kicker: "مجتمع الطيارين الأول",
+      title: "أكبر مجتمع لطياري المستقبل — من كل مكان",
+      body: "انضم وشارك تجاربك وخبراتك، واستكشف تجارب طيارين حقيقيين. لكل من يحلم يصير طيار، من أي بلد وأي خلفية — لا تفوّت الفرصة وتكون من أول المنضمين.",
       cta: "انضم للمجموعة الآن",
     },
     testimonials: {
@@ -778,9 +778,9 @@ export const dictionaries = {
       seeFullJourney: "See your full journey, step by step →",
     },
     community: {
-      kicker: "Our WhatsApp Community",
-      title: "We're Building the Biggest Community for Arab and Indian Aviation Students",
-      body: "Join our WhatsApp group — real questions, real student experiences, and news on opportunities and scholarships as soon as they come up. Don't miss out — be one of the first to join.",
+      kicker: "The First Pilots Community",
+      title: "The Biggest Community for Future Pilots — From Everywhere",
+      body: "Join, share your own experiences, and discover real pilots' stories. For everyone who dreams of becoming a pilot, from any country and any background — don't miss out, be one of the first to join.",
       cta: "Join the Group Now",
     },
     testimonials: {
