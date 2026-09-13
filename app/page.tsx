@@ -412,27 +412,38 @@ export default async function Home() {
         </section>
 
         {/* 8.6 Community — a low-commitment, high-visibility next step before testimonials */}
-        <section className="bg-gradient-to-br from-nino-orange to-red-600 py-16">
-          <div className="mx-auto max-w-3xl px-6 text-center">
-            <Reveal>
-              <span className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 shadow-lg">
-                <MessageCircle className="text-white" size={16} />
-                <span className="font-display text-sm font-bold text-white md:text-base">
-                  {dict.community.kicker}
+        <section className="bg-nino-cream py-16">
+          <div className="mx-auto max-w-5xl px-6">
+            <Reveal className="grid items-center gap-10 md:grid-cols-2">
+              <div className="mx-auto w-full max-w-xs overflow-hidden rounded-3xl shadow-xl md:max-w-sm">
+                <Image
+                  src="/brand/community-promo.jpg"
+                  alt={dict.community.title}
+                  width={1080}
+                  height={1350}
+                  className="h-auto w-full"
+                />
+              </div>
+              <div className="text-center md:text-start">
+                <span className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 shadow-lg">
+                  <MessageCircle className="text-white" size={16} />
+                  <span className="font-display text-sm font-bold text-white md:text-base">
+                    {dict.community.kicker}
+                  </span>
                 </span>
-              </span>
-              <h2 className="mt-6 font-display text-2xl text-white md:text-4xl">
-                {dict.community.title}
-              </h2>
-              <p className="mx-auto mt-4 max-w-xl text-white/90">{dict.community.body}</p>
-              <a
-                href={WHATSAPP_COMMUNITY_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-7 inline-block rounded-full bg-white px-8 py-3.5 text-sm font-medium text-nino-ink shadow-lg transition-transform hover:scale-105"
-              >
-                {dict.community.cta}
-              </a>
+                <h2 className="mt-5 font-display text-2xl text-nino-ink md:text-4xl">
+                  {dict.community.title}
+                </h2>
+                <p className="mt-4 max-w-md text-nino-ink/70 md:mx-0 mx-auto">{dict.community.body}</p>
+                <a
+                  href={WHATSAPP_COMMUNITY_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-7 inline-block rounded-full bg-[#25D366] px-8 py-3.5 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105"
+                >
+                  {dict.community.cta}
+                </a>
+              </div>
             </Reveal>
           </div>
         </section>
