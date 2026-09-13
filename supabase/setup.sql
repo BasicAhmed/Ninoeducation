@@ -206,3 +206,17 @@ CREATE TABLE "login_tokens" (
 	"created_at" text NOT NULL,
 	CONSTRAINT "login_tokens_token_unique" UNIQUE("token")
 );
+
+-- Real, admin-manageable student testimonials (replacing the 3
+-- hardcoded text quotes), with optional video support.
+CREATE TABLE "testimonials" (
+	"id" text PRIMARY KEY NOT NULL,
+	"name" text NOT NULL,
+	"origin" text NOT NULL,
+	"quote" text,
+	"video_url" text,
+	"display_order" integer DEFAULT 0 NOT NULL,
+	"status" text DEFAULT 'draft' NOT NULL,
+	"created_at" text NOT NULL,
+	"updated_at" text NOT NULL
+);

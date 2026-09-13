@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/client";
-import { flightSchools, accommodations, applications, socialPosts, applicationEvents, applicationDrafts } from "@/db/schema";
+import { flightSchools, accommodations, applications, socialPosts, applicationEvents, applicationDrafts, testimonials } from "@/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { redirect } from "next/navigation";
@@ -279,4 +279,35 @@ export async function deleteSocialPost(formData: FormData) {
   const id = String(formData.get("id") || "");
   await db.delete(socialPosts).where(eq(socialPosts.id, id));
   redirect("/admin/social");
+}
+
+export async function saveTestimonial(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  const now = new Date().toISOString();
+
+  const values = {
+    name: String(formData.get("name") || ""),
+    origin: String(formData.get("origin") || ""),
+    quote: String(formData.get("quote") || "") || null,
+    videoUrl: String(formData.get("videoUrl") || "") || null,
+    displayOrder: Number(formData.get("displayOrder") || 0),
+    status: String(formData.get("status") || "draft"),
+    updatedAt: now,
+  };
+
+  if (id) {
+    await db.update(testimonials).set(values).where(eq(testimonials.id, id));
+  } else {
+    await db.insert(testimonials).values({ id: randomUUID(), createdAt: now, ...values });
+  }
+
+  redirect("/admin/testimonials");
+}
+
+export async function deleteTestimonial(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  await db.delete(testimonials).where(eq(testimonials.id, id));
+  redirect("/admin/testimonials");
 }

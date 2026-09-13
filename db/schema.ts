@@ -136,6 +136,25 @@ export const loginTokens = pgTable("login_tokens", {
   createdAt: text("created_at").notNull(),
 });
 
+// Real student testimonials — video-first where possible, since a
+// short video from a real student in their own words is far harder
+// to dismiss as marketing copy than a text quote, and is the single
+// biggest visible gap found when reviewing what comparable
+// international-student aviation platforms do well. videoUrl holds a
+// plain YouTube watch/share link (not an embed URL) — the display
+// component derives the embed and thumbnail from it.
+export const testimonials = pgTable("testimonials", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  origin: text("origin").notNull(), // e.g. "الرياض، السعودية"
+  quote: text("quote"), // nullable — a video testimonial may stand alone without a written quote
+  videoUrl: text("video_url"), // nullable — a plain YouTube link; null means text-only
+  displayOrder: integer("display_order").notNull().default(0),
+  status: text("status").notNull().default("draft"), // draft | published
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
 export const socialPosts = pgTable("social_posts", {
   id: text("id").primaryKey(),
   imageUrl: text("image_url").notNull(),

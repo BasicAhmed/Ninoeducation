@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Plane, Home, ClipboardList, AtSign, LogOut, Menu, X, Hourglass } from "lucide-react";
+import { LayoutDashboard, Plane, Home, ClipboardList, AtSign, LogOut, Menu, X, Hourglass, Quote } from "lucide-react";
 import { logoutAdmin } from "@/lib/admin-auth";
 import { CommandPalette } from "@/components/admin/CommandPalette";
 
@@ -13,6 +13,7 @@ const NAV = [
   { href: "/admin/accommodation", label: "السكن", icon: Home },
   { href: "/admin/applications", label: "الطلبات", icon: ClipboardList },
   { href: "/admin/abandoned", label: "طلبات متروكة", icon: Hourglass },
+  { href: "/admin/testimonials", label: "آراء الطلاب", icon: Quote },
   { href: "/admin/social", label: "إنستقرام", icon: AtSign },
 ];
 
