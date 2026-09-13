@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ShieldCheck, ListChecks, Compass, Home as HomeIcon, X, Check, MessageCircle } from "lucide-react";
+import { ShieldCheck, ListChecks, Compass, Home as HomeIcon, X, Check } from "lucide-react";
 import { getPublishedSchools, getPublishedAccommodations } from "@/lib/schools";
 import { WHATSAPP_NUMBER, WHATSAPP_COMMUNITY_LINK, SITE_URL } from "@/lib/constants";
 import { formatUsdRange } from "@/lib/currency";
@@ -413,9 +413,9 @@ export default async function Home() {
 
         {/* 8.6 Community — a low-commitment, high-visibility next step before testimonials */}
         <section className="bg-nino-cream py-16">
-          <div className="mx-auto max-w-5xl px-6">
-            <Reveal className="grid items-center gap-10 md:grid-cols-2">
-              <div className="mx-auto w-full max-w-xs overflow-hidden rounded-3xl shadow-xl md:max-w-sm">
+          <div className="mx-auto max-w-5xl px-6 text-center">
+            <Reveal>
+              <div className="mx-auto w-full max-w-xs overflow-hidden rounded-3xl shadow-xl">
                 <Image
                   src="/brand/community-promo.jpg"
                   alt={dict.community.title}
@@ -424,26 +424,14 @@ export default async function Home() {
                   className="h-auto w-full"
                 />
               </div>
-              <div className="text-center md:text-start">
-                <span className="inline-flex items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 shadow-lg">
-                  <MessageCircle className="text-white" size={16} />
-                  <span className="font-display text-sm font-bold text-white md:text-base">
-                    {dict.community.kicker}
-                  </span>
-                </span>
-                <h2 className="mt-5 font-display text-2xl text-nino-ink md:text-4xl">
-                  {dict.community.title}
-                </h2>
-                <p className="mt-4 max-w-md text-nino-ink/70 md:mx-0 mx-auto">{dict.community.body}</p>
-                <a
-                  href={WHATSAPP_COMMUNITY_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-7 inline-block rounded-full bg-[#25D366] px-8 py-3.5 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  {dict.community.cta}
-                </a>
-              </div>
+              <a
+                href={WHATSAPP_COMMUNITY_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-7 inline-block rounded-full bg-[#25D366] px-8 py-3.5 text-sm font-medium text-white shadow-lg transition-transform hover:scale-105"
+              >
+                {dict.community.cta}
+              </a>
             </Reveal>
           </div>
         </section>
