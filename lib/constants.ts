@@ -9,6 +9,12 @@ export const PROVINCES = [
 // international format with no + or spaces.
 export const WHATSAPP_NUMBER = "27763102159";
 
+// The community WhatsApp group invite link — a different kind of
+// link from WHATSAPP_NUMBER above (chat.whatsapp.com/... is a group
+// invite, not a direct-message deep link), kept as its own constant
+// since it's used from more than one place.
+export const WHATSAPP_COMMUNITY_LINK = "https://chat.whatsapp.com/JVFD6PFuIWnKzFv8TZXl9u?s=cl&p=i&mlu=4&ilr=4";
+
 export const LICENSE_LABELS: Record<string, string> = {
   PPL: "رخصة طيار خاص (PPL)",
   CPL: "رخصة طيار تجاري (CPL)",

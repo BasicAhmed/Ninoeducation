@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { WHATSAPP_NUMBER } from "@/lib/constants";
+import { WHATSAPP_NUMBER, WHATSAPP_COMMUNITY_LINK } from "@/lib/constants";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
 
@@ -73,6 +73,14 @@ export async function SiteFooter() {
               className="mt-2 inline-block hover:text-nino-orange"
             >
               {t.whatsapp}
+            </a>
+            <a
+              href={WHATSAPP_COMMUNITY_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 block hover:text-nino-orange"
+            >
+              {t.communityLink}
             </a>
           </div>
         </div>

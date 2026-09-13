@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ShieldCheck, ListChecks, Compass, Home as HomeIcon, X, Check } from "lucide-react";
+import { ShieldCheck, ListChecks, Compass, Home as HomeIcon, X, Check, Users } from "lucide-react";
 import { getPublishedSchools, getPublishedAccommodations } from "@/lib/schools";
-import { WHATSAPP_NUMBER, SITE_URL } from "@/lib/constants";
+import { WHATSAPP_NUMBER, WHATSAPP_COMMUNITY_LINK, SITE_URL } from "@/lib/constants";
 import { formatUsdRange } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -407,6 +407,32 @@ export default async function Home() {
               <p className="mt-8 text-center font-display text-xl text-white/90 md:text-2xl">
                 {dict.whyNotAlone.closingNote}
               </p>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* 8.6 Community — a low-commitment, high-visibility next step before testimonials */}
+        <section className="bg-[#25D366] py-16">
+          <div className="mx-auto max-w-3xl px-6 text-center">
+            <Reveal>
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-white/20">
+                <Users className="text-white" size={28} />
+              </div>
+              <p className="mt-4 font-mono text-xs uppercase tracking-widest text-white/80">
+                {dict.community.kicker}
+              </p>
+              <h2 className="mt-3 font-display text-2xl text-white md:text-3xl">
+                {dict.community.title}
+              </h2>
+              <p className="mx-auto mt-3 max-w-xl text-white/90">{dict.community.body}</p>
+              <a
+                href={WHATSAPP_COMMUNITY_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-block rounded-full bg-white px-8 py-3.5 text-sm font-medium text-[#128C4A] shadow-lg transition-transform hover:scale-105"
+              >
+                {dict.community.cta}
+              </a>
             </Reveal>
           </div>
         </section>

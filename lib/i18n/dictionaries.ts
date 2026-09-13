@@ -21,6 +21,7 @@ export const dictionaries = {
       aboutLink: "من نحن",
       dashboardLink: "الدخول لحسابي",
       scholarshipsLink: "منح وخصومات",
+      communityLink: "مجتمعنا على واتساب",
       contactHeading: "تواصل معنا",
       whatsapp: "واتساب نينو إديوكيشن",
       rights: "نينو إديوكيشن. جميع الأسعار تقديرية وقابلة للتغيير من قبل مدارس الطيران.",
@@ -138,6 +139,12 @@ export const dictionaries = {
       step3: "صِل",
       step3Body: "سكن، استقبال من المطار، وشخص تتواصل معه في أول أسبوع لك في جنوب أفريقيا.",
       seeFullJourney: "شوف رحلتك كاملة، خطوة بخطوة ←",
+    },
+    community: {
+      kicker: "مجتمعنا على واتساب",
+      title: "ننبني أكبر مجتمع لطلاب الطيران العرب والهنود",
+      body: "انضم لمجموعتنا على واتساب — أسئلة حقيقية، تجارب طلاب فعليين، وأخبار الفرص والمنح أول بأول. لا تفوّت الفرصة وتكون من أول المنضمين.",
+      cta: "انضم للمجموعة الآن",
     },
     testimonials: {
       kicker: "آراء حقيقية",
@@ -651,6 +658,7 @@ export const dictionaries = {
       aboutLink: "About Us",
       dashboardLink: "Sign In to My Account",
       scholarshipsLink: "Scholarships & Discounts",
+      communityLink: "Our WhatsApp Community",
       contactHeading: "Contact Us",
       whatsapp: "WhatsApp Nino Education",
       rights: "Nino Education. All prices are estimates and subject to change by the flight schools.",
@@ -768,6 +776,12 @@ export const dictionaries = {
       step3: "Arrive",
       step3Body: "Housing, airport pickup, and a point of contact for your first week in South Africa.",
       seeFullJourney: "See your full journey, step by step →",
+    },
+    community: {
+      kicker: "Our WhatsApp Community",
+      title: "We're Building the Biggest Community for Arab and Indian Aviation Students",
+      body: "Join our WhatsApp group — real questions, real student experiences, and news on opportunities and scholarships as soon as they come up. Don't miss out — be one of the first to join.",
+      cta: "Join the Group Now",
     },
     testimonials: {
       kicker: "Real Voices",
