@@ -52,6 +52,7 @@ export async function generateMetadata(): Promise<Metadata> {
     // that's the site's actual primary audience and existing indexed
     // URL.
     alternates: {
+      canonical: SITE_URL,
       languages: { ar: SITE_URL, en: `${SITE_URL}/en`, "x-default": SITE_URL },
     },
     // Set GOOGLE_SITE_VERIFICATION in Vercel once you add the property
