@@ -65,6 +65,11 @@ export default async function Home() {
     name: "نينو إديوكيشن",
     alternateName: "Nino Education",
     url: SITE_URL,
+    // Without this, Google has no structured signal for which image
+    // is the official brand mark — it's what can surface as the small
+    // icon next to search results and in a knowledge panel. Needs a
+    // stable absolute URL, not a relative path.
+    logo: `${SITE_URL}/brand/nino-logo-schema.png`,
     description:
       "استشارات مجانية تساعد الطلاب الدوليين على أن يصبحوا طيارين معتمدين، من خلال إيجاد ومقارنة والتقديم لأفضل مدارس الطيران المعتمدة في جنوب أفريقيا.",
     areaServed: "Arab world, India",
