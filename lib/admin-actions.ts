@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/client";
-import { flightSchools, accommodations, applications, socialPosts, applicationEvents, applicationDrafts, testimonials } from "@/db/schema";
+import { flightSchools, accommodations, applications, socialPosts, applicationEvents, applicationDrafts, testimonials, visaCountries } from "@/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { redirect } from "next/navigation";
@@ -310,4 +310,45 @@ export async function deleteTestimonial(formData: FormData) {
   const id = String(formData.get("id") || "");
   await db.delete(testimonials).where(eq(testimonials.id, id));
   redirect("/admin/testimonials");
+}
+
+export async function saveVisaCountry(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  const now = new Date().toISOString();
+
+  const values = {
+    countryNameAr: String(formData.get("countryNameAr") || ""),
+    countryNameEn: String(formData.get("countryNameEn") || ""),
+    hasEmbassy: formData.get("hasEmbassy") === "on",
+    embassyName: String(formData.get("embassyName") || "") || null,
+    embassyEmail: String(formData.get("embassyEmail") || "") || null,
+    embassyAddress: String(formData.get("embassyAddress") || "") || null,
+    embassyMapsUrl: String(formData.get("embassyMapsUrl") || "") || null,
+    usesVfs: formData.get("usesVfs") === "on",
+    vfsWebsite: String(formData.get("vfsWebsite") || "") || null,
+    vfsAddress: String(formData.get("vfsAddress") || "") || null,
+    vfsMapsUrl: String(formData.get("vfsMapsUrl") || "") || null,
+    noDirectOption: formData.get("noDirectOption") === "on",
+    alternativeCountryNote: String(formData.get("alternativeCountryNote") || "") || null,
+    additionalDocumentsNote: String(formData.get("additionalDocumentsNote") || "") || null,
+    status: String(formData.get("status") || "draft"),
+    lastVerifiedAt: String(formData.get("lastVerifiedAt") || now.slice(0, 10)),
+    updatedAt: now,
+  };
+
+  if (id) {
+    await db.update(visaCountries).set(values).where(eq(visaCountries.id, id));
+  } else {
+    await db.insert(visaCountries).values({ id: randomUUID(), createdAt: now, ...values });
+  }
+
+  redirect("/admin/visa-countries");
+}
+
+export async function deleteVisaCountry(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  await db.delete(visaCountries).where(eq(visaCountries.id, id));
+  redirect("/admin/visa-countries");
 }

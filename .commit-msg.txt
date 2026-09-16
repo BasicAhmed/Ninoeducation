@@ -1,0 +1,80 @@
+Feature: South African visa checkpoint tracker in the student dashboard — country-aware guidance with a progress stepper across booking, location, and documents
+
+Ahmed's spec (dictated): a student logs in, picks the country
+they're applying from, and gets a step-by-step flow — the embassy's
+booking email if their country has a direct embassy, the Google Maps
+location once they've booked, and a document checklist — with a
+progress line tracking where they are.
+
+Deliberately did NOT invent embassy emails, addresses, or VFS center
+details from memory for any country — getting one wrong could cause
+a student to miss an appointment or show up at the wrong place, which
+is a categorically worse outcome than the feature not existing yet.
+Built this as an admin-managed system instead:
+
+New visa_countries table (admin-entered, not AI-guessed) capturing
+exactly one of three real-world paths per country: a direct embassy
+(name, booking email, address, maps link), a VFS Global center
+(booking website, address, maps link), or neither — in which case
+admin enters a note on which neighboring country's embassy the
+student should use instead. Includes lastVerifiedAt so staleness is
+visible in the admin list (flagged with a warning icon past 6
+months), since embassy procedures and VFS arrangements do change.
+
+New visa_progress table tracks each student's own progress by their
+dashboard login email: selected country, whether they've confirmed
+booking the appointment, whether they've confirmed the location, and
+which of the 7 standard SA study-visa documents they've checked off
+(shared with the existing /guides/south-africa-study-visa guide's
+list, so the two don't quietly drift apart over time).
+
+New admin pages at /admin/visa-countries (list/add/edit, conditional
+form sections per path type) and the actual student-facing page at
+/dashboard/visa: country picker, then a 3-dot progress stepper, then
+three step cards showing exactly the guidance that country's data
+calls for, each with a toggleable done/undo action. Linked from the
+main dashboard.
+
+Researched Qatar specifically via web search, since Ahmed named it as
+his walkthrough example — corroborated the embassy address, consular
+booking email (doha.consular@dirco.gov.za), and hours across multiple
+independent sources including the official DIRCO (South Africa's
+foreign ministry) embassy pages. Have this ready as a real, sourced
+example for Ahmed to enter via the admin panel, rather than writing it
+directly to a production database I have no access to.
+
+Real bug caught during testing, not shipped blind: the initial
+version exported STANDARD_VISA_DOCUMENTS (a plain data array) from
+visa-progress.ts, a "use server" file — Next.js only allows async
+function exports from such files, and this crashed every load of the
+tracker page with a build-time error caught only by actually loading
+the page, not by the type-checker or linter (a plain array export is
+syntactically valid TypeScript). Moved the data to its own
+lib/visa-documents.ts file and fixed the fatal render error.
+
+Also caught and fixed a confusingly-worded button label during visual
+review: the 'undo' button for a confirmed appointment read as "Undo —
+Not Booked Yet" in English, which reads like a description of the
+current state rather than an action, when the actual state was
+booked=true and the button reverses that. Reworded to "Cancel
+Confirmation" / "إلغاء التأكيد".
+
+Verified thoroughly, not just type-checked: walked through all three
+real-world country-path scenarios (has-embassy, uses-VFS, no-direct-
+option) with representative mock data and confirmed each renders the
+correct guidance, confirmed the progress stepper reflects mixed
+completion states correctly (including reasoning through why it
+visually mirrors left-to-right under RTL — the rightmost dot is step
+1, matching natural Arabic reading order, not a bug), confirmed the
+document checklist correctly shows checked items with a strikethrough
+and an accurate x-of-y count, and confirmed the English version
+renders correctly including the one real i18n limitation worth
+knowing: admin-entered free-text notes (the alternative-country note)
+are single-language, so they'll appear in whatever language the
+admin typed them regardless of site language — the same accepted
+tradeoff already in place for testimonial quotes. Also confirmed,
+via a genuine mistake during the verification process itself, that
+restoring a stubbed test file from a backup silently reverted an
+already-applied bug fix — caught this by re-checking the restored
+file's content rather than assuming the restore was safe, and
+reapplied the fix before shipping.

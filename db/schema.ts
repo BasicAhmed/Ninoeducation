@@ -155,6 +155,54 @@ export const testimonials = pgTable("testimonials", {
   updatedAt: text("updated_at").notNull(),
 });
 
+// Per-country South African student visa procedure info, entered and
+// verified by Ahmed's team — deliberately NOT populated with
+// AI-guessed embassy emails/addresses, since a wrong one could cause
+// a student to miss an appointment or send documents to the wrong
+// place. lastVerifiedAt exists so admin (and future-admin) can see at
+// a glance how stale a country's info might be, since embassy
+// procedures and VFS arrangements do change over time.
+export const visaCountries = pgTable("visa_countries", {
+  id: text("id").primaryKey(),
+  countryNameAr: text("country_name_ar").notNull(),
+  countryNameEn: text("country_name_en").notNull(),
+  // How this country's applicants actually reach SA visa processing —
+  // exactly one of these three paths applies:
+  hasEmbassy: boolean("has_embassy").notNull().default(false),
+  embassyName: text("embassy_name"),
+  embassyEmail: text("embassy_email"),
+  embassyAddress: text("embassy_address"),
+  embassyMapsUrl: text("embassy_maps_url"),
+  usesVfs: boolean("uses_vfs").notNull().default(false),
+  vfsWebsite: text("vfs_website"),
+  vfsAddress: text("vfs_address"),
+  vfsMapsUrl: text("vfs_maps_url"),
+  // Neither of the above — applicants from this country must apply
+  // through a named neighboring country instead.
+  noDirectOption: boolean("no_direct_option").notNull().default(false),
+  alternativeCountryNote: text("alternative_country_note"),
+  additionalDocumentsNote: text("additional_documents_note"),
+  status: text("status").notNull().default("draft"), // draft | published
+  lastVerifiedAt: text("last_verified_at").notNull(),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
+// A student's progress through the visa checkpoint flow — one row
+// per student email (matches the dashboard's own passwordless-login
+// identity), not tied to a specific application, since a student
+// might revisit this after re-logging in.
+export const visaProgress = pgTable("visa_progress", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  countryId: text("country_id"), // references visaCountries.id, nullable until chosen
+  step1AppointmentBooked: boolean("step1_appointment_booked").notNull().default(false),
+  step2LocationConfirmed: boolean("step2_location_confirmed").notNull().default(false),
+  documentsChecked: text("documents_checked").notNull().default("[]"), // JSON array of document ids
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
 export const socialPosts = pgTable("social_posts", {
   id: text("id").primaryKey(),
   imageUrl: text("image_url").notNull(),
