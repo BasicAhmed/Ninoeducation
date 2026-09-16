@@ -166,6 +166,13 @@ export const visaCountries = pgTable("visa_countries", {
   id: text("id").primaryKey(),
   countryNameAr: text("country_name_ar").notNull(),
   countryNameEn: text("country_name_en").notNull(),
+  // ISO 3166-1 alpha-2 code (e.g. "QA" for Qatar) — matches the
+  // x-vercel-ip-country header Vercel sets automatically on every
+  // request, which is what lets the student's country be detected
+  // without asking them to pick it manually. Nullable so existing
+  // rows aren't broken by the migration; auto-detection just can't
+  // match a row that doesn't have one yet.
+  countryCode: text("country_code"),
   // How this country's applicants actually reach SA visa processing —
   // exactly one of these three paths applies:
   hasEmbassy: boolean("has_embassy").notNull().default(false),

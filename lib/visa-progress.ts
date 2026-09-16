@@ -36,6 +36,26 @@ export async function getMyVisaProgress() {
   }
 }
 
+// Called once, automatically, the first time a student with no
+// country chosen yet loads the tracker and their detected country
+// (from Vercel's own geo-IP header, matched against an admin-entered
+// country code) has a match — saves it so it sticks on future visits
+// without the student needing to pick it manually. A no-op if
+// they've already got a country set, so it never overwrites an
+// explicit later change.
+export async function autoSaveDetectedCountry(countryId: string) {
+  const email = await requireStudentEmail();
+  try {
+    const now = new Date().toISOString();
+    const existing = await db.select().from(visaProgress).where(eq(visaProgress.email, email)).limit(1);
+    if (existing[0] && !existing[0].countryId) {
+      await db.update(visaProgress).set({ countryId, updatedAt: now }).where(eq(visaProgress.email, email));
+    }
+  } catch (err) {
+    console.error("autoSaveDetectedCountry failed:", err);
+  }
+}
+
 export async function selectVisaCountry(formData: FormData) {
   const email = await requireStudentEmail();
   const countryId = String(formData.get("countryId") || "");

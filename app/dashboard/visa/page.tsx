@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Mail, MapPin, ExternalLink, CheckCircle2, Circle, AlertTriangle } from "lucide-react";
+import { headers } from "next/headers";
+import { Mail, MapPin, ExternalLink, CheckCircle2, Circle, AlertTriangle, LocateFixed } from "lucide-react";
 import { eq, asc } from "drizzle-orm";
 import { db } from "@/db/client";
 import { visaCountries } from "@/db/schema";
@@ -13,6 +14,7 @@ import {
   selectVisaCountry,
   toggleVisaStep,
   toggleVisaDocument,
+  autoSaveDetectedCountry,
 } from "@/lib/visa-progress";
 import { STANDARD_VISA_DOCUMENTS } from "@/lib/visa-documents";
 import { SITE_URL } from "@/lib/constants";
@@ -53,9 +55,26 @@ export default async function VisaTrackerPage() {
     console.error("VisaTrackerPage countries lookup failed:", err);
   }
 
-  const selectedCountry = progress?.countryId
+  let selectedCountry = progress?.countryId
     ? countries.find((c) => c.id === progress.countryId) ?? null
     : null;
+
+  // Auto-detect: Vercel sets this header automatically on every
+  // request based on the visitor's IP — no external API, no
+  // permission prompt needed. Only kicks in if the student hasn't
+  // already chosen (or previously been auto-assigned) a country.
+  let autoDetected = false;
+  if (!selectedCountry) {
+    const detectedCode = (await headers()).get("x-vercel-ip-country");
+    if (detectedCode) {
+      const match = countries.find((c) => c.countryCode === detectedCode);
+      if (match) {
+        selectedCountry = match;
+        autoDetected = true;
+        await autoSaveDetectedCountry(match.id);
+      }
+    }
+  }
 
   return (
     <>
@@ -96,7 +115,13 @@ export default async function VisaTrackerPage() {
             </div>
           ) : (
             <>
-              <form action={selectVisaCountry} className="mt-4">
+              {autoDetected && (
+                <p className="mt-4 flex items-center gap-1.5 text-xs text-nino-ink/50">
+                  <LocateFixed size={13} />
+                  {t.autoDetectedNote}
+                </p>
+              )}
+              <form action={selectVisaCountry} className={autoDetected ? "mt-1" : "mt-4"}>
                 <input type="hidden" name="countryId" value="" />
                 <button type="submit" className="text-sm text-nino-orange hover:underline">
                   {lang === "ar" ? selectedCountry.countryNameAr : selectedCountry.countryNameEn} ·{" "}

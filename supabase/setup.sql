@@ -228,6 +228,7 @@ CREATE TABLE "visa_countries" (
 	"id" text PRIMARY KEY NOT NULL,
 	"country_name_ar" text NOT NULL,
 	"country_name_en" text NOT NULL,
+	"country_code" text,
 	"has_embassy" boolean DEFAULT false NOT NULL,
 	"embassy_name" text,
 	"embassy_email" text,

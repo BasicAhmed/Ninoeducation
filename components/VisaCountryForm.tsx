@@ -7,6 +7,7 @@ type VisaCountry = {
   id: string;
   countryNameAr: string;
   countryNameEn: string;
+  countryCode: string | null;
   hasEmbassy: boolean;
   embassyName: string | null;
   embassyEmail: string | null;
@@ -49,6 +50,21 @@ export function VisaCountryForm({ country }: { country?: VisaCountry }) {
           <label className="block text-sm font-medium">اسم الدولة (إنجليزي)</label>
           <input name="countryNameEn" defaultValue={country?.countryNameEn} required dir="ltr" className={inputClass} />
         </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium">رمز الدولة (حرفين، مثل QA لقطر)</label>
+        <input
+          name="countryCode"
+          defaultValue={country?.countryCode ?? ""}
+          dir="ltr"
+          maxLength={2}
+          placeholder="QA"
+          className={`${inputClass} max-w-[120px] uppercase`}
+        />
+        <p className="mt-1.5 text-xs text-nino-ink/50">
+          هذا الرمز يخلي التطبيق يكتشف بلد الطالب أوتوماتيكيًا بدون ما يختاره بنفسه — لازم يكون دقيق.
+        </p>
       </div>
 
       {/* Embassy section */}

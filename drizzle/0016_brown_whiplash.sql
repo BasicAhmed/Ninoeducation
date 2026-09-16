@@ -1,0 +1,1 @@
+ALTER TABLE "visa_countries" ADD COLUMN "country_code" text;

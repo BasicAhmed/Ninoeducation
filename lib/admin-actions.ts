@@ -320,6 +320,7 @@ export async function saveVisaCountry(formData: FormData) {
   const values = {
     countryNameAr: String(formData.get("countryNameAr") || ""),
     countryNameEn: String(formData.get("countryNameEn") || ""),
+    countryCode: String(formData.get("countryCode") || "").trim().toUpperCase() || null,
     hasEmbassy: formData.get("hasEmbassy") === "on",
     embassyName: String(formData.get("embassyName") || "") || null,
     embassyEmail: String(formData.get("embassyEmail") || "") || null,
