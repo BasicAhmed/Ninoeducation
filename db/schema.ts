@@ -210,6 +210,31 @@ export const visaProgress = pgTable("visa_progress", {
   updatedAt: text("updated_at").notNull(),
 });
 
+// A request for a consultation call — deliberately a "request a time"
+// form rather than a full self-serve calendar (no availability/
+// conflict system to keep in sync), matching how every other
+// human-touchpoint on this site already works: the visitor proposes
+// a time, Ahmed's team confirms it personally via WhatsApp/email,
+// same as the existing abandoned-application follow-up pattern.
+// referenceCode/applicationId let a booking made by an existing
+// applicant show their application context directly in admin,
+// instead of admin needing to search for it separately.
+export const consultationBookings = pgTable("consultation_bookings", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  whatsapp: text("whatsapp").notNull(),
+  referenceCode: text("reference_code"), // the "flight number" as typed by the visitor, nullable — not everyone has applied yet
+  applicationId: text("application_id"), // resolved match against applications.id by reference code or email, nullable
+  preferredDate: text("preferred_date").notNull(),
+  preferredTime: text("preferred_time").notNull(), // e.g. "morning" | "afternoon" | "evening"
+  topic: text("topic"), // nullable — what they want to talk about
+  status: text("status").notNull().default("pending"), // pending | confirmed | completed | cancelled
+  adminNotes: text("admin_notes"),
+  createdAt: text("created_at").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+
 export const socialPosts = pgTable("social_posts", {
   id: text("id").primaryKey(),
   imageUrl: text("image_url").notNull(),

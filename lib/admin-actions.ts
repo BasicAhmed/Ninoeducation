@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db/client";
-import { flightSchools, accommodations, applications, socialPosts, applicationEvents, applicationDrafts, testimonials, visaCountries } from "@/db/schema";
+import { flightSchools, accommodations, applications, socialPosts, applicationEvents, applicationDrafts, testimonials, visaCountries, consultationBookings } from "@/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { redirect } from "next/navigation";
@@ -352,4 +352,26 @@ export async function deleteVisaCountry(formData: FormData) {
   const id = String(formData.get("id") || "");
   await db.delete(visaCountries).where(eq(visaCountries.id, id));
   redirect("/admin/visa-countries");
+}
+
+export async function updateConsultationBooking(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  const status = String(formData.get("status") || "pending");
+  const adminNotes = String(formData.get("adminNotes") || "") || null;
+  const now = new Date().toISOString();
+
+  await db
+    .update(consultationBookings)
+    .set({ status, adminNotes, updatedAt: now })
+    .where(eq(consultationBookings.id, id));
+
+  redirect("/admin/consultations");
+}
+
+export async function deleteConsultationBooking(formData: FormData) {
+  await requireAdmin();
+  const id = String(formData.get("id") || "");
+  await db.delete(consultationBookings).where(eq(consultationBookings.id, id));
+  redirect("/admin/consultations");
 }

@@ -64,6 +64,11 @@ export async function SiteFooter() {
                   {t.scholarshipsLink}
                 </Link>
               </li>
+              <li>
+                <Link href="/consultation" className="hover:text-nino-orange">
+                  {t.consultationLink}
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

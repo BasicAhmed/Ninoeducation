@@ -82,6 +82,14 @@ export default async function DashboardPage() {
             <span className="text-nino-orange">←</span>
           </Link>
 
+          <Link
+            href={rows[0]?.referenceCode ? `/consultation?ref=${rows[0].referenceCode}` : "/consultation"}
+            className="mt-3 flex items-center justify-between rounded-2xl border border-nino-line bg-white p-5 hover:border-nino-orange"
+          >
+            <span className="font-medium text-nino-ink">{t.bookCallLink}</span>
+            <span className="text-nino-orange">←</span>
+          </Link>
+
           {rows.length === 0 && (
             <div className="mt-8 rounded-2xl border border-dashed border-nino-line p-10 text-center text-nino-ink/60">
               <p>{t.noApplications}</p>
