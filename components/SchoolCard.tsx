@@ -2,11 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
+import { schoolName, schoolShortEn } from "@/lib/seo";
 import { formatUsdRange } from "@/lib/currency";
 
 type School = {
   slug: string;
   nameAr: string;
+  nameEn?: string | null;
   city: string;
   province: string;
   shortDescriptionAr: string;
@@ -33,12 +35,13 @@ export function SchoolCard({
   lang?: Lang;
 }) {
   const t = dictionaries[lang];
+  const name = schoolName(school, lang);
   const licenses = school.licenses.split(",").slice(0, 3);
   return (
     <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-nino-line bg-white shadow-sm transition hover:-translate-y-1 hover:border-nino-orange hover:shadow-lg">
       {school.heroImageUrl && (
         <div className="relative h-40 w-full">
-          <Image src={school.heroImageUrl} alt={school.nameAr} fill unoptimized className="object-cover" />
+          <Image src={school.heroImageUrl} alt={name} fill unoptimized className="object-cover" />
         </div>
       )}
       <div className="relative flex flex-1 flex-col p-6">
@@ -65,9 +68,9 @@ export function SchoolCard({
           ★ {school.rating.toFixed(1)}
         </span>
       </div>
-      <h3 className="mt-3 font-display text-xl">{school.nameAr}</h3>
+      <h3 className="mt-3 font-display text-xl">{name}</h3>
       <p className="mt-2 text-sm text-nino-ink/70">
-        {school.shortDescriptionAr}
+        {lang === "en" ? schoolShortEn(school) : school.shortDescriptionAr}
       </p>
       {(school.nextIntakeDate || school.seatsAvailable != null) && (
         <div className="mt-3 flex flex-wrap gap-2">

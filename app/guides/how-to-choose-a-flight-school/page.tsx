@@ -1,18 +1,11 @@
 import Link from "next/link";
 import { GuideArticle } from "@/components/GuideArticle";
-import { SITE_URL } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 import { getLang } from "@/lib/i18n/get-lang";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-const META = {
-  ar: { title: "كيف تختار أفضل مدرسة طيران في جنوب أفريقيا؟ | نينو إديوكيشن", description: "معايير عملية لاختيار مدرسة الطيران المناسبة: الاعتماد، الأسطول، الموقع، السعر، ونسبة نجاح الخريجين — وليس فقط الاسم الأشهر." },
-  en: { title: "How to Choose the Best Flight School in South Africa | Nino Education", description: "Practical criteria for choosing the right flight school: accreditation, fleet, location, price, and graduate success rate — not just name recognition." },
-};
-
-export async function generateMetadata() {
-  const lang = await getLang();
-  return { title: META[lang].title, description: META[lang].description, alternates: { canonical: `${SITE_URL}/guides/how-to-choose-a-flight-school` } };
-}
+export const generateMetadata = () =>
+  pageMetadata("/guides/how-to-choose-a-flight-school", { type: "article" });
 
 const FAQ_ITEMS = {
   ar: [

@@ -1,24 +1,14 @@
+import { pageMetadata } from "@/lib/seo";
 import { getSchoolBySlug, getPublishedSchools } from "@/lib/schools";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { ApplyWizard } from "@/components/ApplyWizard";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
-import { SITE_URL } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata() {
-  const lang = await getLang();
-  return {
-    title: lang === "ar" ? "قدّم الآن | نينو إديوكيشن" : "Apply Now | Nino Education",
-    description:
-      lang === "ar"
-        ? "قدّم طلبك للتدريب على الطيران في جنوب أفريقيا مجانًا عبر نينو إديوكيشن."
-        : "Submit your free application for flight training in South Africa through Nino Education.",
-    alternates: { canonical: `${SITE_URL}/apply` },
-  };
-}
+export const generateMetadata = () => pageMetadata("/apply");
 
 export default async function ApplyPage({
   searchParams,

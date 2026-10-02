@@ -1,18 +1,11 @@
 import Link from "next/link";
 import { GuideArticle } from "@/components/GuideArticle";
-import { SITE_URL } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 import { getLang } from "@/lib/i18n/get-lang";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-const META = {
-  ar: { title: "السكن الطلابي في جنوب أفريقيا: دليل الطالب الدولي | نينو إديوكيشن", description: "كل ما تحتاج معرفته عن خيارات السكن لطلاب الطيران الدوليين في جنوب أفريقيا: الأنواع، الأسعار، القرب من المدرسة، وكيف تحجز قبل وصولك." },
-  en: { title: "Student Housing in South Africa: The International Student's Guide | Nino Education", description: "Everything you need to know about housing options for international aviation students in South Africa: types, prices, proximity to school, and how to book before you arrive." },
-};
-
-export async function generateMetadata() {
-  const lang = await getLang();
-  return { title: META[lang].title, description: META[lang].description, alternates: { canonical: `${SITE_URL}/guides/student-accommodation-south-africa` } };
-}
+export const generateMetadata = () =>
+  pageMetadata("/guides/student-accommodation-south-africa", { type: "article" });
 
 const FAQ_ITEMS = {
   ar: [

@@ -1,3 +1,4 @@
+import { buildMetadata } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getAccommodationBySlug } from "@/lib/schools";
@@ -19,11 +20,14 @@ export async function generateMetadata({
   const { slug } = await params;
   const a = await getAccommodationBySlug(slug);
   if (!a) return {};
-  return {
-    title: `${a.nameAr} | نينو إديوكيشن`,
-    description: a.descriptionAr,
-    alternates: { canonical: `${SITE_URL}/accommodation/${a.slug}` },
-  };
+  return buildMetadata({
+    path: `/accommodation/${a.slug}`,
+    lang: "ar",
+    bilingual: false,
+    title: `${a.nameAr}: سكن طلاب الطيران في ${a.city} — الأسعار والصور`,
+    description: a.descriptionAr.slice(0, 155),
+    image: a.imageUrls?.split(",").filter(Boolean)[0],
+  });
 }
 
 export default async function AccommodationProfilePage({

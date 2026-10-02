@@ -1,19 +1,11 @@
+import { pageMetadata } from "@/lib/seo";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { JourneyTimeline } from "@/components/JourneyTimeline";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
-import { SITE_URL } from "@/lib/constants";
 
-export async function generateMetadata() {
-  const lang = await getLang();
-  const t = dictionaries[lang].journey;
-  return {
-    title: t.metaTitle,
-    description: t.metaDescription,
-    alternates: { canonical: `${SITE_URL}/journey` },
-  };
-}
+export const generateMetadata = () => pageMetadata("/journey");
 
 export default async function JourneyPage() {
   const lang = await getLang();

@@ -1,20 +1,12 @@
+import { pageMetadata } from "@/lib/seo";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
 import { submitConsultationBooking } from "@/lib/consultation-actions";
 import { inputClass } from "@/lib/form-styles";
-import { SITE_URL } from "@/lib/constants";
 
-export async function generateMetadata() {
-  const lang = await getLang();
-  const t = dictionaries[lang].consultation;
-  return {
-    title: t.metaTitle,
-    description: t.metaDescription,
-    alternates: { canonical: `${SITE_URL}/consultation` },
-  };
-}
+export const generateMetadata = () => pageMetadata("/consultation");
 
 export default async function ConsultationPage({
   searchParams,

@@ -1,18 +1,11 @@
 import Link from "next/link";
 import { GuideArticle } from "@/components/GuideArticle";
-import { SITE_URL } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 import { getLang } from "@/lib/i18n/get-lang";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-const META = {
-  ar: { title: "متطلبات SACAA والفحص الطبي لرخصة الطيران | نينو إديوكيشن", description: "كل ما تحتاج معرفته عن هيئة الطيران المدني الجنوب أفريقية (SACAA) ومتطلبات الفحص الطبي قبل بدء التدريب على الطيران." },
-  en: { title: "SACAA Requirements and the Aviation Medical Exam | Nino Education", description: "Everything you need to know about the South African Civil Aviation Authority (SACAA) and medical exam requirements before starting flight training." },
-};
-
-export async function generateMetadata() {
-  const lang = await getLang();
-  return { title: META[lang].title, description: META[lang].description, alternates: { canonical: `${SITE_URL}/guides/sacaa-medical-requirements` } };
-}
+export const generateMetadata = () =>
+  pageMetadata("/guides/sacaa-medical-requirements", { type: "article" });
 
 const FAQ_ITEMS = {
   ar: [

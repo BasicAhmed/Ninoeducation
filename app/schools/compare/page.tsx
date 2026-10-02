@@ -1,3 +1,4 @@
+import { pageMetadata, schoolName } from "@/lib/seo";
 import Link from "next/link";
 import { getSchoolsBySlugs } from "@/lib/schools";
 import { formatUsdRange } from "@/lib/currency";
@@ -5,15 +6,10 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
-import { SITE_URL } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "قارن مدارس الطيران | نينو إديوكيشن",
-  description: "قارن أكثر من مدرسة طيران في جنوب أفريقيا جنبًا إلى جنب: السعر، المدة، الرخص، والأسطول.",
-  alternates: { canonical: `${SITE_URL}/schools/compare` },
-};
+export const generateMetadata = () => pageMetadata("/schools/compare");
 
 export default async function ComparePage({
   searchParams,
@@ -56,7 +52,7 @@ export default async function ComparePage({
                     </th>
                     {schools.map((s) => (
                       <th key={s.id} className="p-4 text-start">
-                        {s.nameAr}
+                        {schoolName(s, lang)}
                       </th>
                     ))}
                   </tr>

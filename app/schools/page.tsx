@@ -1,5 +1,5 @@
+import { pageMetadata } from "@/lib/seo";
 import { getPublishedSchools, PROVINCES } from "@/lib/schools";
-import { SITE_URL } from "@/lib/constants";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SchoolCard } from "@/components/SchoolCard";
@@ -9,12 +9,7 @@ import { dictionaries } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "مدارس الطيران في جنوب أفريقيا | نينو إديوكيشن",
-  description:
-    "قارن أفضل مدارس تدريب الطيران في جنوب أفريقيا حسب الميزانية والرخصة والموقع.",
-  alternates: { canonical: `${SITE_URL}/schools` },
-};
+export const generateMetadata = () => pageMetadata("/schools");
 
 export default async function SchoolsPage({
   searchParams,

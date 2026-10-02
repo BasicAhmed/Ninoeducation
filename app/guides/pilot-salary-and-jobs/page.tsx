@@ -1,18 +1,11 @@
 import Link from "next/link";
 import { GuideArticle } from "@/components/GuideArticle";
-import { SITE_URL } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 import { getLang } from "@/lib/i18n/get-lang";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-const META = {
-  ar: { title: "فرص العمل ورواتب الطيارين بعد التخرج | نينو إديوكيشن", description: "نظرة واقعية على فرص العمل بعد الحصول على رخصة CPL: أين تبدأ، كيف تتطور الرواتب مع الخبرة، وما يؤثر فعليًا على فرصك." },
-  en: { title: "Pilot Jobs and Salaries After Graduation | Nino Education", description: "A realistic look at job opportunities after getting a CPL: where you start, how salaries develop with experience, and what actually affects your chances." },
-};
-
-export async function generateMetadata() {
-  const lang = await getLang();
-  return { title: META[lang].title, description: META[lang].description, alternates: { canonical: `${SITE_URL}/guides/pilot-salary-and-jobs` } };
-}
+export const generateMetadata = () =>
+  pageMetadata("/guides/pilot-salary-and-jobs", { type: "article" });
 
 const FAQ_ITEMS = {
   ar: [

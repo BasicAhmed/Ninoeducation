@@ -2,31 +2,13 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SITE_URL } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 import { GUIDES } from "@/lib/guides";
 import { getLang } from "@/lib/i18n/get-lang";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-const META = {
-  ar: {
-    title: "دراسة الطيران في جنوب أفريقيا: الدليل الشامل 2026 | نينو إديوكيشن",
-    description:
-      "كل ما يحتاج الطالب العربي معرفته عن دراسة الطيران في جنوب أفريقيا: التكلفة، أنواع الرخص، مدة التدريب، التأشيرة، السكن، وأفضل المدارس المعتمدة.",
-  },
-  en: {
-    title: "Studying Aviation in South Africa: The Complete 2026 Guide | Nino Education",
-    description:
-      "Everything international students need to know about studying aviation in South Africa: cost, license types, training duration, visa, housing, and accredited schools.",
-  },
-};
-
-export async function generateMetadata() {
-  const lang = await getLang();
-  return {
-    title: META[lang].title,
-    description: META[lang].description,
-    alternates: { canonical: `${SITE_URL}/guides/study-aviation-in-south-africa` },
-  };
-}
+export const generateMetadata = () =>
+  pageMetadata("/guides/study-aviation-in-south-africa", { type: "article" });
 
 const FAQ_ITEMS = {
   ar: [

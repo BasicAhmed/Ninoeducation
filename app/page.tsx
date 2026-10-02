@@ -62,8 +62,8 @@ export default async function Home() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "نينو إديوكيشن",
-    alternateName: "Nino Education",
+    name: lang === "en" ? "Nino Education" : "نينو إديوكيشن",
+    alternateName: lang === "en" ? "نينو إديوكيشن" : "Nino Education",
     url: SITE_URL,
     // Without this, Google has no structured signal for which image
     // is the official brand mark — it's what can surface as the small
@@ -71,7 +71,9 @@ export default async function Home() {
     // stable absolute URL, not a relative path.
     logo: `${SITE_URL}/brand/nino-logo-schema.png`,
     description:
-      "استشارات مجانية تساعد الطلاب الدوليين على أن يصبحوا طيارين معتمدين، من خلال إيجاد ومقارنة والتقديم لأفضل مدارس الطيران المعتمدة في جنوب أفريقيا.",
+      lang === "en"
+        ? "Free advisory service helping international students study aviation in South Africa: find, compare and apply to SACAA-approved flight schools."
+        : "استشارات مجانية تساعد الطلاب الدوليين على دراسة الطيران في جنوب أفريقيا، من خلال إيجاد ومقارنة والتقديم لأفضل مدارس الطيران المعتمدة من SACAA.",
     areaServed: "Arab world, India",
     knowsAbout: "Flight training enrollment, SACAA-licensed flight schools in South Africa",
   };
@@ -83,7 +85,9 @@ export default async function Home() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     url: SITE_URL,
-    name: "نينو إديوكيشن",
+    name: lang === "en" ? "Nino Education" : "نينو إديوكيشن",
+    alternateName: ["Nino Education", "نينو إديوكيشن", "Nino"],
+    inLanguage: ["ar", "en"],
     potentialAction: {
       "@type": "SearchAction",
       target: `${SITE_URL}/schools?q={search_term_string}`,

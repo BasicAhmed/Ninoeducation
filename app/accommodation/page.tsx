@@ -1,7 +1,7 @@
+import { SEO_PAGES, buildMetadata } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import { getPublishedAccommodations } from "@/lib/schools";
-import { SITE_URL } from "@/lib/constants";
 import { formatUsdRange } from "@/lib/currency";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -10,11 +10,9 @@ import { dictionaries } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  title: "السكن الطلابي في جنوب أفريقيا | نينو إديوكيشن",
-  description: "خيارات سكن قريبة من مدارس الطيران في جنوب أفريقيا.",
-  alternates: { canonical: `${SITE_URL}/accommodation` },
-};
+// Listings are Arabic-only for now, so this page has one canonical.
+export const generateMetadata = () =>
+  buildMetadata({ path: "/accommodation", lang: "ar", bilingual: false, ...SEO_PAGES["/accommodation"].ar });
 
 export default async function AccommodationPage() {
   const lang = await getLang();

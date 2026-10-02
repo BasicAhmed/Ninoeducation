@@ -1,18 +1,11 @@
 import Link from "next/link";
 import { GuideArticle } from "@/components/GuideArticle";
-import { SITE_URL } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 import { getLang } from "@/lib/i18n/get-lang";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-const META = {
-  ar: { title: "نصائح عملية للنجاح في دراسة الطيران بجنوب أفريقيا | نينو إديوكيشن", description: "نصائح واقعية من تجارب طلاب سابقين: كيف تتأقلم بسرعة، تدير ميزانيتك، وتحافظ على تقدمك في التدريب دون تعثر." },
-  en: { title: "Practical Tips to Succeed at Aviation Training in South Africa | Nino Education", description: "Realistic tips from past students' experiences: how to adapt quickly, manage your budget, and keep your training progressing without stumbling." },
-};
-
-export async function generateMetadata() {
-  const lang = await getLang();
-  return { title: META[lang].title, description: META[lang].description, alternates: { canonical: `${SITE_URL}/guides/tips-to-succeed-in-south-africa` } };
-}
+export const generateMetadata = () =>
+  pageMetadata("/guides/tips-to-succeed-in-south-africa", { type: "article" });
 
 const FAQ_ITEMS = {
   ar: [

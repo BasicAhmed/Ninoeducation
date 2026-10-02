@@ -4,14 +4,12 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
-import { SITE_URL } from "@/lib/constants";
 
 export async function generateMetadata() {
   const lang = await getLang();
   const t = dictionaries[lang].consultation;
   return {
-    title: `${t.thankYouTitle} | نينو إديوكيشن`,
-    alternates: { canonical: `${SITE_URL}/consultation/thank-you` },
+    title: t.thankYouTitle,
     robots: { index: false },
   };
 }

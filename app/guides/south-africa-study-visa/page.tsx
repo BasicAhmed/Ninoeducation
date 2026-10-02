@@ -1,18 +1,11 @@
 import Link from "next/link";
 import { GuideArticle } from "@/components/GuideArticle";
-import { SITE_URL } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 import { getLang } from "@/lib/i18n/get-lang";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-const META = {
-  ar: { title: "التأشيرة الدراسية لجنوب أفريقيا: دليل الطلاب الدوليين 2026 | نينو إديوكيشن", description: "كل خطوة تحتاجها للحصول على تأشيرة الدراسة في جنوب أفريقيا كطالب طيران دولي: المستندات، المدة، التكلفة، والأخطاء الشائعة." },
-  en: { title: "South Africa's Study Visa: International Students' 2026 Guide | Nino Education", description: "Every step you need to get a study visa for South Africa as an international aviation student: documents, timeline, cost, and common mistakes." },
-};
-
-export async function generateMetadata() {
-  const lang = await getLang();
-  return { title: META[lang].title, description: META[lang].description, alternates: { canonical: `${SITE_URL}/guides/south-africa-study-visa` } };
-}
+export const generateMetadata = () =>
+  pageMetadata("/guides/south-africa-study-visa", { type: "article" });
 
 const FAQ_ITEMS = {
   ar: [

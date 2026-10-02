@@ -1,8 +1,8 @@
+import { pageMetadata } from "@/lib/seo";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { GuidesSearch } from "@/components/GuidesSearch";
 import { GUIDES } from "@/lib/guides";
-import { SITE_URL } from "@/lib/constants";
 import { getLang } from "@/lib/i18n/get-lang";
 
 const COPY = {
@@ -24,15 +24,7 @@ const COPY = {
   },
 };
 
-export async function generateMetadata() {
-  const lang = await getLang();
-  const t = COPY[lang];
-  return {
-    title: t.metaTitle,
-    description: t.metaDescription,
-    alternates: { canonical: `${SITE_URL}/guides` },
-  };
-}
+export const generateMetadata = () => pageMetadata("/guides");
 
 export default async function GuidesIndexPage() {
   const lang = await getLang();

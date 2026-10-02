@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { GraduationCap, Tag, Rocket, Users, HeartHandshake } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -6,15 +7,7 @@ import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
 import { SITE_URL, WHATSAPP_NUMBER } from "@/lib/constants";
 
-export async function generateMetadata() {
-  const lang = await getLang();
-  const t = dictionaries[lang].scholarships;
-  return {
-    title: t.metaTitle,
-    description: t.metaDescription,
-    alternates: { canonical: `${SITE_URL}/scholarships` },
-  };
-}
+export const generateMetadata = () => pageMetadata("/scholarships");
 
 export default async function ScholarshipsPage() {
   const lang = await getLang();

@@ -1,18 +1,11 @@
 import Link from "next/link";
 import { GuideArticle } from "@/components/GuideArticle";
-import { SITE_URL } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 import { getLang } from "@/lib/i18n/get-lang";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-const META = {
-  ar: { title: "مشاكل شائعة يواجهها طلاب الطيران في جنوب أفريقيا | نينو إديوكيشن", description: "المشاكل الواقعية التي قد تواجهها أثناء برنامج التدريب — تأخير الطقس، الحنين للوطن، صعوبات مالية غير متوقعة — وكيف تتعامل معها." },
-  en: { title: "Common Challenges Aviation Students Face in South Africa | Nino Education", description: "The real challenges you might face during your training program — weather delays, homesickness, unexpected financial difficulties — and how to handle them." },
-};
-
-export async function generateMetadata() {
-  const lang = await getLang();
-  return { title: META[lang].title, description: META[lang].description, alternates: { canonical: `${SITE_URL}/guides/common-challenges-flight-training` } };
-}
+export const generateMetadata = () =>
+  pageMetadata("/guides/common-challenges-flight-training", { type: "article" });
 
 const FAQ_ITEMS = {
   ar: [

@@ -1,5 +1,5 @@
+import { pageMetadata } from "@/lib/seo";
 import { CostCalculator } from "@/components/CostCalculator";
-import { SITE_URL } from "@/lib/constants";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { getLang } from "@/lib/i18n/get-lang";
@@ -19,15 +19,7 @@ const COPY = {
   },
 };
 
-export async function generateMetadata() {
-  const lang = await getLang();
-  const t = COPY[lang];
-  return {
-    title: t.metaTitle,
-    description: t.metaDescription,
-    alternates: { canonical: `${SITE_URL}/calculator` },
-  };
-}
+export const generateMetadata = () => pageMetadata("/calculator");
 
 export default async function CalculatorPage() {
   const lang = await getLang();

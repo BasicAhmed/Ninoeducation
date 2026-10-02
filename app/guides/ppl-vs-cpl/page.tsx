@@ -1,18 +1,11 @@
 import Link from "next/link";
 import { GuideArticle } from "@/components/GuideArticle";
-import { SITE_URL } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 import { getLang } from "@/lib/i18n/get-lang";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-const META = {
-  ar: { title: "الفرق بين رخصة PPL و CPL: أيهما تحتاج؟ | نينو إديوكيشن", description: "مقارنة شاملة بين رخصة الطيار الخاص (PPL) ورخصة الطيار التجاري (CPL): التكلفة، المتطلبات، ماذا تسمح لك بفعله، وأيهما تبدأ به." },
-  en: { title: "PPL vs CPL: Which One Do You Need? | Nino Education", description: "A complete comparison between the Private Pilot License (PPL) and Commercial Pilot License (CPL): cost, requirements, what each lets you do, and which to start with." },
-};
-
-export async function generateMetadata() {
-  const lang = await getLang();
-  return { title: META[lang].title, description: META[lang].description, alternates: { canonical: `${SITE_URL}/guides/ppl-vs-cpl` } };
-}
+export const generateMetadata = () =>
+  pageMetadata("/guides/ppl-vs-cpl", { type: "article" });
 
 const FAQ_ITEMS = {
   ar: [

@@ -1,3 +1,4 @@
+import { schoolMetadata, schoolName, schoolShortEn, schoolLongEn } from "@/lib/seo";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -21,12 +22,7 @@ export async function generateMetadata({
   const school = await getSchoolBySlug(slug);
   if (!school) return {};
   const lang = await getLang();
-  const t = dictionaries[lang].schoolProfile;
-  return {
-    title: `${school.nameAr} — ${t.metaTitleSuffix} | نينو إديوكيشن`,
-    description: school.shortDescriptionAr,
-    alternates: { canonical: `${SITE_URL}/schools/${school.slug}` },
-  };
+  return schoolMetadata(school, lang);
 }
 
 export default async function SchoolProfilePage({
@@ -42,6 +38,10 @@ export default async function SchoolProfilePage({
   const dict = dictionaries[lang];
   const t = dict.schoolProfile;
 
+  const name = schoolName(school, lang);
+  const en = lang === "en";
+  const pageUrl = `${SITE_URL}${en ? "/en" : ""}/schools/${school.slug}`;
+
   const licenses = school.licenses.split(",");
   const fleet = school.aircraftFleet.split(",");
   const updated = new Date(school.lastPricingUpdate).toLocaleDateString(
@@ -55,8 +55,10 @@ export default async function SchoolProfilePage({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    name: school.nameAr,
-    url: `${SITE_URL}/schools/${school.slug}`,
+    name,
+    alternateName: en ? school.nameAr : school.nameEn,
+    url: pageUrl,
+    description: en ? schoolLongEn(school) : school.shortDescriptionAr,
     address: {
       "@type": "PostalAddress",
       addressLocality: school.city,
@@ -75,7 +77,7 @@ export default async function SchoolProfilePage({
     hasCourse: licenses.map((l) => ({
       "@type": "Course",
       name: dict.licenses[l as keyof typeof dict.licenses] ?? l,
-      provider: { "@type": "EducationalOrganization", name: school.nameAr },
+      provider: { "@type": "EducationalOrganization", name },
     })),
   };
 
@@ -91,7 +93,7 @@ export default async function SchoolProfilePage({
         <section className={`border-b border-nino-line bg-nino-cream ${!school.heroImageUrl ? "pt-24" : ""}`}>
           {school.heroImageUrl && (
             <div className="relative h-56 w-full md:h-72">
-              <Image src={school.heroImageUrl} alt={school.nameAr} fill unoptimized className="object-cover" />
+              <Image src={school.heroImageUrl} alt={name} fill unoptimized className="object-cover" />
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/50 to-transparent"
@@ -104,10 +106,10 @@ export default async function SchoolProfilePage({
               <span dir="ltr">{school.airportCode}</span>)
             </p>
             <h1 className="mt-3 font-display text-4xl text-nino-ink md:text-5xl">
-              {school.nameAr}
+              {name}
             </h1>
             <p className="mt-4 max-w-2xl text-nino-ink/70">
-              {school.shortDescriptionAr}
+              {en ? schoolShortEn(school) : school.shortDescriptionAr}
             </p>
             {(school.nextIntakeDate || school.seatsAvailable != null) && (
               <div className="mt-4 flex flex-wrap gap-2">
@@ -128,7 +130,7 @@ export default async function SchoolProfilePage({
                 href={`/apply?school=${school.slug}`}
                 className="rounded-full bg-nino-orange px-6 py-3 text-sm font-medium text-white hover:bg-nino-ink"
               >
-                {t.applyTo} {school.nameAr}
+                {t.applyTo} {name}
               </Link>
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
@@ -158,7 +160,7 @@ export default async function SchoolProfilePage({
             <section>
               <h2 className="font-display text-2xl">{t.overview}</h2>
               <p className="mt-3 leading-relaxed text-nino-ink/80">
-                {school.descriptionAr}
+                {en ? schoolLongEn(school) : school.descriptionAr}
               </p>
             </section>
 

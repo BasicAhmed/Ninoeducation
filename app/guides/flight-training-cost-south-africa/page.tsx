@@ -1,24 +1,11 @@
 import Link from "next/link";
 import { GuideArticle } from "@/components/GuideArticle";
-import { SITE_URL } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 import { getLang } from "@/lib/i18n/get-lang";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-const META = {
-  ar: {
-    title: "كم تكلفة تعلم الطيران في جنوب أفريقيا؟ (2026) | نينو إديوكيشن",
-    description: "تفصيل كامل لتكلفة دراسة الطيران في جنوب أفريقيا: رسوم التدريب، السكن، المعيشة، التأشيرة، وكيف تخطط لميزانيتك بدون مفاجآت.",
-  },
-  en: {
-    title: "How Much Does Flight Training Cost in South Africa? (2026) | Nino Education",
-    description: "A complete breakdown of the cost of studying aviation in South Africa: training fees, housing, living, visa, and how to plan your budget without surprises.",
-  },
-};
-
-export async function generateMetadata() {
-  const lang = await getLang();
-  return { title: META[lang].title, description: META[lang].description, alternates: { canonical: `${SITE_URL}/guides/flight-training-cost-south-africa` } };
-}
+export const generateMetadata = () =>
+  pageMetadata("/guides/flight-training-cost-south-africa", { type: "article" });
 
 const FAQ_ITEMS = {
   ar: [

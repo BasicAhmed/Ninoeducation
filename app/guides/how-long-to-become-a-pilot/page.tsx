@@ -1,18 +1,11 @@
 import Link from "next/link";
 import { GuideArticle } from "@/components/GuideArticle";
-import { SITE_URL } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 import { getLang } from "@/lib/i18n/get-lang";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-const META = {
-  ar: { title: "كم تستغرق مدة دراسة الطيران حتى الاحتراف؟ | نينو إديوكيشن", description: "جدول زمني واقعي لدراسة الطيران في جنوب أفريقيا: من أول يوم تدريب حتى رخصة الطيار التجاري، وما يؤثر على المدة الفعلية." },
-  en: { title: "How Long Does It Take to Become a Professional Pilot? | Nino Education", description: "A realistic timeline for studying aviation in South Africa: from the first day of training to a Commercial Pilot License, and what affects the actual duration." },
-};
-
-export async function generateMetadata() {
-  const lang = await getLang();
-  return { title: META[lang].title, description: META[lang].description, alternates: { canonical: `${SITE_URL}/guides/how-long-to-become-a-pilot` } };
-}
+export const generateMetadata = () =>
+  pageMetadata("/guides/how-long-to-become-a-pilot", { type: "article" });
 
 const FAQ_ITEMS = {
   ar: [

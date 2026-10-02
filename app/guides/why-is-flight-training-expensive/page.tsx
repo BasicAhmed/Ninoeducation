@@ -1,24 +1,11 @@
 import Link from "next/link";
 import { GuideArticle } from "@/components/GuideArticle";
-import { SITE_URL } from "@/lib/constants";
+import { pageMetadata } from "@/lib/seo";
 import { getLang } from "@/lib/i18n/get-lang";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-const META = {
-  ar: {
-    title: "هل تعلّم الطيران غالي فعلاً؟ ولماذا؟ | نينو إديوكيشن",
-    description: "لماذا تكلفة تدريب الطيران مرتفعة، وهل يجب دفعها كاملة من أول يوم؟ شرح طريقتي الدفع: الدفع حسب الاستخدام والباقات الثابتة.",
-  },
-  en: {
-    title: "Is Flight Training Really Expensive? And Why? | Nino Education",
-    description: "Why flight training costs what it does, and whether you have to pay it all upfront. Both payment methods explained: pay-as-you-go and fixed packages.",
-  },
-};
-
-export async function generateMetadata() {
-  const lang = await getLang();
-  return { title: META[lang].title, description: META[lang].description, alternates: { canonical: `${SITE_URL}/guides/why-is-flight-training-expensive` } };
-}
+export const generateMetadata = () =>
+  pageMetadata("/guides/why-is-flight-training-expensive", { type: "article" });
 
 const FAQ_ITEMS = {
   ar: [

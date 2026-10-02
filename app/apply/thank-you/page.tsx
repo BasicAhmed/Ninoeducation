@@ -11,7 +11,7 @@ import { dictionaries } from "@/lib/i18n/dictionaries";
 // with any search value. Indexing it risks thin/duplicate pages and
 // could surface someone's name in search results.
 export const metadata = {
-  title: "تم استلام طلبك | نينو إديوكيشن",
+  title: "تم استلام طلبك",
   robots: { index: false, follow: true },
 };
 
