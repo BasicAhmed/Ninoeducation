@@ -25,7 +25,11 @@ import {
   ArrowRight,
   type LucideIcon,
 } from "lucide-react";
-import type { Dictionary, Lang } from "@/lib/i18n/dictionaries";
+import type { dictionaries, Lang } from "@/lib/i18n/dictionaries";
+
+// Arabic or English home text (the dictionary is `as const`, so the two
+// languages are different literal types).
+type HomeText = (typeof dictionaries)[Lang]["home"];
 import { WHATSAPP_COMMUNITY_LINK } from "@/lib/constants";
 
 type Dest = { href: string; icon: LucideIcon; external?: boolean };
@@ -66,7 +70,7 @@ const STAGE_LINKS: Dest[][] = [
   ],
 ];
 
-export function JourneyHub({ t, lang }: { t: Dictionary["home"]; lang: Lang }) {
+export function JourneyHub({ t, lang }: { t: HomeText; lang: Lang }) {
   // Most visitors are deciding which school, so open on stage 2.
   const [active, setActive] = useState(1);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);

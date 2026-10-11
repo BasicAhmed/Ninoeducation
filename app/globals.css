@@ -315,27 +315,6 @@ body {
 
 /* ---------- Site-wide motion system ---------- */
 
-/* Lets <details> animate open/closed to "auto" height where supported
-   (Chrome/Edge today); other browsers just open instantly as before. */
-:root {
-  interpolate-size: allow-keywords;
-}
-
-.smooth-details::details-content {
-  block-size: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition:
-    block-size 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
-    opacity 0.3s ease,
-    content-visibility 0.35s allow-discrete;
-}
-
-.smooth-details[open]::details-content {
-  block-size: auto;
-  opacity: 1;
-}
-
 /* Every page eases in on navigation (app/template.tsx). Ends on
    transform: none so fixed elements inside pages behave normally. */
 @keyframes page-enter {
