@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
-import { schoolName, schoolShortEn } from "@/lib/seo";
+import { schoolName, schoolShortEn } from "@/lib/school-text";
 import { formatUsdRange } from "@/lib/currency";
 
 type School = {
