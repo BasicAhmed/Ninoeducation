@@ -5,7 +5,10 @@ import { LanguageToggle } from "@/components/LanguageToggle";
 import { getLang } from "@/lib/i18n/get-lang";
 import { dictionaries } from "@/lib/i18n/dictionaries";
 
-export async function SiteHeader() {
+// tone="light" is for pages that open on a dark photo (the home hero):
+// white nav text and controls instead of ink.
+export async function SiteHeader({ tone = "dark" }: { tone?: "dark" | "light" } = {}) {
+  const light = tone === "light";
   const lang = await getLang();
   const t = dictionaries[lang].nav;
 
@@ -21,7 +24,7 @@ export async function SiteHeader() {
             priority
           />
         </Link>
-        <nav className="hidden gap-8 text-sm font-medium md:flex">
+        <nav className={`hidden gap-8 text-sm font-medium md:flex ${light ? "text-white/85" : ""}`}>
           <Link href="/schools" className="hover:text-nino-orange">
             {t.schools}
           </Link>
@@ -36,8 +39,8 @@ export async function SiteHeader() {
           </Link>
         </nav>
         <div className="flex items-center gap-2 sm:gap-3">
-          <LanguageToggle lang={lang} />
-          <MobileNav lang={lang} />
+          <LanguageToggle lang={lang} tone={tone} />
+          <MobileNav lang={lang} tone={tone} />
           <Link
             href="/apply"
             className="rounded-full bg-nino-orange px-4 py-2.5 text-xs font-medium text-nino-white transition hover:bg-nino-ink sm:px-5 sm:text-sm"

@@ -3,7 +3,18 @@
 import { usePathname } from "next/navigation";
 import type { Lang } from "@/lib/i18n/dictionaries";
 
-export function LanguageToggle({ lang, className = "" }: { lang: Lang; className?: string }) {
+export function LanguageToggle({
+  lang,
+  className = "",
+  tone = "dark",
+}: {
+  lang: Lang;
+  className?: string;
+  tone?: "dark" | "light";
+}) {
+  const light = tone === "light";
+  const active = light ? "bg-white text-nino-ink" : "bg-nino-ink text-white";
+  const idle = light ? "text-white/70" : "text-nino-ink/60";
   const pathname = usePathname();
 
   function switchTo(target: Lang) {
@@ -35,13 +46,15 @@ export function LanguageToggle({ lang, className = "" }: { lang: Lang; className
 
   return (
     <div
-      className={`flex items-center rounded-full border border-nino-ink/15 p-0.5 text-xs font-medium ${className}`}
+      className={`flex items-center rounded-full border p-0.5 text-xs font-medium ${
+        light ? "border-white/30" : "border-nino-ink/15"
+      } ${className}`}
     >
       <button
         type="button"
         onClick={() => switchTo("ar")}
         className={`rounded-full px-2.5 py-1 transition-colors ${
-          lang === "ar" ? "bg-nino-ink text-white" : "text-nino-ink/60"
+          lang === "ar" ? active : idle
         }`}
       >
         عربي
@@ -50,7 +63,7 @@ export function LanguageToggle({ lang, className = "" }: { lang: Lang; className
         type="button"
         onClick={() => switchTo("en")}
         className={`rounded-full px-2.5 py-1 transition-colors ${
-          lang === "en" ? "bg-nino-ink text-white" : "text-nino-ink/60"
+          lang === "en" ? active : idle
         }`}
       >
         EN

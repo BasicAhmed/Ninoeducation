@@ -37,7 +37,7 @@ export async function FAQ() {
 
         <Reveal delay={100} className="mt-12 divide-y divide-nino-line border-y border-nino-line">
           {t.items.map((item) => (
-            <details key={item.q} className="group py-5">
+            <details key={item.q} className="smooth-details group py-5">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-lg text-nino-ink marker:content-none">
                 {item.q}
                 <span className="shrink-0 text-2xl font-light text-nino-orange transition-transform group-open:rotate-45">

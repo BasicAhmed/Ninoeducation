@@ -27,7 +27,8 @@ export function HomeGuides({ lang }: { lang: Lang }) {
             <Reveal key={g.href} delay={Math.min(i, 5) * 80}>
               <Link
                 href={lang === "en" ? `/en${g.href}` : g.href}
-                className="flex h-full flex-col rounded-2xl border border-nino-line bg-nino-white p-6 transition hover:border-nino-orange"
+                data-spotlight
+                className="flex h-full flex-col rounded-2xl border border-nino-line bg-nino-white p-6 transition duration-300 hover:-translate-y-1 hover:border-nino-orange"
               >
                 <h3 className="font-display text-base">{lang === "ar" ? g.titleAr : g.titleEn}</h3>
                 <p className="mt-2 text-sm text-nino-ink/60">

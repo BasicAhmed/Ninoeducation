@@ -3,6 +3,7 @@ import { IBM_Plex_Sans_Arabic, Inter } from "next/font/google";
 import "./globals.css";
 import { MobileCTA } from "@/components/MobileCTA";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { MotionEffects } from "@/components/motion/MotionEffects";
 import { SITE_URL } from "@/lib/constants";
 import { getLang } from "@/lib/i18n/get-lang";
 import { BRAND, SEO_PAGES, buildMetadata } from "@/lib/seo";
@@ -52,6 +53,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <WhatsAppButton lang={lang} />
         <MobileCTA lang={lang} />
+        <MotionEffects />
       </body>
     </html>
   );

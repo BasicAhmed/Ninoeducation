@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { dictionaries, type Lang } from "@/lib/i18n/dictionaries";
 
-export function MobileNav({ lang }: { lang: Lang }) {
+export function MobileNav({ lang, tone = "dark" }: { lang: Lang; tone?: "dark" | "light" }) {
   const [open, setOpen] = useState(false);
   const t = dictionaries[lang].nav;
 
@@ -22,7 +22,9 @@ export function MobileNav({ lang }: { lang: Lang }) {
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? t.closeMenu : t.openMenu}
         aria-expanded={open}
-        className="flex h-10 w-10 items-center justify-center rounded-full border border-nino-ink/15 text-nino-ink"
+        className={`flex h-10 w-10 items-center justify-center rounded-full border ${
+          tone === "light" ? "border-white/30 text-white" : "border-nino-ink/15 text-nino-ink"
+        }`}
       >
         {open ? <X size={20} /> : <Menu size={20} />}
       </button>

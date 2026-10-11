@@ -38,7 +38,7 @@ export function SchoolCard({
   const name = schoolName(school, lang);
   const licenses = school.licenses.split(",").slice(0, 3);
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-2xl border border-nino-line bg-white shadow-sm transition hover:-translate-y-1 hover:border-nino-orange hover:shadow-lg">
+    <div data-spotlight className="group relative flex flex-col overflow-hidden rounded-2xl border border-nino-line bg-white shadow-sm transition hover:-translate-y-1 hover:border-nino-orange hover:shadow-lg">
       {school.heroImageUrl && (
         <div className="relative h-40 w-full">
           <Image src={school.heroImageUrl} alt={name} fill unoptimized className="object-cover" />

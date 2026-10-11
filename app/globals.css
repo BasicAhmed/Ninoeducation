@@ -145,6 +145,437 @@ body {
   }
 }
 
+/* ---------- Home page motion ---------- */
+
+/* Hero: dashed flight trail that keeps moving, with a plane crossing it */
+@keyframes trail-dash {
+  to {
+    stroke-dashoffset: -56;
+  }
+}
+
+.hero-trail {
+  stroke-dasharray: 5 9;
+  animation: trail-dash 3s linear infinite;
+}
+
+@keyframes hero-fly {
+  from {
+    offset-distance: 0%;
+  }
+  to {
+    offset-distance: 100%;
+  }
+}
+
+.hero-plane {
+  offset-path: path("M1500 120 C 1100 80, 800 420, 360 300 S -100 520, -200 600");
+  offset-rotate: auto 180deg;
+  animation: hero-fly 14s linear infinite;
+}
+
+/* Hero: headline words rise in one by one, the rest fades up after */
+@keyframes word-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+.word-in {
+  display: inline-block;
+  opacity: 0;
+  animation: word-in 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.fade-up {
+  opacity: 0;
+  animation: fade-up 0.8s ease forwards;
+}
+
+@keyframes live-ping {
+  70% {
+    box-shadow: 0 0 0 10px rgba(254, 82, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(254, 82, 0, 0);
+  }
+}
+
+.live-ping {
+  box-shadow: 0 0 0 0 rgba(254, 82, 0, 0.6);
+  animation: live-ping 2s infinite;
+}
+
+/* Facts ticker under the hero. The list is rendered twice so the loop
+   is seamless; RTL scrolls the other way. */
+@keyframes marquee-ltr {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-rtl {
+  to {
+    transform: translateX(50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee-ltr 38s linear infinite;
+}
+
+[dir="rtl"] .marquee-track {
+  animation-name: marquee-rtl;
+}
+
+/* Journey hub: links in the active stage cascade in */
+@keyframes hub-link-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hub-link {
+  animation: hub-link-in 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Slow-turning dashed ring in the "0 fees" card */
+@keyframes slow-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.slow-spin {
+  animation: slow-spin 30s linear infinite;
+}
+
+/* Soft light drifting across the final call to action */
+@keyframes glow-drift {
+  to {
+    transform: translateX(-30%) scale(1.15);
+  }
+}
+
+.glow-drift {
+  animation: glow-drift 8s ease-in-out infinite alternate;
+}
+
+@media (max-width: 639px) {
+  .hero-plane {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-trail,
+  .marquee-track,
+  .slow-spin,
+  .glow-drift,
+  .live-ping {
+    animation: none !important;
+  }
+
+  .hero-plane {
+    display: none;
+  }
+
+  .word-in,
+  .fade-up,
+  .hub-link {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* ---------- Site-wide motion system ---------- */
+
+/* Lets <details> animate open/closed to "auto" height where supported
+   (Chrome/Edge today); other browsers just open instantly as before. */
+:root {
+  interpolate-size: allow-keywords;
+}
+
+.smooth-details::details-content {
+  block-size: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    block-size 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.3s ease,
+    content-visibility 0.35s allow-discrete;
+}
+
+.smooth-details[open]::details-content {
+  block-size: auto;
+  opacity: 1;
+}
+
+/* Every page eases in on navigation (app/template.tsx). Ends on
+   transform: none so fixed elements inside pages behave normally. */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Aurora: slow, drifting brand-colour light. Three blurred blobs move
+   on different loops so the pattern never visibly repeats. */
+@keyframes aurora-a {
+  0%, 100% { transform: translate(-10%, -8%) scale(1); }
+  33% { transform: translate(18%, 6%) scale(1.25); }
+  66% { transform: translate(-4%, 16%) scale(0.95); }
+}
+
+@keyframes aurora-b {
+  0%, 100% { transform: translate(12%, 10%) scale(1.1); }
+  50% { transform: translate(-18%, -12%) scale(0.85); }
+}
+
+@keyframes aurora-c {
+  0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  50% { transform: translate(-14%, 10%) scale(1.3) rotate(25deg); }
+}
+
+.aurora-a { animation: aurora-a 22s ease-in-out infinite; }
+.aurora-b { animation: aurora-b 28s ease-in-out infinite; }
+.aurora-c { animation: aurora-c 34s ease-in-out infinite; }
+
+/* Film grain over gradients, so they read as light rather than a flat fill */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Runway grid: perspective lines rolling toward the horizon */
+@keyframes runway-roll {
+  to {
+    background-position: 0 64px, 0 0;
+  }
+}
+
+.runway-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 64px 64px;
+  transform: perspective(520px) rotateX(62deg);
+  transform-origin: center top;
+  mask-image: linear-gradient(to bottom, transparent, black 30%, black 70%, transparent);
+  animation: runway-roll 2.4s linear infinite;
+}
+
+/* Cursor spotlight on any element with data-spotlight (set up once in
+   MotionEffects). Uses background-image so the card keeps its colour. */
+[data-spotlight] {
+  background-image: radial-gradient(
+    320px circle at var(--mx, -999px) var(--my, -999px),
+    rgba(254, 82, 0, 0.09),
+    transparent 60%
+  );
+}
+
+[data-spotlight="light"] {
+  background-image: radial-gradient(
+    320px circle at var(--mx, -999px) var(--my, -999px),
+    rgba(255, 255, 255, 0.09),
+    transparent 60%
+  );
+}
+
+/* Staggered entrance for a group of children */
+.stagger > * {
+  animation: fade-up 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.stagger > *:nth-child(2) { animation-delay: 60ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 180ms; }
+.stagger > *:nth-child(5) { animation-delay: 240ms; }
+.stagger > *:nth-child(6) { animation-delay: 300ms; }
+.stagger > *:nth-child(7) { animation-delay: 360ms; }
+.stagger > *:nth-child(n + 8) { animation-delay: 420ms; }
+
+/* Wizard: the active step's content cascades in each time it becomes active */
+.wizard-panel[data-active="true"] > *,
+.wizard-panel[data-active="true"] > [class*="space-y"] > * {
+  animation: fade-up 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.wizard-panel[data-active="true"] > *:nth-child(2),
+.wizard-panel[data-active="true"] > [class*="space-y"] > *:nth-child(1) { animation-delay: 80ms; }
+.wizard-panel[data-active="true"] > *:nth-child(3),
+.wizard-panel[data-active="true"] > [class*="space-y"] > *:nth-child(2) { animation-delay: 150ms; }
+.wizard-panel[data-active="true"] > *:nth-child(4),
+.wizard-panel[data-active="true"] > [class*="space-y"] > *:nth-child(3) { animation-delay: 220ms; }
+.wizard-panel[data-active="true"] > [class*="space-y"] > *:nth-child(n + 4) { animation-delay: 290ms; }
+
+/* Check marks and badges pop in */
+@keyframes pop-in {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+.pop-in {
+  animation: pop-in 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Soft pulsing ring around the current step */
+@keyframes ring-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(254, 82, 0, 0.45); }
+  100% { box-shadow: 0 0 0 10px rgba(254, 82, 0, 0); }
+}
+
+.ring-pulse {
+  animation: ring-pulse 1.8s ease-out infinite;
+}
+
+/* Light sweeping along a progress bar */
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: shimmer 2.2s ease-in-out infinite;
+}
+
+/* Submit: the plane on the button takes off */
+@keyframes takeoff {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(120px, -60px) rotate(-12deg); opacity: 0; }
+}
+
+.takeoff {
+  animation: takeoff 0.6s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+}
+
+[dir="rtl"] .takeoff {
+  animation-name: takeoff-rtl;
+}
+
+@keyframes takeoff-rtl {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(-120px, -60px) rotate(12deg); opacity: 0; }
+}
+
+/* Thank-you page: confetti burst from the success badge */
+@keyframes confetti {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% {
+    transform: translate(var(--x), var(--y)) rotate(var(--r));
+    opacity: 0;
+  }
+}
+
+.confetti-bit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 12px;
+  border-radius: 2px;
+  animation: confetti 1.4s cubic-bezier(0.1, 0.7, 0.3, 1) both;
+}
+
+@keyframes draw-check {
+  to { stroke-dashoffset: 0; }
+}
+
+.draw-check {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: draw-check 0.5s 0.35s ease-out forwards;
+}
+
+/* Guides: sections slide in as they're reached */
+.guide-body > section {
+  scroll-margin-top: 96px;
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.guide-body.js-reveal > section:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter,
+  .aurora-a,
+  .aurora-b,
+  .aurora-c,
+  .runway-grid,
+  .stagger > *,
+  .wizard-panel[data-active="true"] > *,
+  .wizard-panel[data-active="true"] > [class*="space-y"] > *,
+  .pop-in,
+  .ring-pulse,
+  .shimmer::after,
+  .confetti-bit,
+  .draw-check {
+    animation: none !important;
+  }
+
+  .draw-check {
+    stroke-dashoffset: 0;
+  }
+
+  .confetti-bit {
+    display: none;
+  }
+
+  .guide-body.js-reveal > section:not(.is-visible) {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* iOS Safari auto-zooms the page when a focused form field's font-size
    is under 16px — this is the "screen zooms when I tap to type" bug.
    Force 16px on mobile for every text field, and only shrink back down
